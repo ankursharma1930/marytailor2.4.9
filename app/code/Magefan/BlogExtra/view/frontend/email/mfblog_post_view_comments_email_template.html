@@ -1,0 +1,27 @@
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<!--@subject {{trans "New comments were posted on %post_title" post_title=$post.getTitle()}} @-->
+<!--@vars {
+"var post":"Blog post",
+"var unsubscribe_link":"Link to unsubscribe from current post comments",
+"var unsubscribe_all_link":"Link to unsubscribe from all post comments",
+"var url":"Blog post URL"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p><strong>{{trans 'New comments were posted on <a href="%post_url">%post_title</a>' post_title=$post.getTitle() post_url=$url |raw}}</strong>.</p>
+<p>&nbsp;</p>
+<p>
+	{{trans 'We just want you to know that there are new comments on the article you are interesting in.'}}<br/>
+    <a href="{{var url}}#post-comments">{{trans "Read new comments now"}}</a>.
+</p>
+<p>&nbsp;</p>
+<p style="font-size: 0.75em;">{{trans "You're receiving this message because you're signed up to receive notifications about new comments at this post."}} {{trans 'If you no longer want to receive this post comment notifications you can <a href="%unsubscribe_link">unsubscribe</a>.' unsubscribe_link=$unsubscribe_link |raw}} {{trans 'To unsubscribe from all post comments notifications <a href='%unsubscribe_all_link'>click here</a>.' unsubscribe_all_link=$unsubscribe_all_link |raw}}
+</p>
+
+{{template config_path="design/email/footer_template"}}

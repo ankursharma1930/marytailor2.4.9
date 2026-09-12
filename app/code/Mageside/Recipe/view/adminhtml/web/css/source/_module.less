@@ -1,0 +1,157 @@
+.recipe-filter-edit {
+  .admin__dynamic-rows {
+    tr {
+      ._disabled {
+        opacity: 1;
+      }
+      td {
+        .admin__field-label {
+          display: none;
+        }
+        .admin__field-service {
+          .admin__field-label {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.mageside-hint {
+  background: #f8f8f8;
+  border: 1px solid #8ba455;
+  margin-bottom: 10px;
+  padding: 11px 0 10px 10px;
+  color: #676056;
+  font: 600 12px 'Open Sans', sans-serif;
+  .content {
+    padding-left: 30px;
+  }
+  a {
+    color: #8ba455;
+  }
+  .module-name {
+    color: #EA7601;
+  }
+}
+.watch-file {
+  display: inline-block;
+}
+.product-image-wrapper-before:before {
+  display: block;
+  content: '\e41c';
+  position: absolute;
+  left: 16%;
+  z-index: 1;
+  color: #ccc;
+  font-size: 9em;
+}
+.image-adminhtml {
+  background: none;
+}
+button.primary.grey {
+  background-color: #514943;
+  border-color: #514943;
+  border-left-color: white;
+}
+
+.actions-split.active .action-toggle.primary.grey{
+  background-color: #514943;
+  border-color: #514943;
+  border-left-color: white;
+}
+.admin__field {
+  .admin__field-change_writer {
+    position: absolute;
+    bottom: 35px;
+    left: -68px;
+    .admin__field-control {
+      button {
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+}
+
+
+/**
+ * Farbtastic Color Picker 1.2
+ * © 2008 Steven Wittens
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+.action-menu.color-chooser {
+  right: 4rem;
+  z-index: 100;
+}
+.action-menu.color-chooser-component, .action-menu.color-chooser {
+  .admin__fieldset>.admin__field>.admin__field-label {
+    width: calc( (100%) * .3);
+    margin-left: 0;
+  }
+  .admin__fieldset {
+    margin: 0 0 0 240px;
+  }
+}
+.farbtastic {
+  position: absolute;
+  margin: 15px;
+}
+.farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.farbtastic, .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .color, .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.farbtastic .wheel {
+  background: url("../Mageside_Recipe/images/farbtastic/wheel.png") no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .overlay {
+  background: url("../Mageside_Recipe/images/farbtastic/mask.png") no-repeat;
+}
+.farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  overflow: hidden;
+  background: url("../Mageside_Recipe/images/farbtastic/marker.png") no-repeat;
+}
+
+.admin__fieldset .recipe_rating_detail .admin__field-label span{
+  white-space: nowrap;
+}
+
+.admin__control-cooking {
+  .admin__field-control {
+    button {
+      &:after {
+        content: '\e634';
+      }
+    }
+  }
+}

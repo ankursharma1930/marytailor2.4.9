@@ -1,0 +1,131 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\Store;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Store $viewModelStore */
+$viewModelStore = $viewModels->require(Store::class);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$title = (string) $block->getTitle();
+$items = $block->getItems() ?? [];
+$uniqueId = '_' . uniqid();
+
+if (is_object($items) && $items instanceof Iterator) {
+    $items = iterator_to_array($items);
+}
+
+if (!$itemCount = count($items)) {
+    return '';
+}
+
+$sliderStyle = (string) $block->getSliderStyle();
+$sliderShowArrows = $block->getShowArrows() !== null ? $block->getShowArrows() : "end";
+$sliderShowDots = $block->getShowDots() !== null ? (bool) $block->getShowDots() : true;
+$sliderLoop = $block->getLoop() !== null ? (bool) $block->getLoop() : false;
+$sliderAutoplay = $block->getAutoplay() !== null ? (bool) $block->getAutoplay() : false;
+$sliderSpeed = (int) $block->getSpeed();
+$loadFirstEager = (bool) $block->getLoadFirstEager();
+
+$sliderItemRenderer = $block->getChildBlock('slider.item.template');
+?>
+
+<section
+    id="slider<?= $escaper->escapeHtml($uniqueId) ?>"
+    class="splide relative"
+    aria-label="<?= $escaper->escapeHtml(__('Latest items')) ?>"
+    x-data="initSlider<?= $escaper->escapeHtml($uniqueId) ?>()"
+    x-defer="intersect"
+>
+    <div class="splide__track">
+        <ul class="splide__list">
+            <?php
+                $sliderIndex = 1;
+                foreach ($items as $item):
+            ?>
+                <?php
+                    $imageAttributes = ['loading' => 'lazy'];
+
+                    if ($loadFirstEager && $sliderIndex === 1) {
+                        $imageAttributes = ['loading' => 'eager', 'fetchpriority' => 'high'];
+                    }
+                ?>
+                <li class="splide__slide">
+                    <?= $sliderItemRenderer
+                        ->setItem($item)
+                        ->setImageAttributes($imageAttributes)
+                        ->toHtml() ?>
+                </li>
+                <?php $sliderIndex++; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php if ($sliderShowArrows): ?>
+        <nav
+            class="splide__arrows flex gap-2 absolute bottom-4 sm:-translate-y-1/2 sm:top-1/2 sm:bottom-auto sm:inset-x-4
+                <?= $sliderShowArrows === "end" ? "right-4" : ($sliderShowArrows === "start" ? "left-4" : "inset-x-4") ?> justify-between"
+            aria-label="<?= $escaper->escapeHtml(__('Slider controls')) ?>"
+        >
+            <button
+                role="button"
+                class="splide__arrow splide__arrow--prev shrink-0 p-2.5 rounded-full transition bg-white text-primary
+                    disabled:opacity-30 shadow hover:shadow-primary/30 focus:shadow-primary/30"
+                aria-label="<?= $escaper->escapeHtml(__('Previous slide')) ?>"
+            >
+                <?= $heroiconsSolid->arrowLeftHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+            </button>
+            <button
+                role="button"
+                class="splide__arrow splide__arrow--next shrink-0 p-2.5 rounded-full transition bg-white text-primary
+                    disabled:opacity-30 shadow hover:shadow-primary/30 focus:shadow-primary/30"
+                aria-label="<?= $escaper->escapeHtml(__('Next slide')) ?>"
+            >
+                <?= $heroiconsSolid->arrowRightHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+            </button>
+        </nav>
+    <?php endif; ?>
+    <ul class="splide__pagination hidden sm:flex gap-4 justify-center items-center mt-7 absolute w-full bottom-8"></ul>
+</section>
+<script>
+    function initSlider<?= $escaper->escapeHtml($uniqueId) ?>() {
+        return {
+            init() {
+                const splidePaginationDotClasses = 'splide__pagination__page w-4 h-4 rounded-full shadow-md cursor-pointer bg-white ring-4 ring-transparent transition hover:bg-blue-600 aria-selected:bg-blue-600 aria-selected:ring-white';
+
+                new Splide(this.$root, {
+                    type: '<?= $escaper->escapeHtmlAttr($sliderStyle ?: "slide") ?>',
+                    rewind: <?= $escaper->escapeHtmlAttr($sliderLoop ? 'true' : 'false') ?>,
+                    autoplay: <?= $escaper->escapeHtmlAttr($sliderAutoplay ? 'true' : 'false') ?>,
+                    speed: <?= $escaper->escapeHtmlAttr($sliderSpeed ?: '1000') ?>,
+                    perPage: 1,
+                    gap: 0,
+                    drag: true,
+                    keyboard: true,
+                    slideFocus: true,
+                    arrows: <?= $escaper->escapeHtmlAttr($sliderShowArrows ? 'true' : 'false') ?>,
+                    pagination: <?= $escaper->escapeHtmlAttr($sliderShowDots ? 'true' : 'false') ?>,
+                    classes: { page: splidePaginationDotClasses },
+                }).mount();
+            },
+        }
+    }
+</script>

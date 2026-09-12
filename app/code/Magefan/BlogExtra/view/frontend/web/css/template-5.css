@@ -1,0 +1,21 @@
+/* Widget Template 5 **************************************************************************************************/
+[class^=template-5] .block-row {margin-left: -1rem;margin-right: -1rem;}
+[class^=template-5] .block-content {margin-left: -1.5rem;margin-right: -1.5rem;}
+[class^=template-5] .block-content .block-post {margin-bottom: 30px;}
+[class^=template-5] .post-list .post-info {padding: 0 0 0 15px;width: 100%;}
+[class^=template-5] .block-post + .post-list .post-info h3 a {font-size: 14px;line-height: 20px;font-weight: 600;}
+[class^=template-5] .block-post:nth-child(1) .post-info {position: absolute;left: 0;bottom: 0;width: 100%;pointer-events: none;z-index: 1;padding: 0 15px 15px;}
+[class^=template-5] .block-post:nth-child(1) .post-info h3.post-title a {font-size: 20px !important;line-height: 25px !important;font-weight: 500 !important;color: #fff;text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
+[class^=template-5] .block-post:nth-child(1) .post-data-wrap .post-author,
+[class^=template-5] .block-post:nth-child(1) .post-data-wrap .post-author a,
+[class^=template-5] .block-post:nth-child(1) .post-data-wrap .post-data {color: #fff;}
+[class^=template-5] .block-post:nth-child(1) .post-view {display: block !important;background: #fff;color: #000;}
+@media (max-width: 1024px) {
+    [class^=template-5] .block-post + .post-list .post-info h3 a {font-size: 18px;line-height: 22px;font-weight: 500;}
+}
+@media (max-width: 767px) {
+    [class^=template-5] .block-row {margin-left: 0;margin-right: 0;}
+    [class^=template-5] .block-content {margin-left: 0;margin-right: 0;}
+    [class^=template-5] .block-post + .post-list .post-info h3 a {font-size: 14px;line-height: 20px;font-weight: 500;}
+}
+/* END Widget Template 5 **********************************************************************************************/

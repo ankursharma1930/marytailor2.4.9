@@ -1,0 +1,22 @@
+{
+  "name": "plumrocket/module-ampemail",
+  "description": "N/A",
+  "require": {
+    "php": ">=7.1",
+    "plumrocket/module-plumbase": ">=2.11",
+    "plumrocket/module-ampemail-api": "2.*",
+    "plumrocket/module-bestsellers": "~1.2",
+    "plumrocket/module-smtp": "1.*",
+    "plumrocket/module-token": "1.*"
+  },
+  "type": "magento2-module",
+  "version": "2.2.3",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Plumrocket\\AmpEmail\\": ""
+    }
+  }
+}

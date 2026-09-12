@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var $block \Mageside\Recipe\Block\Frontend\Ingredient\AllRecipeProductsList
+ */
+?>
+<div class="page-title-wrapper product">
+    <h1 class="page-title">
+        <span class="page-title-wrapper"><?php echo $block->escapeHtml($block->getTitle()) ?></span>
+    </h1>
+</div>
+        <div class="recipe-list-wrapper">
+            <ul class="recipe-grid">
+                <?php echo $block->getChildHtml('recipe_list'); ?>
+            </ul>
+        </div>
+        <script type="text/x-magento-init">
+        {
+            "#update-recipes": {
+                "Mageside_Recipe/js/load-recipes-list": {
+                    "productId": "<?php /* @escapeNotVerified */ echo $block->getProductId(); ?>"
+                }
+            }
+        }
+        </script>

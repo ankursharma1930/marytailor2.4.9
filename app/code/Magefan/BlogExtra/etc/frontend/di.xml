@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd"
+>
+    <type name="Magefan\Blog\Model\ResourceModel\Comment">
+        <plugin
+            name="magefan_blogextra_plugin_magefan_blog_resource_model_comment_admin_notification_plugin"
+            type="Magefan\BlogExtra\Plugin\Magefan\Blog\Model\ResourceModel\Comment\AdminEmailNotification"
+            sortOrder="2"
+            disabled="false"
+        />
+    </type>
+    <type name="Magefan\Blog\Block\Post\View">
+        <plugin
+            name="magefan_blogextra_plugin_magefan_blog_block_post_view"
+            type="Magefan\BlogExtra\Plugin\Magefan\Blog\Block\Post\ViewPlugin"
+            sortOrder="2"
+            disabled="false"
+        />
+    </type>
+    <type name="Magefan\Blog\Block\Index">
+        <plugin name="magefan_blogextra_plugin_magefan_blog_block_indexplugin"
+                type="Magefan\BlogExtra\Plugin\Magefan\Blog\Block\IndexPlugin" sortOrder="1"/>
+    </type>
+    <type name="Magefan\Blog\Block\Widget\Recent">
+        <plugin name="Magefan_BlogExtra_Plugin_Magefan_Blog_Block_Widget_Recent"
+                type="Magefan\BlogExtra\Plugin\Magefan\Blog\Block\Widget\Recent" sortOrder="1" disabled="false"/>
+    </type>
+</config>

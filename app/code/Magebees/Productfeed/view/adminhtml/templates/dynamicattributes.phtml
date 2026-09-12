@@ -1,0 +1,58 @@
+<?php
+$conditions_mapping = $this->getUrl( '*/*/Conditions' );
+$attribute_options = $this->getUrl( '*/*/Attroptions' );
+$loading_url = $this->getViewFileUrl( "Magebees_Productfeed::images/loader.gif" );
+if ( $this->getRequest()->getParam( 'id' ) ) {
+	$condition_id = $this->getRequest()->getParam( 'id' );
+} else {
+	$condition_id = '';
+}
+$template = $this->getTemplates();
+$dynamicattributes = $this->getDynamicattributes();
+
+
+$conditions = array();
+if ( $this->getRequest()->getParam( 'id' ) ) {
+	$condition_id = $this->getRequest()->getParam( 'id' );
+	$dynamiccondition = $dynamicattributes->load( $condition_id );
+	$conditions = json_decode( $dynamiccondition->getCodeconditions(), true );
+} else {
+	$condition_id = '';
+}
+if ( count( $conditions ) > 0 ) {
+	
+	$max_or_key = max( array_keys( $conditions ) );
+	$max_and_key = "";
+	foreach ( $conditions as $key => $value ):
+		if(isset($value['attribute'])){
+		$temp_max = max( array_keys($value['attribute']));	
+		}
+	if ( $temp_max > $max_and_key ) {
+		$max_and_key = $temp_max;
+	}
+	endforeach;
+
+} else {
+	$max_or_key = 0;
+	$max_and_key = 0;
+}
+
+
+
+
+?>
+<div id="Conditions_container"></div>
+
+				<script>
+					requirejs( [ 'jquery', 'domReady!', 'conditions' ], function ( jQuery ) {
+						jQuery( '#Conditions_container' ).conditions( {
+							condition_url: "<?php echo $conditions_mapping; ?>",
+							attribute_url: "<?php echo $attribute_options; ?>",
+							condition_id: "<?php echo $condition_id;?>",
+							max_or_key: "<?php echo $max_or_key;?>",
+							max_and_key: "<?php echo $max_and_key;?>",
+							loading_url: "<?php echo $loading_url;?>"
+						} );
+						jQuery( "#Conditions_container" ).sortable();
+					} );
+				</script>

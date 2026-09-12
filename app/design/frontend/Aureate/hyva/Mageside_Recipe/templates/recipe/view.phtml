@@ -1,0 +1,92 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Recipe\Recipe $block
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+$recipe = $block->getRecipe();
+$writer = $block->getWriter();
+?>
+<h1 class="text-3xl font-bold mb-4 text-center"><?php echo $block->escapeHtml($recipe->getTitle()) ?></h1>
+    <div class="mx-auto p-6 mt-10">
+        <!-- Recipe Image -->
+        <div class="mb-6">
+            <?php echo $block->getChildHtml('recipe_image'); ?>
+            <?php if ($recipe->getMediaType() == 'video') : ?>
+                <?php echo $block->getChildHtml('recipe_video'); ?>
+            <?php endif; ?>
+        </div>
+        <div class="flex justify-between mb-6 text-gray-600">
+            <div class="flex items-center">
+                <svg title="<?php echo $block->escapeHtml(__('Servings Number')) ?>" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 10.5l.25-2.5a2 2 0 011.11-1.76l1.14-.57a2 2 0 012.12 0l1.14.57a2 2 0 011.11 1.76l.25 2.5m3.75 0h-1a2 2 0 00-2-2h-3.5a2 2 0 00-2 2h-1m3 8a4 4 0 10-8 0 4 4 0 008 0z"></path></svg>
+                <?php $servingsNumber = $block->getFormatServingsNumber($recipe->getServingsNumber()); ?>
+                <span><?php echo $servingsNumber . ' ' . (($servingsNumber == '1') ? $block->escapeHtml(__('person')) : $block->escapeHtml(__('people'))); ?></span>
+            </div>
+            <div class="flex items-center">
+                <svg title="<?php echo $block->escapeHtml(__('Preparation Time')) ?>" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0 8c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm0-4a4 4 0 100-8 4 4 0 000 8zm0 4a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getPrepTime())); ?></span>
+            </div>
+            <div class="flex items-center">
+                <svg title="<?php echo $block->escapeHtml(__('Cooking Time')) ?>" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3 3v-6m4-1a9 9 0 11-8 0 9 9 0 018 0zm-8 6a9 9 0 110-8 9 9 0 010 8z"></path></svg>
+                <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getCookTime())); ?></span>
+            </div>
+
+        </div>
+        <!-- Social Share Buttons -->
+        <?php echo $block->getChildHtml('social_sharing'); ?>
+        <?php echo $block->getChildHtml('recipe.view.print.button'); ?>
+        <div class="description">
+            <?php if (!empty($recipe->getShortDescription())) : ?>
+                <?php echo $recipe->getShortDescriptionHtml(); ?>
+            <?php endif; ?>
+        </div>
+        <!-- Ingredients List -->
+        <h3 class="text-3xl font-bold mb-4 text-left border-b-2 py-3">Ingredients and Method</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+            <div>
+                <h2 class="text-2xl font-semibold mb-4">Ingredients</h2>
+                <ul class="list-disc list-inside">
+                    <?php foreach ($recipe->getIngredients() as $ingredientData) : ?>
+                        <li>
+                            <?php echo $block->escapeHtml($ingredientData['measure']); ?>
+                            <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
+                            <a
+                                href="<?php echo $block->escapeHtml($ingredientData['url']); ?>"
+                                target="_blank"
+                            >
+                                <?php endif; ?>
+                                <?php echo $block->escapeHtml($ingredientData['ingredient']); ?>
+                                <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
+                            </a>
+                        <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <div>
+                <h2 class="text-2xl font-semibold mb-4">Methods</h2>
+                <ul class="list-disc list-inside">
+                    <?php foreach ($recipe->getMethod() as $methodData) : ?>
+                        <?php if (isset($methodData['step'])) : ?>
+                            <li>
+                                <?php echo $block->escapeHtml($methodData['step']); ?>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <!-- Related Products -->
+        <?php if (!empty($recipe->getAssignedProductIds())) : ?>
+        <h3 class="text-3xl font-bold mb-4 text-left border-b-2 py-3">Products you will need</h3>
+        <?php echo $block->getChildHtml('ingredients_list') ?>
+        <?php endif; ?>
+        <?php if ($config->getReviewEnabled()) : ?>
+            <?php echo $block->getChildHtml('recipe_review') ?>
+        <?php endif; ?>
+    </div>

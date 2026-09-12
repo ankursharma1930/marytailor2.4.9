@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Recipe\Recipe $block
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+    $config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+    $recipe = $block->getRecipe();
+    $url = urlencode($block->getUrl($config->getSeoRoute()) . $recipe->getUrlKey() . $config->getSeoPostfix());
+    $twitterShare = $config->getTwitterShare();
+    $facebookShare = $config->getFacebookShare();
+    $googleShare = $config->getGoogleShare();
+    $pinterestShare = $config->getPinterestShare();
+?>
+
+<?php if ($config->getSocialShareEnable()) : ?>
+    <?php if ($googleShare || $facebookShare || $twitterShare|| $pinterestShare) : ?>
+            <ul class="inline-block text-center w-full mt-10">
+                <?php if ($twitterShare) : ?>
+                    <li class="inline-block px-4">
+                        <a onClick="window.open('https://twitter.com/share?url=<?php echo $block->escapeHtml($url); ?>','sharer','width=548,height=325,top=300,left=500');"
+                           class="twitter" rel="nofollow" target="_blank" title="Twitter Tweet">
+                            <i class="fa fa-twitter"></i>
+                            <?php  echo $block->escapeHtml(__('Tweet')); ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($facebookShare) : ?>
+                    <li class="inline-block px-4">
+                        <a onClick="window.open('https://www.facebook.com/sharer/sharer.php?u=<?php echo $block->escapeHtml($url); ?>','sharer','width=548,height=325,top=300,left=500');"
+                           class="facebook" rel="nofollow" target="_blank" title="Facebook Share">
+                            <i class="fa fa-facebook"></i>
+                            <?php  echo $block->escapeHtml(__('Share')); ?>
+                        </a>
+                    </li class="inline-block px-4">
+                <?php endif; ?>
+                <?php if ($googleShare) : ?>
+                    <li class="inline-block px-4">
+                        <a onClick="window.open('https://plus.google.com/share?url=<?php echo $block->escapeHtml($url); ?>','sharer','width=548,height=325,top=300,left=500');"
+                           class="gplus" rel="nofollow" target="_blank" title="Google Plus Share">
+                            <i class="fa fa-google-plus"></i>
+                            <?php  echo $block->escapeHtml(__('Share')); ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($pinterestShare) : ?>
+                    <li class="inline-block px-4">
+                        <a onClick="window.open('http://pinterest.com/pin/create/button/?url=<?php echo $block->escapeHtml($url); ?>','sharer','width=548,height=325,top=300,left=500');"
+                           class="gplus" rel="nofollow" target="_blank" title="Pinterest Share">
+                            <i class="fa fa-pinterest"></i>
+                            <?php  echo $block->escapeHtml(__('Share')); ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+    <?php endif; ?>
+<?php endif; ?>

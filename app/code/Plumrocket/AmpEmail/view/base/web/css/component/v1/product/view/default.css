@@ -1,0 +1,68 @@
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+.product-view *:focus{outline:0;}
+.product-view {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product-view .amp-product-gallery,
+.product-view .product-info {
+  width: 48%;
+  min-width:260px;
+}
+
+.product-view .amp-product-gallery .carousel-preview amp-img {margin: 0 3px 3px 0}
+
+/*Doesn't work for gmail need to find the way to make it work */
+/*.product-view .amp-product-gallery .carousel-preview amp-img:focus{outline: 2px solid #00A0FF;} */
+
+.product-view .amp-product-gallery .carousel-preview amp-img:active {opacity: 0.6}
+
+.product-view .name a {
+  font-weight: 700;
+  font-size: 18px;
+  color:#494949;
+  text-decoration: none;
+  padding-bottom: 14px;
+  display: block;
+}
+
+.product-view .name a:hover {
+  text-decoration: underline;
+}
+
+.product-view .price {
+  font-size: 18px;
+  padding-bottom:8px;
+}
+
+.product-view .stock {
+  font-size:14px;
+  padding-bottom: 35px;
+}
+
+.product-view .e-msg {
+  padding-top:5px;
+  color:#666;
+  font-size: 12px;
+}
+.product-view amp-accordion h4 {
+  background: #ffffff;
+  color:#45A4DC;
+  font-weight: 400;
+  border:none;
+}
+
+.product-view amp-accordion .text{font-size:12px;}
+
+.product-view .ar-d {vertical-align: 2px; margin-right: 5px; display: inline-block;}
+
+
+@media (max-width: 580px) {
+  .product-view {flex-wrap: wrap; justify-content: center;}
+}

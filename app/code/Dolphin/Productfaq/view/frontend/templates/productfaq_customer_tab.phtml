@@ -1,0 +1,43 @@
+<?php
+if ($block->isCustomerLoggedIn()) {
+    $customerProductfaq = $block->getCustomerFaqQuery();
+    if ($customerProductfaq->getSize() == 0) { ?>
+        <div class="message info">
+        <span>You have not asked any question yet.</span>
+        </div>
+    <?php } else {?>
+        <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Question</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <?php foreach ($customerProductfaq->getData() as $customerFaq) { ?>
+            <?php if ($customerFaq['answer_faq']) {
+                $productId = $customerFaq['product_id'];
+                $product = $block->getProduct($productId);
+                $name = $product->getName();
+                $url = $product->getProductUrl();
+                $encodedProductUrl = $block->getEncodeUrl($productId);
+                $encodedFaqUrl = $block->getEncodeUrl($customerFaq['productfaq_id']);
+                ?>
+                <tr>
+                    <td><a href="<?= /* @noEscape */ $url;?>" target="_blank"><?= /* @noEscape */ $name; ?></a></td>
+                    <td><?= /* @noEscape */ $customerFaq['question_faq'];?></td>
+                    <td><a href="<?= /* @noEscape */
+                        $block->getBaseUrl() .
+                        'productfaq/customer/view?key1=' . $encodedProductUrl . '&key2=' . $encodedFaqUrl; ?>">View</a>
+                    </td>
+                </tr>
+            <?php }
+        } ?>
+        </table>
+        <?php if ($block->getPagerHtmlTab()): ?>
+            <div class="toolbar bottom custom-pager">
+                    <?= /* @noEscape */ $block->getPagerHtmlTab(); ?>
+            </div>
+        <?php endif; ?>
+    <?php }
+} ?>

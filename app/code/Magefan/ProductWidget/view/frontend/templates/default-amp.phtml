@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+/**
+ * Product Widget Block Template
+ *
+ * @var $block \Magefan\ProductWidget\Block\Widget\Product\Block
+ */
+?>
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$renderer = $objectManager->get( \Plumrocket\AmpCatalog\ViewModel\Product\ProductList\ItemRenderer::class);
+
+$product = $block->getProduct();
+if ($product) {
+    $productUrl = $product->getProductUrl();
+    $productName = $block->getProductName();
+    ?>
+    <div class="mfpwb">
+        <div class="wrap clearfix">
+            <?php if ($block->displayImage()) { ?>
+                <div class="mfpip">
+                    <a href="<?= $block->escapeHtml($productUrl) ?>" class="product photo" title="<?= $block->escapeHtml($productName) ?>">
+                        <?php /*<img src="<?= $block->escapeHtml($block->getProductImage()) ?>" alt="<?= $block->escapeHtml($productName) ?>" />*/ ?>
+                        <?= $renderer->getImage($product, 'amp_category_page_grid')->toHtml() ?>
+                    </a>
+                </div>
+            <?php } ?>
+
+            <div class="mfpid">
+                <div class="product__item-details">
+                    <a class="product__item-name"
+                       href="<?= $block->escapeHtml($productUrl) ?>"
+                       title="<?= $block->escapeHtml($productName) ?>"
+                    >
+                        <strong><?= $block->escapeHtml($productName) ?></strong>
+                    </a>
+                </div>
+
+                <?php if ($block->displayReviews()) { ?>
+                    <?= $block->getReviewsSummaryHtml($product, $block->getReviewTemplateType()) ?>
+                <?php } ?>
+
+                <?php if ($block->displayPrice()) { ?>
+                    <div class="product__item-price">
+                        <?= $block->getProductPrice($product) ?>
+                    </div>
+                <?php } ?>
+
+                <?php if ($block->displayAddToCart()) { ?>
+                    <a class="btn btn__primary product__item-btn__view" href="<?= $block->escapeHtml($productUrl) ?>">
+                        <svg width="23" height="21" viewBox="0 0 23 21" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1 10.5C1 10.5 4.818 5 11.5 5C18.182 5 22 10.5 22 10.5C22 10.5 18.182 16 11.5 16C4.818 16 1 10.5 1 10.5Z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11.5 13.375C11.8776 13.375 12.2514 13.3006 12.6002 13.1562C12.949 13.0117 13.266 12.7999 13.5329 12.5329C13.7999 12.266 14.0117 11.949 14.1562 11.6002C14.3006 11.2514 14.375 10.8776 14.375 10.5C14.375 10.1224 14.3006 9.7486 14.1562 9.39979C14.0117 9.05097 13.7999 8.73404 13.5329 8.46707C13.266 8.2001 12.949 7.98833 12.6002 7.84385C12.2514 7.69936 11.8776 7.625 11.5 7.625C10.7375 7.625 10.0062 7.9279 9.46707 8.46707C8.9279 9.00624 8.625 9.7375 8.625 10.5C8.625 11.2625 8.9279 11.9938 9.46707 12.5329C10.0062 13.0721 10.7375 13.375 11.5 13.375V13.375Z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        <span><?= $block->escapeHtml(__('View Details')) ?></span>
+                    </a>
+                <?php } ?>
+
+                <?php if ($block->displayDescription()) { ?>
+                    <div class="mf-product-item-description">
+                        <p><?= $block->getProductDescription() ?></p>
+                    </div>
+                <?php } ?>
+
+                <?php if (false && $block->displayReadMore()) { ?>
+                    <a href="<?= $block->escapeHtml($productUrl) ?>" title="<?= $block->escapeHtml($productName) ?>" class="read-more"><?= $block->escapeHtml($block->getReadMoreText()) ?></a>
+                <?php } ?>
+
+            </div>
+        </div>
+    </div>
+<?php } ?>

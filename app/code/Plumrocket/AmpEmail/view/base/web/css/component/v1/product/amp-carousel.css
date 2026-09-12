@@ -1,0 +1,118 @@
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+.carousel-slides {
+  text-align: center;
+}
+
+.carousel-slides h2 {margin-bottom: 10px;}
+
+.crs__carousel-towishlist {
+  position: absolute;
+  top:25px;
+  right:25px;
+  z-index:10;
+}
+
+.crs__name,
+.crs__price,
+.crs__to-cart {
+  text-align: center;
+}
+
+
+.crs__name-link {
+  color: #494949;
+  text-decoration: none;
+  overflow: hidden;
+  max-width:180px;
+  text-overflow: ellipsis;
+  display:block;
+  margin: 0 auto;
+}
+
+.crs__pb {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 21px;
+  color: #A90100;
+}
+
+.crs__pb--regular,
+.crs__pb--special {
+  vertical-align: middle;
+}
+
+.crs__pb--regular {
+ color: #929292;
+ text-decoration: line-through;
+ font-size: 18px;
+}
+
+.crs__btn {
+  margin: 0 auto;
+  margin-top: 17px;
+}
+.crs__to-cart .crs__btn{
+  width:98%;
+}
+
+.towishlist {
+  background-color:#fff;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  outline:none;
+  border:none;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  color:white;
+  text-align:center;
+  font-weight:bold;
+  cursor: pointer;
+}
+
+.towishlist--already {
+  cursor: auto;
+}
+
+.m-hld {position: relative;}
+.m-hld__item {
+    z-index: 5;
+    position: absolute;
+    left: -5000px;
+    top:50%;
+    background: #94ff87;
+    padding: 3px 15px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 1s ease-in-out 2s;
+}
+
+.m-hld__item--show {
+    left: 50%;
+    opacity: 0;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+
+/* modificators */
+.product-carousel-slide {
+  position: relative;
+  vertical-align: top;
+  margin:0 14px;
+}
+
+.product-carousel-slide .crs__pb {
+  font-size:14px
+}
+
+.product-carousel-slide .btn {
+  min-height: 38px;
+  font-size:14px;
+  padding:0 3px;
+}
+

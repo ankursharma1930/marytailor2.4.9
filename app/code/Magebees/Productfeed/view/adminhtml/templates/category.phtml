@@ -1,0 +1,69 @@
+<?php 
+$mapping = $this->getRequest()->getParams();
+$feed_model = $this->getFeed();
+$cat_mapping_model = $this->getCategory()->create();
+$feed_categories = array();
+ if (isset($mapping['feed_id'])) {
+	$feed_id = $mapping['feed_id'];
+	$feed_model->load($feed_id);
+	if ($feed_model->getId()) 
+		{ 
+			$conditions = $feed_model->getConditionsSerialized();
+			if($feed_model->isJSON($conditions)){
+				$conditions_arr = json_decode($conditions, true);
+				if(isset($conditions_arr['categories'])){
+				/* Convert Array value as array key*/
+				$feed_categories = array_combine($conditions_arr['categories'], $conditions_arr['categories']); 	
+				}
+				
+				
+				
+			}
+		}
+}
+?>
+<div class="fieldset category-mapping" id="content">
+<div class="grid">
+<?php 
+		$model_cat = $this->getCategoryHelper();
+		$categories = $model_cat->getCollection()
+					->addAttributeToSelect('*')
+					->addAttributeToFilter('level', 1)
+					->addAttributeToFilter('is_active', 1);
+		$parent_categories = $categories->getData();
+		$mapping_content = '';
+		if(count($parent_categories)>0){
+			$parent_html = '';
+
+			foreach($parent_categories as $key => $value):
+			$parent_category = $model_cat->load($value['entity_id']);
+			?><div class="mapping level-<?php echo $parent_category->getLevel();?>" data-level="<?php echo $parent_category->getLevel();?>">
+			
+			<?php if($parent_category->hasChildren()){
+				?>
+				<div class="toggle close"></div>
+				<?php	
+				} ?>
+		<div class="name">
+		<?php if(isset($feed_categories[$parent_category->getId()])){
+		?>
+		<input type="checkbox" class="mapping-checkbox" name="categories[<?php echo $parent_category->getId();?>]" value="<?php echo $feed_categories[$parent_category->getId()];?>" id="categories[<?php echo $parent_category->getId();?>]
+		data-parent="<?php echo $parent_category->getParentId();?>" data-id="<?php echo $parent_category->getId();?>"
+		" checked><label for="categories[<?php echo $parent_category->getId();?>]"> <?php echo $parent_category->getName();?></label>
+		<?php	
+		}else{
+			?>
+			<input type="checkbox" class="mapping-checkbox" name="categories[<?php echo $parent_category->getId();?>]" id="categories[<?php echo $parent_category->getId();?>]" data-parent="<?php echo $parent_category->getParentId();?>" data-id="<?php echo $parent_category->getId();?>"><label for="categories[<?php echo $parent_category->getId();?>]"> <?php echo $parent_category->getName();?></label>
+		<?php
+		}?>
+		</div>
+		<div class="clear"></div></div>
+		<?php
+			$Categories_list = $feed_model->getCategorieslist($value['entity_id'],true,$feed_categories);
+			echo $Categories_list;
+		endforeach;	
+		
+		}?>
+
+</div>
+</div>

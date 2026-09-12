@@ -1,0 +1,14 @@
+/* Widget Template-2-1  Post Grid Three Column ************************************************************************/
+.template-2-1 .block-post {width: 33.3%;float: left;padding: 0 15px 15px;margin-bottom: 15px;}
+.template-2-1 .block-post:nth-child(3n+1) {clear: both;}
+@media (max-width: 1024px) {
+    .template-2-1 .post-view {display: none !important;}
+}
+@media (max-width: 768px) {
+    /*.template-2-1 .post-info h3.post-title a {font-size: 14px;font-weight: 600;line-height: 1.4;}*/
+}
+@media (max-width: 767px) {
+    .template-2-1 .block-post-grid {margin-left: -7.5px;margin-right: -7.5px;}
+    .template-2-1 .block-post {width: 100%;float: left;padding: 0 7.5px 7.5px;margin-bottom: 25px;}
+}
+/* END Widget Template-2-1  Post Grid Three Column ********************************************************************/

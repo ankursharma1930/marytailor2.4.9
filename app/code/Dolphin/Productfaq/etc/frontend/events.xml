@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_productfaq_index_save">
+        <observer name="recaptcha_on_product_faq_form" instance="Dolphin\Productfaq\Observer\RecapchaFormObserver"/>
+    </event>
+    <event name="customer_register_success">
+        <observer instance="Dolphin\Productfaq\Observer\Customer\RegisterSuccess" name="customer_register_success"/>
+    </event>
+</config>

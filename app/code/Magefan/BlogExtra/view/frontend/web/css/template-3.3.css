@@ -1,0 +1,26 @@
+/* Widget Template 3-3 ************************************************************************************************/
+.template-3-3 .block-post-grid .block-post {margin-bottom: 25px;}
+.template-3-3 .post-category {display: block !important;}
+.template-3-3 .block-post-grid .post-info h3.post-title a {font-size: 18px !important;line-height: 22px !important;font-weight: 500 !important;}
+.template-3-3 .post-data-wrap .post-author-name {display: inline-block;}
+.template-3-3 .post-view {display: block !important;}
+.template-3-3 .post-description {display: block !important;}
+/* Not 1 */
+.template-3-3 .block-post:nth-child(1) {-ms-flex-direction: column;flex-direction: column;}
+.template-3-3 .block-post:nth-child(1) .image-container {-ms-flex: 0 0 100%;flex: 0 0 100%;}
+.template-3-3 .block-post:nth-child(1) .image-container .image-wrap {padding-bottom: 35% !important;}
+.template-3-3 .block-post:nth-child(1) .post-category {display: block !important;}
+.template-3-3 .block-post:nth-child(1) .post-info {padding: 15px 0 0;}
+.template-3-3 .block-post:nth-child(1) .post-info h3.post-title a {font-size: 20px !important;line-height: 25px !important;font-weight: 500 !important;}
+.template-3-3 .block-post:nth-child(1) .post-view {display: block !important;}
+.template-3-3 .block-post:nth-child(1) .post-data-wrap .post-author-name {display: inline-block !important;}
+.template-3-3 .block-post:nth-child(1) .post-description {display: block !important;}
+@media (max-width: 768px) {
+    .template-3-3 .post-description {display: none !important;}
+}
+@media (max-width: 767px) {
+    .template-3-3 .post-info h3.post-title a {font-size: 14px !important;line-height: 20px !important;font-weight: 600 !important;}
+    .template-3-3 .post-view {display: none !important;}
+    .template-3-3 .post-description {display: none !important;}
+}
+/* END Widget Template 3-3 ********************************************************************************************/

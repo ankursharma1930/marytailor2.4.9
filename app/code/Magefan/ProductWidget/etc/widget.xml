@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="magefan_catalog_product_block" class="Magefan\ProductWidget\Block\Widget\Product\Block" 
+            placeholder_image="Magefan_ProductWidget::images/magefan-widget-product-block.png">
+        <label translate="true">Product Widget Advanced by Magefan</label>
+        <description translate="true">Block with product information</description>
+        <parameters>
+            <parameter name="product_id" xsi:type="block" visible="true" required="true" sort_order="10">
+                <label translate="true">Product</label>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser">
+                    <data>
+                        <item name="button" xsi:type="array">
+                            <item name="open" xsi:type="string" translate="true">Select Product...</item>
+                        </item>
+                    </data>
+                </block>
+            </parameter>
+            <parameter name="display_image" xsi:type="select" visible="true" sort_order="20" >
+                <label translate="true">Display Image</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="display_reviews" xsi:type="select" visible="true" sort_order="50" >
+                <label translate="true">Display Reviews</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="display_price" xsi:type="select" visible="true" sort_order="60" >
+                <label translate="true">Display Price</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="display_add_to_cart" xsi:type="select" visible="true" sort_order="60" >
+                <label translate="true">Display "Add to Cart" Button</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="display_description" xsi:type="select" visible="true" sort_order="70" >
+                <label translate="true">Display Description</label>
+                <options>
+                    <option name="yes1" value="1" selected="true">
+                        <label translate="true">Yes (Use Product Short Description)</label>
+                    </option>
+                    <option name="yes3" value="2">
+                        <label translate="true">Yes (Use Custom Product Attribute)</label>
+                    </option>
+                    <option name="yes2" value="3">
+                        <label translate="true">Yes (Use Custom Text)</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="description_attribute" xsi:type="text" visible="true" sort_order="80" >
+                <label translate="true">Description Product Attribute Code</label>
+                <depends>
+                    <parameter name="display_description" value="2" />
+                </depends>
+            </parameter>
+            <parameter name="description_text" xsi:type="text" visible="true" sort_order="90" >
+                <label translate="true">Description Custom Text</label>
+                <depends>
+                    <parameter name="display_description" value="3" />
+                </depends>
+            </parameter>
+
+            <parameter name="display_read_more" xsi:type="select" visible="true" sort_order="100" >
+                <label translate="true">Display Read More Link</label>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="read_more_text" xsi:type="text" visible="true" sort_order="110" >
+                <label translate="true">Read More Link Text</label>
+                <description translate="true"><![CDATA[
+                    Leave blank to use default text "<em>Click here for more details</em>".
+                ]]></description>
+                <depends>
+                    <parameter name="display_read_more" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="custom_template" xsi:type="text" visible="true" sort_order="130" >
+                <label translate="true">Custom Template</label>
+                <description translate="true"><![CDATA[
+                    Leave blank to use default template "<em>Magefan_ProductWidget::default.phtml</em>".
+                ]]></description>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

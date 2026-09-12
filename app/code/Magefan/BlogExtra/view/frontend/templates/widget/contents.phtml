@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * Blog post contents
+ *
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+?>
+<div class="mfblog-contents">
+    <p>
+        <span class="mfblog-contents-header"><?= $block->escapeHtml(__('Post Contents')) ?></span>
+        [<span class="mfblog-contents-toggle"><?= $block->escapeHtml(__('hide')) ?></span>]
+    </p>
+    <ol class="mfblog-contents-toc"></ol>
+</div>
+
+<script>
+    require(['jquery', 'domReady!'], function($) {
+        var headings = "h1:not('.notoc'), h2:not('.notoc'), h3:not('.notoc'), h4:not('.notoc')," +
+            " h5:not('.notoc'), h6:not('.notoc')";
+
+        if ($('.post-text-hld,._post-description').find(headings).length) {
+            $('.mfblog-contents .mfblog-contents-toggle').click(function() {
+                $('.mfblog-contents ol').toggle();
+
+                $(this).text(function(i, text) {
+                    return text === "<?= $block->escapeHtml(__('hide')) ?>" ?
+                        "<?= $block->escapeHtml(__('show')) ?>" :
+                        "<?= $block->escapeHtml(__('hide')) ?>";
+                })
+            });
+
+            require(['Magefan_BlogExtra/js/jquery.toc.min'], function() {
+                $('.post-text-hld .mfblog-contents-toc,._post-description .mfblog-contents-toc').toc({
+                    content: '.post-text-hld,._post-description',
+                    headings: headings
+                });
+                $('.mfblog-contents').show();
+            });
+        }
+    })
+</script>

@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Recipe\RecipeList $block
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+$recipeCollection = $block->getAvailableRecipeCollection();
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+?>
+<?php if (count($recipeCollection) == 0) : ?>
+    <div class="page-title-wrapper">
+        <h1 class="page-title">
+            <span class="base">
+                <?php echo $block->escapeHtml(__("Recipes not found")); ?>
+            </span>
+        </h1>
+    </div>
+<?php else : ?>
+    <?php foreach ($recipeCollection as $recipe) : ?>
+        <?php $recipeUrl = $block->getUrl($config->getSeoRoute()) . $recipe->getUrlKey() . $config->getSeoPostfix(); ?>
+        <li class="recipe-item item">
+            <div class="recipe-item-info">
+                <div class="recipe-item-details">
+                    <strong class="recipe-item-name">
+                        <a class="recipe-item-link"
+                           href="<?php echo $block->escapeHtml($recipeUrl) ?>">
+                            <?php echo $block->escapeHtml($recipe->getTitle()); ?>
+                        </a>
+                    </strong>
+                </div>
+                <div class="recipe-media">
+                    <a class="recipe-item-photo"
+                       href="<?php echo $block->escapeHtml($recipeUrl) ?>">
+                        <?php if ($recipe->getThumbnail()) : ?>
+                            <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage(
+                                $block->getRecipeThumbnail($recipe->getThumbnail()),
+                                'recipe_listing_image_thumbnail'
+                            )); ?>"
+                                 alt="<?php echo $block->escapeHtml($recipe->getTitle()) ?>"
+                                 title="<?php echo $block->escapeHtml($recipe->getTitle()) ?>">
+                        <?php else : ?>
+                            <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage(
+                                $block->getImageStub(),
+                                'recipe_listing_image_thumbnail'
+                            )); ?>"
+                                 alt="<?php $block->escapeHtml(__('Recipe Image')); ?>">
+                        <?php endif; ?>
+                    </a>
+                </div>
+                <ul class="filter-icon">
+                    <?php if (!empty($recipe->getOptions())) : ?>
+                        <?php  foreach ($recipe->getOptions() as $filterOption) : ?>
+                            <?php $d = 1; ?>
+                            <?php foreach ($filterOption as $optionData) : ?>
+                                <?php if (!empty($optionData['option_image'])) : ?>
+                                    <li><img title="<?php echo $block->escapeHtml($optionData['option_label']); ?>"
+                                             src="<?php echo $block->escapeHtml($block->getImageUrl()
+                                                 . '/' . $optionData['option_image']); ?>"
+                                             width="35" height="35"></li>
+                                <?php endif; ?>
+                                <?php if ($d == 5) : ?>
+                                    <?php break; ?>
+                                <?php endif; ?>
+                                <?php $d++; ?>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </ul>
+                <div class="container-recipe-cooking">
+                    <div class="cooking recipe-servings-number">
+                        <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/serving.png')); ?>"
+                             title="<?php echo $block->escapeHtml(__('Servings Number')) ?>" width="35" height="35">
+                        <?php $servingsNumber = $block->getFormatServingsNumber($recipe->getServingsNumber()); ?>
+                        <span>
+                            <?php echo $block->escapeHtml($servingsNumber . ' ' . (($servingsNumber == '1')
+                                    ? __('person') : __('people'))); ?>
+                        </span>
+                    </div>
+                    <div class="cooking prep-time">
+                        <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/prep-time.png')); ?>"
+                             title="<?php echo $block->escapeHtml(__('Prep Time')) ?>" width="35" height="35">
+                        <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getPrepTime())); ?></span>
+                    </div>
+                    <div class="cooking cooking-time">
+                        <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/cooking-time.png')); ?>"
+                             title="<?php echo $block->escapeHtml(__('Cooking Time')) ?>" width="35" height="35">
+                        <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getCookTime())); ?></span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    <?php endforeach ?>
+<?php endif; ?>

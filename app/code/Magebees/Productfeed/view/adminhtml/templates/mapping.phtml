@@ -1,0 +1,56 @@
+<?php
+$mapping = $this->getRequest()->getParams();
+$mapping_model = $this->getMapping();
+$model_cat = $this->getCategory();
+$category_mapping_arr = array();
+if ( isset( $mapping[ 'mapping_id' ] ) ) {
+	$mapping_id = $mapping[ 'mapping_id' ];
+	$mapping_model->load( $mapping_id );
+	if ( $mapping_model->getId() ) {
+		$category_mapping = $mapping_model->getMappingcontent();
+		if ( $mapping_model->isJSON( $category_mapping ) ) {
+			$category_mapping_arr = json_decode( $category_mapping, true );
+
+		}
+	}
+}
+?>
+<div class="fieldset category-mapping" id="content">
+	<div class="grid">
+		<?php 
+			$categories = $model_cat->getCollection()
+						->addAttributeToSelect('*')
+						->addAttributeToFilter('level', 1)
+						->addAttributeToFilter('is_active', 1);
+			$parent_categories = $categories->getData();
+			$mapping_content = '';
+			if(count($parent_categories)>0){
+				$parent_html = '';
+
+				foreach($parent_categories as $key => $value):
+				$parent_category = $model_cat->load($value['entity_id']);
+				
+		?>
+			<div class="mapping level-<?php echo $parent_category->getLevel();?>" data-level="<?php echo $parent_category->getLevel();?>">
+				<?php if($parent_category->hasChildren()){ ?>
+					<div class="toggle open"></div>
+				<?php } ?>
+				
+				<div class="name"><?php echo $parent_category->getName(); ?>(ID: "<?php echo $parent_category->getId();?>")</div>
+				<div class="map">
+					<?php if(isset($category_mapping_arr[$parent_category->getId()])){ ?>
+						<input type="text" data-parent="<?php echo $parent_category->getParentId();?>" data-id="<?php echo $parent_category->getId();?>" value="<?php echo $category_mapping_arr[$parent_category->getId()];?>" name="mapping[<?php echo $parent_category->getId();?>]" class="mapping-input">
+					<?php } else { ?>
+						<input type="text" data-parent="<?php echo $parent_category->getParentId();?>" data-id="<?php echo $parent_category->getId();?>" value="" name="mapping[<?php echo $parent_category->getId();?>]" class="mapping-input">
+					<?php } ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		<?php
+				$Categories_list = $mapping_model->getCategorieslist( $value[ 'entity_id' ], true, $category_mapping_arr );
+				echo $Categories_list;
+				endforeach;
+			}
+		?>
+	</div>
+</div>

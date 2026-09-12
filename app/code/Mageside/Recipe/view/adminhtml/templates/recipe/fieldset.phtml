@@ -1,0 +1,17 @@
+<fieldset class="admin__fieldset" style="padding: 20px;">
+    <div class="admin__field">
+        <label class="admin__field-label">
+            <span><?php echo $block->escapeHtml(__("Writer Name"));?></span>
+        </label>
+        <div class="admin__field-control control">
+            <div id="writer_name" class="control-value admin__field-value">
+                <?php if ($block->isWriter()) : ?>
+                <a href="<?php echo $block->escapeHtml($block->getWriterUrl()); ?>"
+                   target="_blank"><?php echo $block->escapeHtml($block->getWriterName()); ?></a>
+                <?php else: ?>
+                    <span><?php echo $block->escapeHtml($block->getWriterName()); ?></span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</fieldset>

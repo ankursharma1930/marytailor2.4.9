@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+        <add id="Dolphin_Productfaq::parent" title="Product Questions/FAQ" module="Dolphin_Productfaq" sortOrder="10" resource="Dolphin_Productfaq::parent" parent="Magento_Catalog::catalog" />
+    	<add id="Dolphin_Productfaq::dolphin_productfaq_productfaq" title="Manage Questions" module="Dolphin_Productfaq" sortOrder="30" action="dolphin_productfaq/productfaq/index" resource="Dolphin_Productfaq::manage" parent="Dolphin_Productfaq::parent"/>
+    	<add id="Dolphin_Productfaq::productfaq_configuration" title="Configuration" module="Dolphin_Productfaq" sortOrder="40" action="adminhtml/system_config/edit/section/productfaq" resource="Dolphin_Productfaq::productfaq_configuration" parent="Dolphin_Productfaq::parent"/>
+	</menu>
+</config>

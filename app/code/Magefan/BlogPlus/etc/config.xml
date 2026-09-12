@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mfblog>
+            <general>
+                <mfmodulep>BlogPlus</mfmodulep>
+                <mftype>0</mftype>
+            </general>
+            <design>
+                <index_page_layout/>
+                <post_page_layout/>
+                <category_page_layout/>
+                <tag_page_layout/>
+                <author_page_layout/>
+                <search_page_layout/>
+            </design>
+            <post_view>
+                <related_posts>
+                    <autorelated_enabled>0</autorelated_enabled>
+                    <autorelated_black_words/>
+                </related_posts>
+                <related_products>
+                    <autorelated_enabled>0</autorelated_enabled>
+                    <autorelated_black_words/>
+                </related_products>
+            </post_view>
+            <publish_post_on_fb>
+                <enabled>0</enabled>
+                <app_id/>
+                <app_secret/>
+                <page_id/>
+                <post_format>{{var post.title}} -{{post.short_content}}</post_format>
+                <autopublish_categories>0</autopublish_categories>
+            </publish_post_on_fb>
+            <advanced_permalink>
+                <enabled>0</enabled>
+                <redirect_to_no_slash>1</redirect_to_no_slash>
+                 <blog_route>blog</blog_route>
+                 <post_path_schema>{{blog_route}}/post/{{url_key}}</post_path_schema>
+                 <category_path_schema>{{blog_route}}/category/{{parent_category}}/{{url_key}}</category_path_schema>
+                 <tag_path_schema>{{blog_route}}/tag/{{url_key}}</tag_path_schema>
+                 <author_path_schema>{{blog_route}}/author/{{url_key}}</author_path_schema>
+                 <archive_path_schema>{{blog_route}}/archive/{{url_key}}</archive_path_schema>
+                 <search_path_schema>{{blog_route}}/search/{{url_key}}</search_path_schema>
+                 <rss_path_schema>blog/rss/feed</rss_path_schema>
+            </advanced_permalink>
+            <sitemap>
+                <index>
+                    <enabled>1</enabled>
+                    <frequency>daily</frequency>
+                    <priority>1</priority>
+                </index>
+                <category>
+                    <enabled>1</enabled>
+                    <frequency>daily</frequency>
+                    <priority>0.8</priority>
+                </category>
+                <post>
+                    <enabled>1</enabled>
+                    <frequency>daily</frequency>
+                    <priority>0.5</priority>
+                </post>
+                <author>
+                    <enabled>0</enabled>
+                    <frequency>daily</frequency>
+                    <priority>0.5</priority>
+                </author>
+                <tag>
+                    <enabled>0</enabled>
+                    <frequency>daily</frequency>
+                    <priority>0.5</priority>
+                </tag>
+            </sitemap>
+        </mfblog>
+    </default>
+</config>

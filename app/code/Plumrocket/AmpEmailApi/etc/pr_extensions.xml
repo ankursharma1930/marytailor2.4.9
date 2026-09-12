@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+ * @package     Plumrocket_AmpEmailApi
+ * @copyright   Copyright (c) 2021 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+-->
+<extensions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:module:Plumrocket_Base:etc/pr_extensions.xsd">
+    <extension name="AmpEmailApi" is_service="true" title="Amp Email Api" />
+</extensions>

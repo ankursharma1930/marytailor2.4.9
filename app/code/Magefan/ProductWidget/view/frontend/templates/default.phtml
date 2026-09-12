@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+/**
+ * Product Widget Block Template
+ *
+ * @var $block \Magefan\ProductWidget\Block\Widget\Product\Block
+ */
+?>
+<?php
+    $product = $block->getProduct();
+    if ($product) {
+        $productUrl = $product->getProductUrl();
+        $productName = $block->getProductName();
+?>
+<div class="mfpwb">
+    <div class="wrap clearfix">
+        <?php if ($block->displayImage()) { ?>
+        <div class="mfpip">
+            <a href="<?= $block->escapeHtml($productUrl) ?>" class="product photo" title="<?= $block->escapeHtml($productName) ?>">
+                <img src="<?= $block->escapeHtml($block->getProductImage()) ?>" alt="<?= $block->escapeHtml($productName) ?>" />
+            </a>
+        </div>
+        <?php } ?>
+
+        <div class="mfpid">
+            <div class="product-item-name">
+                <a class="product-item-link"
+                   href="<?= $block->escapeHtml($productUrl) ?>"
+                   title="<?= $block->escapeHtml($productName) ?>"
+                   >
+                    <?= $block->escapeHtml($productName) ?>
+                </a>
+            </div>
+
+            <?php if ($block->displayReviews()) { ?>
+                <?= $block->getReviewsSummaryHtml($product, $block->getReviewTemplateType()) ?>
+            <?php } ?>
+
+            <?php if ($block->displayPrice()) { ?>
+                <?= $block->getProductPrice($product) ?>
+            <?php } ?>
+
+            <?php if ($block->displayAddToCart()) { ?>
+                <?php if ($product->isSaleable()) { ?>
+                    <?php $postParams = $block->getAddToCartPostParams($product); ?>
+                    <form data-role="tocart-form" data-product-sku="<?=  /* @NoEscape */ $product->getSku() ?>" action="<?= /* @NoEscape */ $postParams['action'] ?>" method="post">
+                        <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $postParams['data']['product'] ?>">
+                        <input type="hidden" name="<?= /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                        <?= $block->getBlockHtml('formkey') ?>
+                        <button type="submit"
+                                title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                                class="action tocart primary btn btn-primary">
+                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                        </button>
+                    </form>
+                <?php } ?>
+            <?php } ?>
+
+            <?php if ($block->displayDescription()) { ?>
+            <div class="mf-product-item-description">
+                <p><?= $block->getProductDescription() ?></p>
+            </div>
+            <?php } ?>
+
+            <?php if ($block->displayReadMore()) { ?>
+                <a href="<?= $block->escapeHtml($productUrl) ?>" title="<?= $block->escapeHtml($productName) ?>" class="read-more"><?= $block->escapeHtml($block->getReadMoreText()) ?></a>
+            <?php } ?>
+
+        </div>
+    </div>
+</div>
+
+<script data-mfmofile="true">
+    document.addEventListener("DOMContentLoaded", function() {
+            !function (f, b, e, v, t) {
+                if(f.mfProductWidgetCss)return;
+                f.mfProductWidgetCss=1;
+                t = b.createElement(e);
+                t.rel = 'stylesheet';
+                t.type = 'text/css';
+                t.href = v;
+                s = b.getElementsByTagName('HEAD')[0];
+                s.appendChild(t)
+            }(window, document, 'link', '<?= $block->getViewFileUrl('Magefan_ProductWidget::css/productwidget.css') ?>');
+        });
+</script>
+
+
+<?php } ?>

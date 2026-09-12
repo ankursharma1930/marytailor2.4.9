@@ -1,0 +1,23 @@
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+.mf-ytw-wrapper {display: inline-block;}
+.mf-ytw-youtube {background-color: #000; margin-bottom: 30px; position: relative; overflow: hidden;	cursor: pointer; width:100%}
+.mf-ytw-youtube .mf-ytw-play-button {width: 90px; height: 60px;	background-color: #333;	box-shadow: 0 0 30px rgba( 0,0,0,0.6 );	z-index: 1;	opacity: 0.8; border-radius: 6px}
+.mf-ytw-youtube .mf-ytw-play-button:before {content: ""; border-style: solid; border-width: 15px 0 15px 26.0px; border-color: transparent transparent transparent #fff}
+.mf-ytw-youtube .mf-ytw-play-button {cursor: pointer}
+.mf-ytw-youtube iframe, .mf-ytw-youtube .mf-ytw-play-button, .mf-ytw-youtube .mf-ytw-play-button:before {position: absolute}
+.mf-ytw-youtube .mf-ytw-play-button, .mf-ytw-youtube .mf-ytw-play-button:before {top: 50%; left: 50%; transform: translate3d( -50%, -50%, 0 )}
+.mf-ytw-youtube iframe {height: 100%; width: 100%; top: 0; left: 0}
+
+.modal-popup.mf-ytw-youtube-popup .modal-inner-wrap {background:none;box-shadow:none;}
+.modal-popup.mf-ytw-youtube-popup .modal-header, .modal-popup.mf-ytw-youtube-popup .modal-footer {padding-left: 0px; padding-right: 0px}
+.modal-popup.mf-ytw-youtube-popup .action-close {margin-right: -15px; display: block;}
+.modal-popup.mf-ytw-youtube-popup .action-close:before {color: #000; font-size: 18px; line-height: 18px}
+.modal-popup.mf-ytw-youtube-popup .modal-inner-wrap {width:75%!important}
+@media (max-width: 1023px) {
+  .modal-popup.mf-ytw-youtube-popup .modal-inner-wrap {width:95%!important}
+}
+

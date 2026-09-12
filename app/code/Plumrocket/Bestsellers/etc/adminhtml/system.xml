@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_Bestsellers
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="pr_bestsellers" translate="label" type="text" sortOrder="717126" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Bestsellers</label>
+            <tab>plumrocket</tab>
+            <resource>Plumrocket_Bestsellers::pr_bestsellers_configuration</resource>
+            <group id="toolbox" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <frontend_model>Plumrocket\Base\Block\Adminhtml\System\Config\Form\ToolbarFieldset</frontend_model>
+                <field id="version" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Plumrocket\Base\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                    <attribute type="pr_extension_name">Bestsellers</attribute>
+                </field>
+            </group>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <attribute type="expanded">1</attribute>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="serial" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Plumrocket\Base\Block\Adminhtml\System\Config\Form\Serial</frontend_model>
+                    <label>Serial Key</label>
+                    <attribute type="pr_extension_name">Bestsellers</attribute>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

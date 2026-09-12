@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageside_Recipe::css/jquery.bxslider.css"/>
+        <css src="Mageside_Recipe::css/font-awesome.min.css"/>
+        <css src="Mageside_Recipe::css/style.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageside\Recipe\Block\Frontend\Index" name="recipe" as="recipe" template="recipe/recipes.phtml">
+                <block class="Mageside\Recipe\Block\Frontend\Recipe\RecipeList" name="recipe_list" as="recipe_list" template="recipe/list.phtml">
+                    <block class="Mageside\Recipe\Block\Frontend\Recipe\RecipeList" name="recipe_items" as="recipe_items" template="recipe/list/items.phtml"/>
+                </block>
+                <block class="Mageside\Recipe\Block\Frontend\Recipe\Filters\RecipeFilterType" name="recipe_filters" as="recipe_filters" template="recipe/list/filters.phtml"/>
+            </block>
+            <referenceBlock name="page.main.title" remove="true"/>
+        </referenceContainer>
+    </body>
+</page>

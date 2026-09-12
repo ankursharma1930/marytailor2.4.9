@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * YouTube Widget Block Template
+ *
+ * @var $block \Magefan\YouTubetWidget\Block\Widget\YouTube
+ */
+?>
+<?php if ($block->getVideoEmbedKey()) { ?>
+    <?php
+        $width = $block->escapeHtml($block->getWidth());
+        $height = $block->escapeHtml($block->getHeigth());
+        $allowFullScreen = $block->getAllowFullScreen() ? 1 : 0;
+        $id = 'mf-ytw-wrapper-' . sha1($block->getNameInLayout());
+        $title = $block->getVideoName() ? $block->escapeHtml($block->getVideoName()) : '';
+        $isShorts = $block->escapeHtml($block->getShortVideo());
+    ?>
+    <div id="<?= $id ?>" class="mf-ytw-wrapper" <?= $isShorts ?  'shorts="true"' : '' ?> data-allowfullscreen="<?= $allowFullScreen ?>" data-width="<?= $width ?>" data-height="<?= $height ?>" style="width: <?= $width ?>" data-iframe-title="<?= $title ?>" data-iframe-src="<?= $block->escapeUrl($block->getVideoEmbedUrl()) ?>">
+        <?php if ($block->isSnippetEnabled()) { ?>
+            <div id="<?= $block->escapeHtml($block->getData('video_url')) ?>" itemprop="video" itemscope itemtype="http://schema.org/VideoObject" >
+            <?php
+            $params = [
+                'name' => 'getVideoName',
+                'duration' => 'getVideoDuration',
+                'thumbnailUrl' => 'getImageUrl',
+                'url' => 'getVideoUrl',
+                /*'contentUrl' => 'getContentUrl',*/
+                'embedUrl' => 'getVideoEmbedUrl',
+                'uploadDate' => 'getUploadDate',
+                'description' => 'getVideoDescription',
+                'height' => 'getWidth',
+                'width' => 'getHeigth'
+            ];
+            ?>
+            <?php foreach ($params as $itemprop => $contentMethod) { ?>
+                <?php $content = $block->$contentMethod() ?>
+                <?php if ($content) { ?>
+                    <meta itemprop="<?= $itemprop ?>" content="<?= $block->escapeHtml($content) ?>" />
+                <?php } ?>
+            <?php } ?>
+            </div>
+        <?php } ?>
+        <div class="mf-ytw-youtube"
+             data-background="black url('<?= $block->escapeHtml($block->getImageUrl()) ?>') center no-repeat"
+             data-background-size="<?= $block->escapeHtml($block->getImageSize()) ?>"
+        >
+            <div class="mf-ytw-play-button"></div>
+        </div>
+    </div>
+<?php } ?>

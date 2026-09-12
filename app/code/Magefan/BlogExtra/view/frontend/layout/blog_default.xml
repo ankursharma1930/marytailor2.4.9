@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="blog.sidebar">
+            <block class="Magefan\BlogExtra\Block\Sidebar\Contents" name="blog.sidebar.contents" template="Magefan_BlogExtra::sidebar/contents.phtml" >
+                <action method="setBlockTitle">
+                    <argument name="time" xsi:type="string">Post Contents</argument>
+                </action>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="mfblog.import.items" htmlTag="div" htmlClass="mfblog-imports" >
+            <referenceBlock name="mfblog.import.amasty1" >
+                <arguments>
+                    <argument name="import_type" xsi:type="string">amasty1</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="mfblog.import.amasty2" >
+                <arguments>
+                    <argument name="import_type" xsi:type="string">amasty2</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="mfblog.import.joomla">
+                <arguments>
+                    <argument name="import_type" xsi:type="string">joomla</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="mfblog.import.em">
+                <arguments>
+                    <argument name="import_type" xsi:type="string">em</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="mfblog.import.csvxml" >
+                <arguments>
+                    <argument name="import_type" xsi:type="string">csvxml</argument>
+                    <argument name="import_path" xsi:type="string">blogimport/import/step1</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="mfblog.import.hubspot">
+                <arguments>
+                    <argument name="import_type" xsi:type="string">hubspot</argument>
+                    <argument name="import_path" xsi:type="string">blogimport/import/hubspot</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="mfblog.import.drupal">
+                <arguments>
+                    <argument name="import_type" xsi:type="string">drupal</argument>
+                </arguments>
+            </referenceBlock>
+        </referenceContainer>
+    </body>
+</page>

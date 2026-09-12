@@ -1,0 +1,129 @@
+<?php /** @var \Snowdog\Menu\Block\Menu $block */ ?>
+<?php
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+$menu = $block->getMenu();
+$uniqueId = '_' . uniqid();
+
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+
+<?php if ($menu): ?>
+    <script>
+        'use strict';
+
+        const initMenuFooter<?= $escaper->escapeHtml($uniqueId) ?> = () => ({
+            isDesktop: true,
+            checkIsDesktopResolution() {
+                this.isDesktop = window.matchMedia('(min-width: 1024px)').matches
+            },
+            toggleSubmenu(event, index) {
+                const focusableElements = 'button:not([disabled]), a[href]:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])'
+
+                event.stopPropagation()
+                this[index] = !this[index]
+
+                if (this[index]) {
+                    this.$nextTick(() => {
+                        this.$refs['submenu-' + index]?.querySelector(focusableElements)?.focus()
+                    })
+                } else {
+                    this.$nextTick(() => {
+                        this.$refs['submenu-toggle-' + index]?.focus()
+                    })
+                }
+            },
+        })
+    </script>
+    <div
+        class="
+            <?= $escaper->escapeHtmlAttr($menu->getCssClass()) ?>
+             snowdog-menu-footer w-full flex flex-wrap text-primary-darker text-stone-500
+        "
+        x-data="initMenuFooter<?= $escaper->escapeHtml($uniqueId) ?>()"
+    >
+
+        <div class="w-full md:w-2/5 pt-0 ps-0 md:ps-36 py-4">
+            <div class="title mb-6">
+                <a class="logo" href="/">
+                    <img src="http://local.marytylor.com/media/logo/stores/1/Logo---Mary-Tylor_Naturals_200x89_PNG_1.png" alt="logo" class="mx-auto md:mx-0">
+                </a>
+            </div>
+            <div class="content">
+                <p class="text-left inline-block text-xs">Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.</p>
+                <div class="toggle-footer">
+                    <div class="mt-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="20" height="20" class="inline mb-1 me-1"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Address : 2126 Alicia Street Fort Myers FL 33901 USA.</div>
+                    <div class="mt-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="20" height="20" class="inline mb-1 me-1"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z"/></svg> Call us now: <a href="tel:(518) 444 0434">(518) 444 0434</a></div>
+                    <div class="mt-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" class="inline mb-1 me-1"><path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/></svg> <a href="mailto:cs@marytylor.com">cs@marytylor.com</a></div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="w-full md:ml-4 ml-0 flex flex-col flex-wrap md:flex-row md:w-1/2 md:justify-between md:gap-6 divide-y divide-container md:divide-y-0"
+            x-init="checkIsDesktopResolution()"
+            @resize.window.debounce="checkIsDesktopResolution()"
+            @visibilitychange.window.debounce="checkIsDesktopResolution()"
+        >
+            <?php foreach ($block->getNodes() as $node): ?>
+                <?php
+                $childrenLevel = $node->getLevel() + 1;
+                $children = $block->getNodes($childrenLevel, $node);
+                $node->setIsParent((bool) $children);
+                $indexId = 'node' . $node->getId();
+                $title = $node->getTitle();
+                $nodeType = $node->getType();
+                $nodeClasses = $node->getClasses();
+                ?>
+                <li x-data="{'<?= /* @noEscape */ (string) $indexId ?>': false }"
+                    class="flex-1"
+                >
+                    <?php if ($node->getIsParent() && !$node->getIsViewAllLink()): ?>
+                        <div @keydown.escape="(event) => !isDesktop && toggleSubmenu(event, '<?= /* @noEscape */ (string) $indexId ?>')">
+                            <span x-show="isDesktop"
+                                x-cloak="tablet"
+                                class="block font-bold mb-6 text-black"
+                            >
+                                <?= $escaper->escapeHtml($title) ?>
+                            </span>
+                            <button x-show="!isDesktop"
+                                x-cloak="desktop"
+                                x-ref="submenu-toggle-<?= /* @noEscape */ (string) $indexId ?>"
+                                class="
+                                    w-full py-4 font-bold text-black
+                                "
+                                @click="(event) => toggleSubmenu(event, '<?= /* @noEscape */ (string) $indexId ?>')"
+                                :aria-expanded="<?= /* @noEscape */ (string) $indexId ?> === true"
+                                type="button"
+                            >
+                                <div class="flex items-center justify-between">
+                                    <span>
+                                        <?= $escaper->escapeHtml($title) ?>
+                                    </span>
+                                    <div class="transition-transform"
+                                        :class="{'rotate-180' : <?= /* @noEscape */ (string) $indexId ?> === true}"
+                                    >
+                                        <?= $heroicons->chevronDownHtml('text-gray-500', 20, 20, ['aria-hidden' => 'true']); ?>
+                                    </div>
+                                </div>
+                            </button>
+                            <div x-show="isDesktop || !!<?= /* @noEscape */ (string) $indexId ?>"
+                                x-cloak="tablet"
+                                x-ref="submenu-<?= /* @noEscape */ (string) $indexId ?>"
+                                x-collapse
+                                class="pb-2"
+                                :aria-hidden="!isDesktop && <?= /* @noEscape */ (string) $indexId ?> === false ? 'true' : 'false'"
+                            >
+                                <?= /* @noEscape */ $block->renderSubmenu($children, $node, $childrenLevel) ?>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="group">
+                            <?= /* @noEscape */ $block->renderMenuNode($node) ?>
+                        </div>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    </div>
+<?php endif; ?>

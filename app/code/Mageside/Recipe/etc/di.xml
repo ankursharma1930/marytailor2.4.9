@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Mageside\Recipe\Model\Recipe\Filter\Data" type="Magento\Framework\Model\AbstractModel">
+        <arguments>
+            <argument name="resource" xsi:type="object">Mageside\Recipe\Model\ResourceModel\Recipe\Filter\Data</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mageside\Recipe\Model\Store" type="Magento\Framework\Model\AbstractModel">
+        <arguments>
+            <argument name="resource" xsi:type="object">Mageside\Recipe\Model\ResourceModel\Store</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mageside\Recipe\Model\ResourceModel\Writer\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="resourceModel" xsi:type="string">Mageside\Recipe\Model\ResourceModel\Writer\Collection</argument>
+            <argument name="mainTable" xsi:type="string">ms_recipe_writer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mageside\Recipe\Ui\DataProvider\Form\Modifier\RecipePoolVirtual" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="fillData" xsi:type="array">
+                    <item name="class" xsi:type="string">Mageside\Recipe\Ui\DataProvider\Form\Modifier\AssignedProductsData</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mageside\Recipe\Model\Layer\Category\Context" type="Magento\Catalog\Model\Layer\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Mageside\Recipe\Model\Layer\ItemCollectionRecipe</argument>
+            <argument name="stateKey" xsi:type="object">Mageside\Recipe\Model\Layer\StateKey</argument>
+            <argument name="collectionFilter" xsi:type="object">Magento\Catalog\Model\Layer\Category\CollectionFilter</argument>
+        </arguments>
+    </virtualType>
+    <type name="Mageside\Recipe\Ui\DataProvider\Form\RecipeDataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Mageside\Recipe\Ui\DataProvider\Form\Modifier\RecipePoolVirtual</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="recipe_listing_data_source" xsi:type="string">Mageside\Recipe\Model\ResourceModel\Recipe\Grid\Collection</item>
+                <item name="recipe_filter_listing_data_source" xsi:type="string">Mageside\Recipe\Model\ResourceModel\Recipe\Filter\Grid\Collection</item>
+                <item name="products_listing_data_source" xsi:type="string">Mageside\Recipe\Model\ResourceModel\RecipeProduct\Grid\Collection</item>
+                <item name="recipe_customer_listing_data_source" xsi:type="string">Mageside\Recipe\Ui\DataProvider\Listing\Collection\Writer</item>
+                <item name="recipe_reviews_listing_data_source" xsi:type="string">Mageside\Recipe\Model\ResourceModel\Review\Grid\Collection</item>
+                <item name="reviews_recipe_listing_data_source" xsi:type="string">Mageside\Recipe\Ui\DataProvider\Listing\Collection\Review</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Customer\Collection">
+        <plugin name="after_load_collection"
+                type="Mageside\Recipe\Model\Plugin\DataFormWriter"
+                sortOrder="10"
+                disabled="false"
+        />
+    </type>
+    <preference for="Magento\Review\Model\ResourceModel\Review\Product\Collection" type="Mageside\Recipe\Model\ResourceModel\Review\Product\Collection"/>
+    <type name="Magento\Review\Model\ResourceModel\Review">
+        <plugin name="mageside_before_aggregate"
+                type="Mageside\Recipe\Model\Plugin\AggregateRatingSummaries"
+                sortOrder="10"
+                disabled="false"
+        />
+    </type>
+    <preference for="Magento\Review\Model\ResourceModel\Rating" type="Mageside\Recipe\Model\ResourceModel\Rating"/>
+    <preference for="Magento\Review\Model\ResourceModel\Review" type="Mageside\Recipe\Model\ResourceModel\Review"/>
+    <type name="Mageside\Recipe\Helper\Settings">
+        <arguments>
+            <argument name="joinFields" xsi:type="array">
+                <item name="title" xsi:type="string">varchar</item>
+                <item name="ingredients" xsi:type="string">text</item>
+                <item name="short_description" xsi:type="string">text</item>
+                <item name="method" xsi:type="string">text</item>
+                <item name="meta_title" xsi:type="string">varchar</item>
+                <item name="meta_keywords" xsi:type="string">text</item>
+                <item name="meta_description" xsi:type="string">text</item>
+            </argument>
+            <argument name="searchKeywords" xsi:type="array">
+                <item name="title" xsi:type="number">100</item>
+                <item name="short_description" xsi:type="number">50</item>
+                <item name="ingredients" xsi:type="number">25</item>
+                <item name="method" xsi:type="number">10</item>
+            </argument>
+            <argument name="storeDefinedFields" xsi:type="array">
+                <item name="title" xsi:type="string">input</item>
+                <item name="short_description" xsi:type="string">wysiwyg</item>
+            </argument>
+            <argument name="searchEngineFields" xsi:type="array">
+                <item name="meta_title" xsi:type="string">input</item>
+                <item name="meta_keywords" xsi:type="string">textarea</item>
+                <item name="meta_description" xsi:type="string">textarea</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemProvider\Composite">
+        <arguments>
+            <argument name="itemProviders" xsi:type="array">
+                <item name="recipeProvider" xsi:type="object">Mageside\Recipe\Model\ItemProvider\RecipeSiteMap</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Mageside\Recipe\Model\ItemProvider\RecipeSiteMap">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Mageside\Recipe\Model\ItemProvider\RecipeSiteMapConfigReader</argument>
+        </arguments>
+    </type>
+</config>

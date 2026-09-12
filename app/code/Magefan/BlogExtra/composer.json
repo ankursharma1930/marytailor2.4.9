@@ -1,0 +1,28 @@
+{
+    "name": "magefan/module-blog-extra",
+    "description": "Magefan Blog Extra for Magento 2",
+    "version": "2.11.4",
+    "type": "magento2-module",
+    "license": "EULA",
+    "require": {
+        "magefan/module-blog-plus": "2.11.4",
+        "magefan/module-blog-author": "2.11.3",
+        "magefan/module-blog-import": "2.11.1",
+        "magefan/module-productwidget": ">=2.0.12",
+        "magefan/module-youtube-widget": ">=2.0.17"
+    },
+    "authors": [
+        {
+            "name": "Magefan",
+            "email": "support@magefan.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Magefan\\BlogExtra\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}

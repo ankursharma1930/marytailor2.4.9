@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var $block Mageside\Recipe\Block\Frontend\Recipe\GoogleRichSnippets
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+?>
+<?php if ($config->googleRichSnippets()) : ?>
+    <script type="application/ld+json">
+        <?php echo $block->getJsonData(); ?>
+    </script>
+<?php endif; ?>

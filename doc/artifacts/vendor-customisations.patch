@@ -1,0 +1,25 @@
+diff --git a/vendor/hyva-themes/magento2-default-theme/Magento_Theme/layout/default.xml b/vendor/hyva-themes/magento2-default-theme/Magento_Theme/layout/default.xml
+index 106ed8a6e..1b2dc6203 100755
+--- a/vendor/hyva-themes/magento2-default-theme/Magento_Theme/layout/default.xml
++++ b/vendor/hyva-themes/magento2-default-theme/Magento_Theme/layout/default.xml
+@@ -59,7 +59,6 @@
+                 <block name="topmenu_generic"
+                        as="topmenu"
+                        template="Magento_Theme::html/header/topmenu.phtml"
+-                       ttl="3600"
+                 >
+                     <arguments>
+                         <argument name="cache_lifetime" xsi:type="string">3600</argument>
+diff --git a/vendor/hyva-themes/magento2-default-theme/Magento_Theme/templates/html/header/logo.phtml b/vendor/hyva-themes/magento2-default-theme/Magento_Theme/templates/html/header/logo.phtml
+index ac13c08a9..9658ed2a2 100755
+--- a/vendor/hyva-themes/magento2-default-theme/Magento_Theme/templates/html/header/logo.phtml
++++ b/vendor/hyva-themes/magento2-default-theme/Magento_Theme/templates/html/header/logo.phtml
+@@ -34,7 +34,7 @@ $logoSrc = $logoPathResolver && method_exists($logoPathResolver, 'getLogoSrc')
+     ? $logoPathResolver->getLogoSrc($block->getData('logo_file'))
+     : $block->getLogoSrc();
+ ?>
+-<div class="order-1 sm:order-2 lg:order-1 w-full pb-2 sm:w-auto sm:pb-0">
++<div class="w-full pb-2 sm:w-auto sm:pb-0">
+     <a
+         class="flex items-center justify-center text-xl font-medium tracking-wide text-gray-800
+             no-underline hover:no-underline font-title"

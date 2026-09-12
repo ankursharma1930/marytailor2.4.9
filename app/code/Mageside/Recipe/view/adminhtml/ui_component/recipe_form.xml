@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">recipe_form.recipe_form_data_source</item>
+            <item name="deps" xsi:type="string">recipe_form.recipe_form_data_source</item>
+            <item name="namespace" xsi:type="string">recipe_form</item>
+        </item>
+        <item name="config" xsi:type="array">
+            <item name="namespace" xsi:type="string">recipe_form</item>
+        </item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Mageside\Recipe\Block\Adminhtml\Edit\BackButton</item>
+            <item name="delete" xsi:type="string">Mageside\Recipe\Block\Adminhtml\Edit\DeleteButton</item>
+            <item name="save" xsi:type="string">Mageside\Recipe\Block\Adminhtml\Edit\Save</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="childrenFromMeta" xsi:type="boolean">true</item>
+    </argument>
+    <dataSource name="recipe_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Mageside\Recipe\Ui\DataProvider\Form\RecipeDataProvider</argument>
+            <argument name="name" xsi:type="string">recipe_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">main_table.recipe_id</argument>
+            <argument name="requestFieldName" xsi:type="string">recipe_id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="recipe/recipe/save"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <fieldset name="recipe_form">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">General Details</item>
+                <item name="collapsible" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+        <container name="current_recipe_writer" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">3</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Mageside\Recipe\Block\Adminhtml\Recipe\Writer</argument>
+            </htmlContent>
+        </container>
+        <container name="recipe_writer">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="string"/>
+                    <item name="label" xsi:type="string"/>
+                    <item name="sortOrder" xsi:type="number">4</item>
+                </item>
+            </argument>
+            <container name="change_writer_button">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="title" xsi:type="string" translate="true">Change</item>
+                        <item name="dataScope" xsi:type="string"/>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="displayArea" xsi:type="string">insideGroup</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">recipe_form.recipe_form.recipe_form.change_writer_model</item>
+                                <item name="actionName" xsi:type="string">toggleModal</item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="targetName" xsi:type="string">recipe_form.recipe_form.recipe_form.change_writer_model.recipe_writer_listing</item>
+                                <item name="actionName" xsi:type="string">render</item>
+                            </item>
+                        </item>
+                        <item name="additionalForGroup" xsi:type="boolean">true</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-change_writer</item>
+                    </item>
+                </argument>
+            </container>
+        </container>
+        <modal name ="change_writer_model">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataScope" xsi:type="string"/>
+                    <item name="component" xsi:type="string">Magento_Ui/js/modal/modal-component</item>
+                    <item name="options" xsi:type="array">
+                        <item name="title" xsi:type="string" translate="true">Recipe Writer</item>
+                        <item name="buttons" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="text" xsi:type="string" translate="true">Cancel</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="string">closeModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <insertListing name="recipe_writer_listing">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="autoRender" xsi:type="boolean">true</item>
+                        <item name="ns" xsi:type="string">recipe_customer_listing</item>
+                        <item name="externalProvider" xsi:type="string">recipe_customer_listing.recipe_customer_listing_data_source</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="recipe_id" xsi:type="string">${ $.provider }:data.recipe.recipe_id</item>
+                        </item>
+                        <item name="exports" xsi:type="array">
+                            <item name="recipe_id" xsi:type="string">${ $.externalProvider }:params.recipe.recipe_id</item>
+                        </item>
+                    </item>
+                </argument>
+            </insertListing>
+        </modal>
+        <field name="status">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">5</item>
+                    <item name="label" xsi:type="string">Enabled</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
+                    </item>
+                    <item name="dataScope" xsi:type="string">data.recipe.status</item>
+                    <item name="default" xsi:type="string">1</item>
+                </item>
+            </argument>
+        </field>
+        <field name="featured">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">7</item>
+                    <item name="label" xsi:type="string">Featured</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
+                    </item>
+                    <item name="dataScope" xsi:type="string">data.recipe.featured</item>
+                    <item name="default" xsi:type="string">0</item>
+                </item>
+            </argument>
+        </field>
+        <field name="sort_order">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">8</item>
+                    <item name="label" xsi:type="string">Sort Order</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.sort_order</item>
+                    <item name="default" xsi:type="string">100</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-digits" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="label" xsi:type="string">Title</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.title</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="thumbnail">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Mageside_Recipe/js/components/form/file-uploader</item>
+                    <item name="source" xsi:type="string">recipe</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="label" xsi:type="string" translate="true">Thumbnail</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.thumbnail</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="recipe/image/upload"/>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="media_type">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">25</item>
+                    <item name="label" xsi:type="string">Media Type</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.media_type</item>
+                </item>
+                <item name="options" xsi:type="array">
+                    <item name="image" xsi:type="array">
+                        <item name="value" xsi:type="string">image</item>
+                        <item name="label" xsi:type="string" translate="true">Image</item>
+                    </item>
+                    <item name="video" xsi:type="array">
+                        <item name="value" xsi:type="string">video</item>
+                        <item name="label" xsi:type="string" translate="true">Video</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="media_type_image">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Mageside_Recipe/js/components/form/file-uploader</item>
+                    <item name="source" xsi:type="string">recipe</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="label" xsi:type="string" translate="true">Main Image</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.media_type_image</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="recipe/image/upload"/>
+                    </item>
+                    <item name="visibleToggles" xsi:type="array">
+                        <item name="recipe_form.recipe_form.recipe_form.media_type" xsi:type="array">
+                            <item name="options" xsi:type="array">
+                                <item name="image" xsi:type="string">image</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="media_type_video_url">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Mageside_Recipe/js/components/form/input</item>
+                    <item name="source" xsi:type="string">recipe</item>
+                    <item name="label" xsi:type="string">Video Url</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="notice" xsi:type="string">Please use full video url from Vimeo or YouTube</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.media_type_video_url</item>
+                    <item name="sortOrder" xsi:type="number">35</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-url" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">!${$.parentName}.media_type_image:visible</item>
+                    </item>
+                    <item name="visibleToggles" xsi:type="array">
+                        <item name="recipe_form.recipe_form.recipe_form.media_type" xsi:type="array">
+                            <item name="options" xsi:type="array">
+                                <item name="video" xsi:type="string">video</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="short_description" formElement="wysiwyg">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">wysiwyg</item>
+                    <item name="label" xsi:type="string">Short Description</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="wysiwyg" xsi:type="boolean">true</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.short_description</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="rows" xsi:type="number">8</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="wysiwygConfigData" xsi:type="array">
+                        <item name="is_pagebuilder_enabled" xsi:type="boolean">true</item>
+                        <item name="pagebuilder_button" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="store_view">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Cms\Ui\Component\Listing\Column\Cms\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Store View</item>
+                    <item name="formElement" xsi:type="string">multiselect</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.store_view</item>
+                    <item name="sortOrder" xsi:type="string">50</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+    <fieldset name="search_engine_optimisation">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Search Engine Optimization</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <field name="url_key">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="label" xsi:type="string">Url key</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.url_key</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="meta_title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string">Meta Title</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.meta_title</item>
+                </item>
+            </argument>
+        </field>
+        <field name="meta_keywords">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="label" xsi:type="string">Meta Keywords</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.meta_keywords</item>
+                </item>
+            </argument>
+        </field>
+        <field name="meta_description" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="label" xsi:type="string">Meta Description</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.meta_description</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+    <fieldset name="cooking">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Cooking</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <field name="prep_time" class="Mageside\Recipe\Ui\Component\Form\Element\DataType\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Mageside_Recipe/js/components/form/time</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Prep Time</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.prep_time</item>
+                    <item name="sortOrder" xsi:type="number">55</item>
+                    <item name="additionalClasses" xsi:type="string">admin__control-cooking</item>
+                    <item name="options" xsi:type="array">
+                        <item name="showsTime" xsi:type="boolean">true</item>
+                        <item name="timeOnly" xsi:type="boolean">true</item>
+                        <item name="timeFormat" xsi:type="string">HH:mm</item>
+                        <item name="showButtonPanel" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="default" xsi:type="string">00:00</item>
+                </item>
+            </argument>
+        </field>
+        <field name="cook_time" class="Mageside\Recipe\Ui\Component\Form\Element\DataType\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Mageside_Recipe/js/components/form/time</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Cook Time</item>
+                    <item name="dataScope" xsi:type="string">data.recipe.cook_time</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="additionalClasses" xsi:type="string">admin__control-cooking</item>
+                    <item name="options" xsi:type="array">
+                        <item name="showsTime" xsi:type="boolean">true</item>
+                        <item name="timeOnly" xsi:type="boolean">true</item>
+                        <item name="timeFormat" xsi:type="string">HH:mm</item>
+                        <item name="showButtonPanel" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="default" xsi:type="string">00:00</item>
+                </item>
+            </argument>
+        </field>
+        <container name="servings_number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="componentType" xsi:type="string">container</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">65</item>
+                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
+                </item>
+                <item name="template" xsi:type="string">templates/container/default</item>
+            </argument>
+            <field name="servings_number_from">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="label" xsi:type="string" translate="true">Servings Number</item>
+                        <item name="dataScope" xsi:type="string">data.recipe.servings_number_from</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-default</item>
+                    </item>
+                    <item name="options" xsi:type="object">Mageside\Recipe\Model\Source\Servings</item>
+                </argument>
+            </field>
+            <field name="servings_number_to">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="label" xsi:type="string" translate="true">To</item>
+                        <item name="dataScope" xsi:type="string">data.recipe.servings_number_to</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-default</item>
+                    </item>
+                    <item name="options" xsi:type="object">Mageside\Recipe\Model\Source\Servings</item>
+                </argument>
+            </field>
+        </container>
+            <container name="ingredients">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string">Mageside_Recipe/js/dynamic-rows/dynamic-rows</item>
+                        <item name="template" xsi:type="string">Mageside_Recipe/ui/dynamic-rows/default</item>
+                        <item name="componentType" xsi:type="string">dynamicRows</item>
+                        <item name="recordTemplate" xsi:type="string">option_ingredients</item>
+                        <item name="addButtonLabel" xsi:type="string" translate="true">Add Ingredient</item>
+                        <item name="label" xsi:type="string">Ingredients</item>
+                        <item name="dataScope" xsi:type="string">data.recipe</item>
+                    </item>
+                </argument>
+                <container name="option_ingredients">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                            <item name="isTemplate" xsi:type="boolean">true</item>
+                            <item name="is_collection" xsi:type="boolean">true</item>
+                            <item name="dataScope" xsi:type="string"/>
+                        </item>
+                    </argument>
+                    <field name="measure">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="formElement" xsi:type="string">input</item>
+                                <item name="template" xsi:type="string">ui/form/field</item>
+                                <item name="dataType" xsi:type="string">text</item>
+                                <item name="label" xsi:type="string" translate="true">Measure</item>
+                            </item>
+                        </argument>
+                    </field>
+                    <field name="ingredient">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="formElement" xsi:type="string">input</item>
+                                <item name="template" xsi:type="string">ui/form/field</item>
+                                <item name="dataType" xsi:type="string">text</item>
+                                <item name="label" xsi:type="string" translate="true">Ingredient</item>
+                            </item>
+                        </argument>
+                    </field>
+                    <field name="url">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="formElement" xsi:type="string">input</item>
+                                <item name="template" xsi:type="string">ui/form/field</item>
+                                <item name="dataType" xsi:type="string">text</item>
+                                <item name="label" xsi:type="string" translate="true">Url</item>
+                            </item>
+                        </argument>
+                    </field>
+                    <actionDelete name="actionDelete" class="Magento\Ui\Component\Form\Element\ActionDelete">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="componentType" xsi:type="string">actionDelete</item>
+                                <item name="dataType" xsi:type="string">text</item>
+                                <item name="label" xsi:type="string" translate="true">Actions</item>
+                                <item name="template" xsi:type="string">Mageside_Recipe/ui/dynamic-rows/cells/action-delete</item>
+                                <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
+                            </item>
+                        </argument>
+                    </actionDelete>
+                </container>
+            </container>
+            <container name="method">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string">Mageside_Recipe/js/dynamic-rows/dynamic-rows</item>
+                        <item name="template" xsi:type="string">Mageside_Recipe/ui/dynamic-rows/default</item>
+                        <item name="componentType" xsi:type="string">dynamicRows</item>
+                        <item name="recordTemplate" xsi:type="string">option_method</item>
+                        <item name="addButtonLabel" xsi:type="string" translate="true">Add Step</item>
+                        <item name="label" xsi:type="string">Method</item>
+                        <item name="dataScope" xsi:type="string">data.recipe</item>
+                    </item>
+                </argument>
+                <container name="option_method">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                            <item name="isTemplate" xsi:type="boolean">true</item>
+                            <item name="is_collection" xsi:type="boolean">true</item>
+                            <item name="dataScope" xsi:type="string"/>
+                        </item>
+                    </argument>
+                    <field name="step">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="formElement" xsi:type="string">textarea</item>
+                                <item name="template" xsi:type="string">ui/form/field</item>
+                                <item name="dataType" xsi:type="string">text</item>
+                                <item name="label" xsi:type="string" translate="true">Step</item>
+                            </item>
+                        </argument>
+                    </field>
+                    <actionDelete name="actionDelete" class="Magento\Ui\Component\Form\Element\ActionDelete">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="componentType" xsi:type="string">actionDelete</item>
+                                <item name="dataType" xsi:type="string">text</item>
+                                <item name="label" xsi:type="string" translate="true">Actions</item>
+                                <item name="template" xsi:type="string">Mageside_Recipe/ui/dynamic-rows/cells/action-delete</item>
+                                <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
+                            </item>
+                        </argument>
+                    </actionDelete>
+                </container>
+            </container>
+    </fieldset>
+</form>

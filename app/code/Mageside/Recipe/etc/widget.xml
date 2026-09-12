@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="mageside_recipe" class="Mageside\Recipe\Block\Widget\Recipe">
+        <label translate="true">Recipes</label>
+        <description translate="true">Widget in Magento</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="true" visible="true">
+                <label translate="true">Title</label>
+            </parameter>
+            <parameter name="recipe_type" xsi:type="select" required="true" visible="true">
+                <label translate="true">Recipe attributes to show</label>
+                <description translate="true">Featured - recipe marked as 'Featured', Recently Create - recently created recipes</description>
+                <options>
+                    <option name="featured" value="featured">
+                        <label translate="true">Featured</label>
+                    </option>
+                    <option name="recently" value="recently">
+                        <label translate="true">Recently Create</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="recipe_size" xsi:type="text" required="false" visible="true">
+                <label translate="true">Number of Recipe to display</label>
+                <value>4</value>
+            </parameter>
+            <parameter name="template" xsi:type="select" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default"
+                            value="Mageside_Recipe::recipe/widget.phtml"
+                            selected="true">
+                        <label translate="true">Mageside Recipes Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

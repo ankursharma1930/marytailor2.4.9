@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="blogauthor.author.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="blogauthor.author.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">mfBlogAuthorGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magefan\BlogAuthor\Model\ResourceModel\Author\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">id</argument>
+                    <argument name="default_dir" xsi:type="string">desc</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="blogauthor.author.grid.massaction" as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">author_id</argument>
+                        <argument name="form_field_name" xsi:type="string">id</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="status_enable" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Enable</item>
+                                <item name="url" xsi:type="string">*/*/massStatus/status/1/</item>
+                            </item>
+                            <item name="status_disable" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Disable</item>
+                                <item name="url" xsi:type="string">*/*/massStatus/status/0/</item>
+                            </item>
+                            <item name="delete" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Delete</item>
+                                <item name="url" xsi:type="string">*/*/delete</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="blogauthor.author.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">columnSet</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="index" xsi:type="string">author_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="firstname">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">First Name</argument>
+                            <argument name="index" xsi:type="string">firstname</argument>
+                            <argument name="header_css_class" xsi:type="string">col-firstname</argument>
+                            <argument name="column_css_class" xsi:type="string">ccol-firstname</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="lastname">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Last Name</argument>
+                            <argument name="index" xsi:type="string">lastname</argument>
+                            <argument name="header_css_class" xsi:type="string">col-lastname</argument>
+                            <argument name="column_css_class" xsi:type="string">ccol-lastname</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Email</argument>
+                            <argument name="index" xsi:type="string">email</argument>
+                            <argument name="header_css_class" xsi:type="string">col-email</argument>
+                            <argument name="column_css_class" xsi:type="string">ccol-email</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_ids">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store View</argument>
+                            <argument name="index" xsi:type="string">store_ids</argument>
+                            <argument name="type" xsi:type="string">store</argument>
+                            <argument name="store_all" xsi:type="string">1</argument>
+                            <argument name="store_view" xsi:type="string">1</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">col-store</argument>
+                            <argument name="header_css_class" xsi:type="string">col-store</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="creation_time">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Creation Time</argument>
+                            <argument name="index" xsi:type="string">creation_time</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="header_css_class" xsi:type="string">col-creation_time</argument>
+                            <argument name="column_css_class" xsi:type="string">ccol-creation_time</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="update_time">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Update Time</argument>
+                            <argument name="index" xsi:type="string">update_time</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="header_css_class" xsi:type="string">col-update_time</argument>
+                            <argument name="column_css_class" xsi:type="string">ccol-update_time</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magefan\Blog\Block\Adminhtml\Grid\Column\Statuses" as="status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="index" xsi:type="string">is_active</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="status_enabled" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">Enabled</item>
+                                </item>
+                                <item name="status_disabled" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">Disabled</item>
+                                </item>
+                            </argument>
+                            <argument name="header_css_class" xsi:type="string">col-status</argument>
+                            <argument name="column_css_class" xsi:type="string">col-status</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

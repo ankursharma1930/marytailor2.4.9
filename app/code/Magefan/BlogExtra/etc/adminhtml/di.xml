@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magefan\Blog\Ui\DataProvider\Category\Form\CategoryDataProvider">
+        <plugin name="magefan_blogextra_plugin_magefan_blog_ui_dataprovider_category_form_categorydataproviderplugin" type="Magefan\BlogExtra\Plugin\Magefan\Blog\Ui\DataProvider\Category\Form\CategoryDataProviderPlugin" sortOrder="1" disabled="false" />
+    </type>
+    <type name="Magefan\Blog\Model\ResourceModel\Category">
+        <plugin name="magefan_blogextra_plugin_magefan_blog_resource_model_categoryplugin" type="Magefan\BlogExtra\Plugin\Magefan\Blog\Model\ResourceModel\CategoryPlugin" sortOrder="1" disabled="false"/>
+    </type>
+    <type name="Magefan\Blog\Model\Config\Source\PostsSortBy">
+        <plugin name="magefan_blogextra_plugin_magefan_blog_model_config_source_posts_sort_by" type="Magefan\BlogExtra\Plugin\Magefan\Blog\Model\Config\Source\PostsSortByPlugin" sortOrder="1" disabled="false"/>
+    </type>
+</config>

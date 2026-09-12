@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageside_Recipe::css/font-awesome.min.css"/>
+        <css src="mage/gallery/gallery.css"/>
+    </head>
+<body>
+    <referenceContainer name="content">
+        <block class="Mageside\Recipe\Block\Frontend\Recipe\Recipe"
+               name="recipe" template="recipe/view.phtml">
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\Review"
+                   name="summary_recipe"
+                   template="recipe/view/summary.phtml"/>
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\Recipe"
+                   name="recipe.view.print.button"
+                   template="recipe/view/print-button.phtml"/>
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\Recipe"
+                   name="social_sharing" as="social_sharing"
+                   template="recipe/view/social-sharing.phtml"/>
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\ListProduct"
+                   name="ingredients_list"
+                   template="recipe/view/ingredients.phtml">
+                <block class="Magento\Framework\View\Element\RendererList" name="ingredients.product.type.details.renderers" as="details.renderers">
+                    <block class="Magento\Framework\View\Element\Template"
+                           name="ingredients.product.type.details.renderers.default"
+                           as="default"/>
+                    <block class="Mageside\Recipe\Block\Product\View\Type\Configurable"
+                           name="ingredients.product.type.details.renderers.configurable"
+                           as="configurable"
+                           template="Mageside_Recipe::product/view/type/options/configurable.phtml">
+                        <arguments>
+                            <argument name="block_selector" xsi:type="string">#product-item-</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\GalleryImages"
+                   name="recipe_image"
+                   template="Mageside_Recipe::recipe/gallery.phtml"/>
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\GalleryRecipe"
+                   name="recipe_video"
+                   template="Magento_ProductVideo::product/view/gallery.phtml"/>
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\Review"
+                   name="recipe_review"
+                   template="Mageside_Recipe::recipe/view/review.phtml">
+                <container name="recipe.review.container" as="recipe_review_container">
+                    <block class="Mageside\Recipe\Block\Frontend\Recipe\Review\ListView"
+                           name="recipe.review.list"
+                           as="recipe_review_list"
+                           template="Magento_Review::product/view/list.phtml"/>
+                    <block class="Mageside\Recipe\Block\Html\Pager"
+                           name="recipe_review_list.toolbar">
+                        <arguments>
+                            <argument name="show_per_page" xsi:type="boolean">false</argument>
+                            <argument name="show_amounts" xsi:type="boolean">false</argument>
+                        </arguments>
+                    </block>
+                </container>
+                <block class="Mageside\Recipe\Block\Frontend\Recipe\Review\Form"
+                       name="recipe.review.form"
+                       as="recipe_review_form"
+                       template="Mageside_Recipe::form.phtml">
+                </block>
+            </block>
+        </block>
+        <referenceBlock name="page.main.title" remove="true"/>
+    </referenceContainer>
+    <move element="recaptcha_validation_recaptcha" destination="recipe.review.form"
+          as="recaptcha_validation"/>
+    <referenceContainer name="after.body.start">
+        <block class="Mageside\Recipe\Block\Frontend\Recipe\GoogleRichSnippets"
+               name="google_rich_snippets"
+               as="google_rich_snippets"
+               template="recipe/view/google-rich-snippets.phtml"/>
+    </referenceContainer>
+</body>
+</page>

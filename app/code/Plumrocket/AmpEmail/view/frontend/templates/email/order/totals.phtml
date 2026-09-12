@@ -1,0 +1,42 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+declare(strict_types=1);
+// @codingStandardsIgnoreFile
+/**
+ * @var $block \Magento\Sales\Block\Order\Totals
+ * @see \Magento\Sales\Block\Order\Totals
+ */
+?>
+<?php
+$totals = $block->getTotals();
+$totalsCount = count($totals);
+$currentTotal = 1;
+?>
+<?php foreach ($block->getTotals() as $_code => $_total) : ?>
+    <?php if ($_total->getBlockName()) : ?>
+        <?= $block->getChildHtml($_total->getBlockName(), false) ?>
+    <?php else : ?>
+    <tr class="<?= /* @noEscape */ $_code ?> <?= $currentTotal === 1 ? 'first' : '' ?> <?= $currentTotal === $totalsCount ? 'last' : '' ?>">
+        <th <?= /* @noEscape */ $block->getLabelProperties() ?> scope="row">
+            <?php if ($_total->getStrong()) : ?>
+            <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
+            <?php else : ?>
+                <?= $block->escapeHtml($_total->getLabel()) ?>
+            <?php endif ?>
+        </th>
+        <td <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtml($_total->getLabel()) ?>">
+            <?php if ($_total->getStrong()) : ?>
+            <strong><?= /* @noEscape */  $block->formatValue($_total) ?></strong>
+            <?php else : ?>
+                <?= /* @noEscape */  $block->formatValue($_total) ?>
+            <?php endif ?>
+        </td>
+    </tr>
+    <?php endif?>
+    <?php $currentTotal++; ?>
+<?php endforeach?>

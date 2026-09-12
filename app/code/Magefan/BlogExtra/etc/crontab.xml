@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd"
+>
+  <group id="default">
+    <job instance="Magefan\BlogExtra\Cron\SendCommentSubscribeEmail" method="execute" name="mf_blogextra_send_comment_subscribe_email">
+      <schedule>*/10 * * * *</schedule>
+    </job>
+  </group>
+</config>
+

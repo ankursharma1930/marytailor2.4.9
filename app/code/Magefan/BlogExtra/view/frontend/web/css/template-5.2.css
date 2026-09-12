@@ -1,0 +1,5 @@
+/* Widget Template 5-2 ************************************************************************************************/
+@media (max-width: 768px) {
+    .template-5-2 .block-post + .post-list .post-info h3 a {font-size: 14px;line-height: 20px;font-weight: 500;}
+}
+/* END Widget Template 5-2 ********************************************************************************************/

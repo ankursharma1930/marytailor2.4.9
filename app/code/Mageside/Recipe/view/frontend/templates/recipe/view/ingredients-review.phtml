@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+
+/**
+ * @var $block Mageside\Recipe\Block\Frontend\Recipe\ListProduct
+ */
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper(\Magento\Catalog\Helper\Output::class);
+?>
+<?php if (empty($_productCollection->getSize())) : ?>
+    <div class="message info empty">
+        <div><?php /* @escapeNotVerified */
+            echo $block->escapeHtml(__('We can\'t find products matching the selection.')) ?></div>
+    </div>
+<?php else : ?>
+    <div class="messages"></div>
+    <?= $block->getAdditionalHtml() ?>
+    <form action="<?= $block->getUrl('recipe/recipe/addAllCart') ?>"
+          method="post"
+          id="form-validate"
+          class="review-ingredients-form">
+        <input type="hidden" name="recipe_id" value="<?= $block->getCurrentRecipe()->getId() ?>">
+        <div class="cart table-wrapper">
+            <table id="shopping-cart-table" class="cart items data table">
+                <caption role="heading" aria-level="2" class="table-caption">Shopping Cart Items</caption>
+                <thead>
+                <tr>
+                    <th class="col item" scope="col"><span>Item</span></th>
+                    <th class="col price" scope="col"><span>Price</span></th>
+                    <th class="col qty" scope="col"><span>Qty</span></th>
+                </tr>
+                </thead>
+                <tbody class="cart item">
+                <?php foreach ($_productCollection as $_product) : ?>
+                <tr class="item-info" id="item-info-<?= $_product->getId(); ?>">
+                    <td data-th="Item" class="col item">
+                        <a href="<?= $block->escapeHtml($_product->getProductUrl()) ?>"
+                           title="<?= $block->stripTags($_helper->productAttribute($_product, $_product->getName(), 'name')); ?>"
+                           class="product-item-photo" tabindex="-1">
+                            <?php echo $block->getImage($_product, 'cart_page_product_thumbnail')->toHtml(); ?>
+                        </a>
+                        <div class="product-item-details">
+                            <strong class="product-item-name">
+                                <a href="<?= $block->escapeHtml($_product->getProductUrl()) ?>">
+                                    <?= $block->escapeHtml($_helper->productAttribute($_product, $_product->getName(), 'name')) ?>
+                                </a>
+                            </strong>
+                            <?= $block->getProductDetailsHtml($_product) ?>
+                        </div>
+                    </td>
+                    <td class="col price" data-th="Price">
+                        <?= $block->getProductPrice($_product) ?>
+                    </td>
+                    <td class="col qty" data-th="Qty">
+                        <div class="field qty">
+                            <div class="control qty">
+                                <input id="ingredients-<?= $_product->getId() ?>-qty"
+                                       name="ingredients[<?= $_product->getId() ?>][qty]"
+                                       value="<?= intval($_product->getQty()); ?>"
+                                       type="number"
+                                       size="4"
+                                       title="Qty"
+                                       class="input-text qty"
+                                       data-validate="{required:true,'validate-digits':true}"
+                                       data-role="ingredients-item-qty">
+                            </div>
+                            <label class="label" for="ingredients-<?= $_product->getId() ?>-qty">
+                                <span>Qty</span>
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </form>
+<?php endif; ?>

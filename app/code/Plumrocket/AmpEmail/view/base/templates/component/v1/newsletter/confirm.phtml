@@ -1,0 +1,83 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+/** @var \Plumrocket\AmpEmail\Block\Component\Newsletter\Confirm $block */
+
+$visitStoreUrl = $block->escapeUrl($block->getVisitStoreUrl());
+$confirmationLink =  $block->escapeUrl($block->getConfirmationLink());
+?>
+<div class="list-imitator success-message subscribe-message" hidden="hidden" [hidden]="'error' == subscriber.confirm.form_status || '' == subscriber.confirm.form_status">
+    <?= $block->escapeHtml(__('Your subscription has been confirmed.')) ?>
+    <a class="subscribe-message__btn btn btn--visit btn--link" href="<?= /* @noEscape */ $visitStoreUrl ?>">
+        <?= $block->escapeHtml(__('Visit Store')) ?>
+    </a>
+</div>
+<div class="list-imitator error-message subscribe-message" hidden="hidden" [hidden]="'success' == subscriber.confirm.form_status || '' == subscriber.confirm.form_status">
+    <p><?= $block->escapeHtml(__('Sorry, something went wrong. Please try confirm by clicking on the following link:')) ?></p>
+    <p>
+        <a href="<?= /* @noEscape */ $confirmationLink ?>">
+            <?= /* @noEscape */ $confirmationLink ?>
+        </a>
+    </p>
+</div>
+
+<amp-list width="auto"
+          [hidden]="'' != subscriber.confirm.form_status"
+          height="100"
+          layout="fixed-height"
+          src="<?= $block->escapeUrl($block->getCheckUrl()) ?>"
+>
+    <template type="amp-mustache">
+        <div class="{{class_confirm}}">
+            <form method="post"
+                  action-xhr="<?= $block->escapeUrl($block->getConfirmUrl()) ?>"
+                  on="submit-success: AMP.setState({subscriber: {confirm: {form_status: 'success', loader: false}} }); submit-error: AMP.setState({subscriber: {confirm: {form_status: 'error', loader: false}} })"
+            >
+                <input name="current_action" class="no-display" type="hidden" value="confirm">
+                <button
+                    class="btn btn--subs"
+                    [class]="subscriber.confirm.loader ? 'btn btn--subs loader' : 'btn btn--subs'"
+                    type="submit"
+                    on="tap: AMP.setState({subscriber: {confirm: {loader: true}} })"
+                >
+                    <span class="loader-bar">
+                        <amp-anim width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.gif')?>">
+                            <amp-img placeholder width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.png')?>"></amp-img>
+                        </amp-anim>
+                    </span>
+                    <span><?= $block->escapeHtml(__('Confirm')) ?></span>
+                </button>
+            </form>
+        </div>
+
+        <div class="{{class_subscribe}}">
+            <p class="subscribe-message">
+                <?= $block->escapeHtml(__('Please subscribe and confirm your subscription afterwords.')) ?>
+                <a class="subscribe-message__btn btn btn--visit btn--link" href="<?= /* @noEscape */ $visitStoreUrl ?>">
+                    <?= $block->escapeHtml(__('Visit Store')) ?>
+                </a>
+            </p>
+        </div>
+
+        <div class="{{class_already}}">
+            <p class="subscribe-message">
+                <?= $block->escapeHtml(__('Your subscription already successfully confirmed.')) ?>
+                <a class="subscribe-message__btn btn btn--visit btn--link" href="<?= /* @noEscape */ $visitStoreUrl ?>">
+                    <?= $block->escapeHtml(__('Visit Store')) ?>
+                </a>
+            </p>
+        </div>
+    </template>
+
+    <div fallback>
+        <div class="link-form">
+            <a class="btn btn--subs btn--link" href="<?= /* @noEscape */ $confirmationLink ?>">
+                <?= $block->escapeHtml(__('Confirm')) ?>
+            </a>
+        </div>
+    </div>
+</amp-list>

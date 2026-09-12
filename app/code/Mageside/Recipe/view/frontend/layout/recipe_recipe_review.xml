@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<body>
+    <referenceContainer name="content">
+        <block class="Mageside\Recipe\Block\Frontend\Recipe\ListProduct"
+               name="ingredients_list"
+               template="recipe/view/ingredients-review.phtml">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="ingredients.additional.container"
+                   as="additional"/>
+            <block class="Magento\Framework\View\Element\RendererList" name="ingredients.product.type.details.renderers" as="details.renderers">
+                <block class="Magento\Framework\View\Element\Template"
+                       name="ingredients.product.type.details.renderers.default"
+                       as="default"/>
+                <block class="Mageside\Recipe\Block\Product\View\Type\Configurable"
+                       name="ingredients.product.type.details.renderers.configurable"
+                       as="configurable"
+                       template="Mageside_Recipe::product/view/type/options/configurable.phtml">
+                    <arguments>
+                        <argument name="block_selector" xsi:type="string">#item-info-</argument>
+                        <argument name="add_wrapper_super_attribute" xsi:type="boolean">true</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceContainer>
+</body>
+</page>

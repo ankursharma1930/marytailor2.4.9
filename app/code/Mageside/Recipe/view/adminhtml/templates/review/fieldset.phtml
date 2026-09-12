@@ -1,0 +1,13 @@
+<fieldset class="admin__fieldset" style="padding-top: 2rem; padding-bottom: 0;">
+    <div class="admin__field">
+        <label class="admin__field-label">
+            <span><?php echo $block->escapeHtml(__("Recipe"));?></span>
+        </label>
+        <div class="admin__field-control control">
+            <div id="product_name" class="control-value admin__field-value">
+                <a href="<?php echo $block->escapeHtml($block->getRecipeUrl()); ?>"
+                   target="_blank"><?php echo $block->escapeHtml($block->getRecipeName()); ?></a>
+            </div>
+        </div>
+    </div>
+</fieldset>

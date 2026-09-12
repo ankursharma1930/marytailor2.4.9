@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Plumrocket\AmpEmail\Model\Email\PartsCollectorInterface" shared="false"/>
+    <!-- AmpEmailApi -->
+    <preference for="Plumrocket\AmpEmailApi\Api\ComponentDataLocatorInterface" type="Plumrocket\AmpEmail\Model\Component\Locator\ContainerLocator" />
+    <preference for="Plumrocket\AmpEmailApi\Api\InitFrontProductPriceInterface" type="Plumrocket\AmpEmail\Model\Component\InitFrontProductPrice" />
+    <preference for="Plumrocket\AmpEmailApi\Api\ComponentPartsCollectorInterface" type="Plumrocket\AmpEmail\Model\Component\PartsCollector" />
+    <preference for="Plumrocket\AmpEmailApi\Model\CorsValidatorInterface" type="Plumrocket\AmpEmail\Model\Security\CorsValidator" />
+    <preference for="Plumrocket\AmpEmailApi\Model\Result\AmpJsonInterface" type="Plumrocket\AmpEmail\Model\Result\AmpJson" />
+    <preference for="Plumrocket\AmpEmailApi\Model\Result\AmpJsonFactoryInterface" type="Plumrocket\AmpEmail\Model\Result\AmpJsonFactory" />
+    <!-- Internal -->
+    <preference for="Plumrocket\AmpEmail\Api\AmpTemplateProviderInterface" type="Plumrocket\AmpEmail\Model\Template\Provider" />
+    <preference for="Plumrocket\AmpEmail\Api\CanOneClickAddToCartInterface" type="Plumrocket\AmpEmail\Model\Component\CanOneClickAddToCart" />
+    <preference for="Plumrocket\AmpEmail\Api\ComponentConfigResolverInterface" type="Plumrocket\AmpEmail\Model\Component\ConfigResolver" />
+    <preference for="Plumrocket\AmpEmail\Api\AmpComponentLibraryJsInterface" type="Plumrocket\AmpEmail\Model\Component\AmpComponentLibraryJs" />
+    <preference for="Plumrocket\AmpEmail\Api\ComponentLocatorPoolInterface" type="Plumrocket\AmpEmail\Model\Component\Locator\Pool" />
+    <preference for="Plumrocket\AmpEmail\Api\ComponentProductLocatorInterface" type="Plumrocket\AmpEmail\Model\Component\Locator\Product" />
+    <preference for="Plumrocket\AmpEmail\Api\IsVerifiedSenderInterface" type="Plumrocket\AmpEmail\Model\Security\IsVerifiedSender" />
+    <preference for="Plumrocket\AmpEmail\Api\GetVerifiedSenderListInterface" type="Plumrocket\AmpEmail\Model\ResourceModel\Security\VerifiedSender\GetVerifiedSenderList" />
+    <preference for="Plumrocket\AmpEmail\Api\AddVerifiedSenderInterface" type="Plumrocket\AmpEmail\Model\ResourceModel\Security\VerifiedSender\AddVerifiedSender" />
+    <preference for="Plumrocket\AmpEmail\Api\ResizeImageInterface" type="Plumrocket\AmpEmail\Model\Image\Resize" />
+    <preference for="Plumrocket\AmpEmail\Api\ComponentPriceAlertLocatorInterface" type="Plumrocket\AmpEmail\Model\Component\Locator\ProductPriceAlertLocator" />
+    <preference for="Plumrocket\AmpEmail\Api\ClearAmpForEmailHtmlInterface" type="Plumrocket\AmpEmail\Model\Template\ClearAmpForEmailHtml" />
+    <preference for="Plumrocket\AmpEmail\Model\AddAmpAlternativesToTemplatesInterface" type="Plumrocket\AmpEmail\Model\Template\AddAmpAlternatives" />
+    <preference for="Plumrocket\AmpEmail\Model\LoginCustomerByIdInterface" type="Plumrocket\AmpEmail\Model\LoginCustomerById" />
+    <preference for="Plumrocket\AmpEmail\Model\Email\PartsCollectorInterface" type="Plumrocket\AmpEmail\Model\Email\PartsCollector" />
+    <preference for="Plumrocket\AmpEmail\Model\Email\MimeTypeSorterInterface" type="Plumrocket\AmpEmail\Model\Email\MimeTypeSorter" />
+    <preference for="Plumrocket\AmpEmail\Model\Email\AmpMessageInterface" type="Plumrocket\AmpEmail\Model\Email\AmpMessage" />
+    <preference for="Plumrocket\AmpEmail\Model\Email\AmpTemplateInterface" type="Plumrocket\AmpEmail\Model\Email\AmpTemplate" />
+    <preference for="Plumrocket\AmpEmail\Model\Email\EmailAddressParserInterface" type="Plumrocket\AmpEmail\Model\Email\EmailAddressParser" />
+
+    <preference for="Magento\Framework\Mail\Template\TransportBuilder" type="Plumrocket\AmpEmail\Model\Email\TransportBuilder"/>
+
+    <type name="Plumrocket\AmpEmail\Controller\V1\Product\Add">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\AmpEmail\Model\Component\Locator\ContainerLocator">
+        <arguments>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\AmpEmail\Model\Component\Config\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">pramp_email_component.xml</argument>
+            <argument name="schemaLocator" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Config\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Config\FileResolver</argument>
+        </arguments>
+    </type>
+    <type name="Plumrocket\AmpEmail\Model\Component\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Config\Reader\Proxy</argument>
+            <argument name="cacheId" xsi:type="string">pramp_email_component</argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\AmpEmail\Api\ComponentLocatorPoolInterface">
+        <arguments>
+            <argument name="locators" xsi:type="array">
+                <item name="data" xsi:type="object">Plumrocket\AmpEmailApi\Api\ComponentDataLocatorInterface</item>
+                <item name="product" xsi:type="object">Plumrocket\AmpEmail\Api\ComponentProductLocatorInterface</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\AmpEmailApi\Api\ComponentPartsCollectorInterface">
+        <arguments>
+            <argument name="renderStrategies" xsi:type="array">
+                <item name="css" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Parts\CssRenderStrategy</item>
+                <item name="state" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Parts\StateCompositeRenderStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\AmpEmail\Model\Component\Parts\StateCompositeRenderStrategy">
+        <arguments>
+            <argument name="renderStrategies" xsi:type="array">
+                <item name="wishlist" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Parts\State\Wishlist</item>
+                <item name="cart" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Parts\State\Cart</item>
+                <item name="subscriber" xsi:type="object">Plumrocket\AmpEmail\Model\Component\Parts\State\Subscriber</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\AmpEmail\Model\Security\IsVerifiedSender">
+        <arguments>
+            <argument name="testAmpSourceOrigins" xsi:type="array">
+                <item name="amp@gmail.dev" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\ProductAlert\Model\Email">
+        <plugin name="pramp_email_product_locator" type="Plumrocket\AmpEmail\Plugin\Magento\ProductAlert\Model\EmailPlugin" sortOrder="10" />
+    </type>
+
+    <type name="Plumrocket\AmpEmail\Model\Component\Parts\CssRenderStrategy">
+        <arguments>
+            <argument name="adapter" xsi:type="object">Plumrocket\AmpEmail\Model\CssMinify</argument>
+        </arguments>
+    </type>
+
+    <type name="Plumrocket\Token\Api\CustomerTypePoolInterface">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="amp_email" xsi:type="object">Plumrocket\AmpEmail\Model\Security\AmpEmailTokenType</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

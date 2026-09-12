@@ -1,0 +1,27 @@
+/* Widget Template 4-2 ************************************************************************************************/
+.template-4-2 .block-content {margin-left: -1.5rem;margin-right: -1.5rem;}
+.template-4-2 .block-left {width: 33.3%;}
+.template-4-2 .block-right {width: 66.6%;}
+.template-4-2 .post-list {
+    display: -ms-flexbox !important;display: flex !important;
+    -ms-flex-wrap: wrap;flex-wrap: wrap;}
+.template-4-2 .block-right .post-item {
+    display: -ms-flexbox !important;display: flex !important;
+    width: 50%;}
+@media (max-width: 1023px) {
+    .template-4-2 .block-content {
+        -ms-flex-direction: column !important;flex-direction: column !important;}
+    .template-4-2 .block-left {width: 100%;}
+    .template-4-2 .block-post {margin-bottom: 2.5rem !important;}
+    .template-4-2 .block-left .image-container .image-wrap {padding-bottom: 55%;}
+
+    .template-4-2 .block-right {width: 100%;}
+    .template-4-2 .block-right .post-item {
+        display: -ms-flexbox !important;display: flex !important;
+        width: 50% !important;}
+}
+@media (max-width: 767px) {
+    .template-4-2 .block-content {margin-left: 0;margin-right: 0;}
+    .template-4-2 .block-right .post-item {width: 100% !important;}
+}
+/* END Widget Template 4-2 ********************************************************************************************/

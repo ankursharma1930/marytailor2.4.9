@@ -1,0 +1,204 @@
+<?php
+$template = $this->getFeedModelTemplate();
+$feed = $this->getFeedModel();
+if ( $this->getRequest()->getParam( 'id' ) ) {
+	$feed_id = $this->getRequest()->getParam( 'id' );
+	if ( $feed_id != "" ) {
+		$feed_information = $feed->load( $feed_id );
+		if ( $feed_information->getType() == "csv" ) {
+			$csv_json_content = $feed_information->getContent();
+			$csv_content = json_decode( $csv_json_content, true );
+		} else if ( $feed_information->getType() == "xml" ) {
+			$xml_json_content = $feed_information->getContent();
+			$xml_content = json_decode( $xml_json_content, true );
+		}
+	}
+}
+if ( $this->getRequest()->getParam( 'template' ) ) {
+
+	$feed_id = $this->getRequest()->getParam( 'template' );
+	if ( $feed_id != "" ) {
+		$feed_information = $template->load( $feed_id );
+		if ( $feed_information->getType() == "csv" ) {
+			$csv_json_content = $feed_information->getContent();
+			$csv_content = json_decode( $csv_json_content, true );
+		} else if ( $feed_information->getType() == "xml" ) {
+			$xml_json_content = $feed_information->getContent();
+			$xml_content = json_decode( $xml_json_content, true );
+		}
+	}
+}
+?>
+<fieldset id="item_base_fieldset" class="fieldset admin__fieldset ">
+	<legend class="admin__legend legend">
+		<!--<span>XML Templates Information (templates\xmlfeedcontent.phtml)</span>-->
+		<span>XML Templates Information</span>
+	</legend><br>
+	<div class="entry-edit" id="xml_options">
+
+
+		<div class="fieldset" id="amfeed_xml">
+			<div class="hor-scroll">
+				<div class="admin__field field field-title">
+					<label class="label admin__field-label" for="xml_header"><span>Header</span></label>
+					<div class="admin__field-control control">
+						<textarea name="xml[xml_header]" id="xml_header"><?php if(isset($xml_content['xml_header'])){ echo $xml_content['xml_header']; ?><?php } ?></textarea>
+					</div>
+				</div>
+				<div class="admin__field field field-title">
+					<label class="label admin__field-label" for="feed_xml_item"><span>Item</span></label>
+					<div class="admin__field-control control">
+						<textarea name="xml[feed_xml_item]" row="0" column="25" id="feed_xml_item"><?php if(isset($xml_content['feed_xml_item'])){ echo $xml_content['feed_xml_item']; ?><?php } ?></textarea>
+						<div class="note">XML Tag for Item (example for Google - item).</div>
+					</div>
+				</div>
+				<div class="admin__field field field-title">
+					<label class="label admin__field-label" for="xml_body"><span>Attributes</span></label>
+					<div class="admin__field-control control">
+						<textarea name="xml[xml_body]" id="xml_body"><?php if(isset($xml_content['xml_body'])){ echo $xml_content['xml_body']; ?><?php } else { ?><?php } ?></textarea>
+						<div id="xml_control_container"><br />
+							<table id="xml_table" class="data-grid am_constructor" cellpadding="0" cellspacing="0">
+								<thead>
+									<tr class="headings">
+										<th class="data-grid-th" style="width:30px"></th>
+										<th class="data-grid-th">Title</th>
+										<th class="data-grid-th">Type</th>
+										<th class="data-grid-th" style="width:200px">Value</th>
+										<th class="data-grid-th" style="width:60px">Parent</th>
+										<th class="data-grid-th" style="width:40px">Action</th>
+									</tr>
+								</thead>
+								<tbody id="feed_xml_content_container">
+									<tr>
+										<td class="icons"><span class="value-setting" title="setting"><i class="fa fa-cog" aria-hidden="true"></i></span></td>
+										<td id="xml_tag_col"><input id="xml_field_title" class="input-text admin__control-text" /></td>
+										<td id="xml_insert_type">
+											<select id="insert_type" onchange="change_columntype(this);">
+												<?php 
+													foreach($template->getColumnType() as $key => $value):
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													endforeach;
+												?>
+											</select>
+										</td>
+										<td id="attribute_values">
+											<select id="insert_attr_attribute" style="width:200px;">
+												<?php 
+												echo '<option value="please-select">Select Attribute</option>';
+													foreach($template->getAttributeList() as $key => $list):
+														echo "<optgroup label=".$key.">";
+														foreach($list as $key => $value):
+														 echo '<option value="'.$key.'">'.$value.'</option>';
+														endforeach;
+													endforeach;
+												?>
+											</select>
+											<select id="insert_attr_category" style="width:200px; display:none">
+												<?php 
+													foreach($this->getCategoryMappingCollection() as $key => $value):
+														echo '<option value="'.$value['id'].'">'.$value['name'].'</option>';
+													endforeach;
+												?>
+											</select>
+											<input id="insert_attr_text" class="input-text" name="csv[txt][]" style="width:195px; display:none"/>
+											<select id="insert_attr_images" name="csv[images][]" style="width:200px; display:none;">
+												<?php 
+													foreach($template->getImageList() as $key => $value):
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													endforeach;
+												?>
+											</select>
+										</td>
+										<td id="xml_use_parent" style="width:60px">
+											<select id="use_parent">
+												<?php 
+													foreach($template->getisParent() as $key => $value):
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													endforeach;
+												?>
+											</select>
+										</td>
+										<td class="icons">
+											<button id="insert_button" title="Insert" type="button" class="scalable add icoBtn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+											<button id="update_button" title="Update" type="button" class="scalable save icoBtn"><i class="fa fa-check-circle" aria-hidden="true"></i></button>
+										</td>
+									</tr>
+									<tr style="display:none;">
+										<th class="data-grid-th"></th>
+										<th class="data-grid-th">Format</th>
+										<th class="data-grid-th">Max Length</th>
+										<th class="data-grid-th" colspan="3">Cdata</th>
+									</tr>
+									<tr style="display:none;">
+										<td></td>
+										<td id="xml_image_format">
+											<select id="insert_format">
+												<?php 
+													foreach($template->getFormat() as $key => $value):
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													endforeach;
+												?>
+											</select>
+										</td>
+										<td id="xml_insert_length">
+											<input class="input-text admin__control-text" id="insert_length"/>
+										</td>
+										<td id="xml_use_cdata">
+											<select id="use_cdata">
+												<?php 
+													foreach($template->getisParent() as $key => $value):
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+
+													endforeach;
+												?>
+											</select>
+										</td>
+										<td colspan="3"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="admin__field field field-title">
+					<label class="label admin__field-label" for="xml_footer"><span>Footer</span></label>
+					<div class="admin__field-control control">
+						<textarea id="xml_footer" name="xml[xml_footer]"><?php if(isset($xml_content['xml_footer'])){ echo $xml_content['xml_footer']; ?><?php } ?></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</fieldset>
+<script>
+	function change_columntype( row ) {
+		$( row ).up( 'tr' ).down( 'td#attribute_values' ).select( 'select' ).each( function ( select ) {
+			select.hide();
+		} );
+
+		$( row ).up( 'tr' ).down( 'td#attribute_values' ).select( 'input' ).each( function ( select ) {
+			select.hide();
+		} );
+
+		$( row ).up( 'tr' ).down( '#insert_attr_' + $( row ).value ).show();
+
+		var tr = $( row ).up( 'tr' );
+		var tr_next = $( row ).up( 'tr' ).next().next();
+		jQuery( "#insert_attr_text" ).val( '' );
+		console.log( tr_next );
+		switch ( row.value ) {
+			case "images":
+				tr_next.down( '#insert_image_format' ).show();
+				tr_next.down( '#insert_format' ).hide();
+				break;
+			default:
+				//tr.down('#insert_image_format').hide();
+				tr_next.down( '#insert_format' ).show();
+				break;
+		}
+	}
+	require( [ 'customxmledit' ], function ( xmlEditor ) {
+		xmlEditor.init();
+
+	} );
+</script>

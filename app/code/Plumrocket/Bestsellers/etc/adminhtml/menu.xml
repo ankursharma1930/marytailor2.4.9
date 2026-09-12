@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Plumrocket Inc.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End-user License Agreement
+ * that is available through the world-wide-web at this URL:
+ * http://wiki.plumrocket.net/wiki/EULA
+ * If you are unable to obtain it through the world-wide-web, please
+ * send an email to support@plumrocket.com so we can send you a copy immediately.
+ *
+ * @package     Plumrocket_Bestsellers
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (http://www.plumrocket.com)
+ * @license     http://wiki.plumrocket.net/wiki/EULA  End-user License Agreement
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Plumrocket_Bestsellers::pr_bestsellers"
+             title="Bestsellers"
+             module="Plumrocket_Bestsellers"
+             parent="Plumrocket_Base::elements"
+             sortOrder="717126"
+             resource="Plumrocket_Bestsellers::pr_bestsellers"/>
+
+        <add id="Plumrocket_Bestsellers::pr_bestsellers_configuration"
+             title="Configuration"
+             module="Plumrocket_Bestsellers"
+             parent="Plumrocket_Bestsellers::pr_bestsellers"
+             sortOrder="10"
+             action="adminhtml/system_config/edit/section/pr_bestsellers"
+             resource="Plumrocket_Bestsellers::pr_bestsellers_configuration"/>
+    </menu>
+</config>

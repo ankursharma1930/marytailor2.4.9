@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Plumrocket_AmpEmail::prampemail" title="AMP Email" module="Plumrocket_AmpEmail" parent="Plumrocket_Base::elements" sortOrder="275308" resource="Plumrocket_AmpEmail::prampemail"/>
+        <add id="Plumrocket_AmpEmail::prampemail_configuration" title="Configuration" module="Plumrocket_AmpEmail" parent="Plumrocket_AmpEmail::prampemail" sortOrder="10" action="adminhtml/system_config/edit/section/prampemail" resource="Plumrocket_AmpEmail::config_prampemail"/>
+    </menu>
+</config>

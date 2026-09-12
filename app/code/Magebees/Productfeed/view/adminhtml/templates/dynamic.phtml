@@ -1,0 +1,162 @@
+<?php
+$dynamicattributes = $this->getDynamicattributes();
+
+$template = $this->getTemplates();
+$catalogProduct = $this->getcatalogProduct();
+$condition_id = '';
+$conditions = array();
+if ( $this->getRequest()->getParam( 'condition_id' ) ) {
+	$condition_id = $this->getRequest()->getParam( 'condition_id' );
+	$dynamiccondition = $dynamicattributes->load( $condition_id );
+	$conditions = json_decode( $dynamiccondition->getCodeconditions(), true );
+
+
+}
+
+?>
+<div id="conditions_options" style="display:block">
+	<div class="grid">
+		<table id="dynamic_conditions" class="data-grid" style="width:100%" cellpadding="0" cellspacing="0">
+			<thead>
+				<tr class="headings">
+					<th colspan="5" class="data-grid-th a-centr">Conditions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php 
+					if(count($conditions)>0){
+						foreach($conditions as $key => $value):
+						$or_counting = $key;
+				?>
+				<tr id="<?php echo "or-condition-".$or_counting;?>">
+					<td class="icons" width="25"><button class="icoBtn add-and-conditions" id="<?php echo "and-condition-".$or_counting;?>" condition_count="<?php echo $or_counting;?>" type="button" title="Add AND Condition"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+					<td colspan="3"><label for="<?php echo "condition-".$or_counting."-result-value ";?>">Result</label> <input type="text" class="input-text admin__control-text dynamic.phtml 32" name="condition[<?php echo $or_counting;?>][result][value]" id="<?php echo "condition-".$or_counting."-result-value ";?>" value="<?php echo $value['result']['value'];?>"></td>
+					<td class="icons" width="25"><button class="icoBtn delete delete-or-conditions" id="<?php echo "condition-".$or_counting."-or-delete";?>" type="button" title="Delete Or Condition" condition_count="<?php echo $or_counting;?>"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+				</tr>
+				<?php
+				if(isset($value['attribute'])&&isset($value['operator']))
+				{
+					$attributes = $value['attribute'];
+					$operatores = $value[ 'operator' ];
+					$selected_options_values = $value[ 'value' ];
+					foreach ( $value[ 'attribute' ] as $attr_key => $attr_value ):
+
+						if ( isset( $attributes[ $attr_key ] ) ) {
+							$selected_attributes = $attributes[ $attr_key ][ 0 ];
+						}
+					if ( isset( $operatores[ $attr_key ] ) ) {
+						$selected_oprtator = $operatores[ $attr_key ][ 0 ];
+					}
+					if ( isset( $selected_options_values[ $attr_key ] ) ) {
+						$selected_op_values = $selected_options_values[ $attr_key ][ 0 ];
+					}
+
+					$attribute_result = $dynamicattributes->getConditionDetails( $selected_attributes, $selected_op_values, $selected_oprtator, $or_counting, $attr_key );
+					//echo 'value::::'.$value['operator'][$attr_key];
+					?>
+					<tr id="<?php echo "or-condition-".$or_counting."-and-condition-".$attr_key." ";?>">
+						<td></td>
+						<td>
+							<select or_counting="<?php echo $or_counting;?>" and_counting="<?php echo $attr_key;?>" name="condition[<?php echo $or_counting;?>][attribute][<?php echo $attr_key;?>][]" id="<?php echo "insert_attr_attribute_".$attr_key;?>" class="select admin__control-select insert_attr_attribute">
+								<?php 
+									echo '<option value="please-select">Select Attribute</option>';
+									$attribute_lists = $template->getAttributeList();
+									unset($attribute_lists['Image Attribute']);
+									unset($attribute_lists['DynamicCreated Attributes']);
+									foreach($attribute_lists as $key => $list):
+										echo "<optgroup label=".$key.">";
+
+										foreach($list as $key => $value):
+										 if($selected_attributes==$key){
+												echo '<option value="'.$key.'" selected>'.$value.'</option>';	
+											}else{
+												echo '<option value="'.$key.'">'.$value.'</option>';		
+											}
+										endforeach;
+									endforeach;
+								?>
+							</select>
+						</td>
+						<?php echo $attribute_result['operators']; ?>
+						<?php echo $attribute_result['attribute_options']; ?>
+						
+						<td class="icons"><button style="" class="icoBtn scalable delete delete-and-conditions" id="<?php echo "condition-".$attr_key."-or-delete"; ?>" type="button" count="<?php echo $attr_key;?>" title="Delete AND Condition"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+					</tr>
+				<?php
+						endforeach;
+					}
+					endforeach;
+					}
+				?>
+			</tbody>
+		</table>
+		<div id="Conditions_container"></div>
+		<div id="Conditions_template" style="display:none;">
+			<span class="field-row">
+				<table class="data-grid" style="width: 100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td id="attribute_values">
+							<select id="insert_attr_attribute" name="csv[attr][]" class="select admin__control-select">
+							<?php 
+									echo '<option value="please-select">Select Attribute</option>';
+									$attribute_lists = $template->getAttributeList();
+									unset($attribute_lists['Image Attribute']);
+									unset($attribute_lists['DynamicCreated Attributes']);
+									foreach($attribute_lists as $key => $list):
+										echo "<optgroup label=".$key.">";
+										foreach($list as $key => $value):
+										 echo '<option value="'.$key.'">'.$value.'</option>';
+										endforeach;
+									endforeach;
+								?>
+							</select>
+							<select id="condition_operator" name="condition_operator" class="select admin__control-select">
+								<option value="==">is</option>
+								<option value="!=">is not</option>
+								<option value="&gt;=">equals or greater than</option>
+								<option value=">">greater than</option>
+								<option value="<=">equals or less than</option>
+								<option value="<">less than</option>
+								<option value="{}">contains</option>
+								<option value="!{}">does not contain</option>
+								<option value="()">is one of</option>
+								<option value="!()">is not one of</option>
+							</select>
+							
+							
+							
+						</td>
+						<td><button title="Add AND Condition" type="button" class="icoBtn delete add-and-conditions" style=""><span>Add "AND" condition</span></button></td>
+						<td><input class="input-text admin__control-text" name="csv[result][]" value="125125125125125"/></td>
+						<td class="icons"><button title="Delete Condition" type="button" class="icoBtn add delete-or-conditions" style=""><span>Delete Condition</span></button></td>
+					</tr>
+				</table>
+			</span>
+		</div>
+		<div id="attribute_list" style="display:none;">
+			<tr>
+				<td>
+					<select class="select admin__control-select" id="insert_condition_attribute" name="condition[attr][]">
+						<?php 
+							$attribute_lists = $template->getAttributeList();
+							unset($attribute_lists['Image Attribute']);
+							unset($attribute_lists['DynamicCreated Attributes']);
+							foreach($attribute_lists as $key => $list):
+								if($key=="Image"){
+									continue;
+								}
+								echo "<optgroup label=".$key.">";
+								foreach($list as $key => $value):
+								 echo '<option value="'.$key.'">'.$value.'</option>';
+								endforeach;
+							endforeach;
+						?>
+					</select>
+				<td>
+			</tr>
+		</div>
+	</div>
+	<br />
+	<button title="Add OR Condition" type="button" class="scalable add add-or-conditions" style=""><i class="fa fa-plus-circle" aria-hidden="true"></i> <span>Add "OR" condition</span></button>
+</div>
+<!--</fieldset>-->

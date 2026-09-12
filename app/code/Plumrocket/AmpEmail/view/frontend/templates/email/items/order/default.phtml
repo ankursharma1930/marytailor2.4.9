@@ -1,0 +1,96 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+declare(strict_types=1);
+
+/** @var $block \Magento\Sales\Block\Order\Email\Items\DefaultItems */
+// @codingStandardsIgnoreFile
+/** @var $_item \Magento\Sales\Model\Order\Item */
+$_item = $block->getItem();
+$_order = $_item->getOrder();
+$qtyOrdered = $_item->getQtyOrdered() * 1;
+
+/** @var $prampViewModel \Plumrocket\AmpEmail\ViewModel\Sales\Order\Email\Items\DefaultItems */
+$prampViewModel = $block->getData('pramp_view_model');
+$imageWidth = $prampViewModel->getImageAttribute('pr_amp_cart_page_product_thumbnail', 'width');
+$imageHeight = $prampViewModel->getImageAttribute('pr_amp_cart_page_product_thumbnail', 'height');
+?>
+<tr>
+    <td class="ordered-table__td">
+        <?php $productImage = $prampViewModel->getProductImage($_item); ?>
+        <amp-img
+            width="<?= $block->escapeHtmlAttr($imageWidth) ?>"
+            height="<?= $block->escapeHtmlAttr($imageHeight) ?>"
+            layout="fixed"
+            alt="<?= $block->escapeHtmlAttr($productImage->getLabel()) ?>"
+            src="<?= $block->escapeUrl($productImage->getImageUrl()) ?>" >
+        </amp-img>
+    </td>
+    <td class="ordered-table__td">
+        <p class="ordered-table__product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="ordered-table__product-sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <?php if ($block->getItemOptions()): ?>
+            <dl class="ordered-table__product-options">
+                <?php foreach ($block->getItemOptions() as $option): ?>
+                    <div class="ordered-table__product-wrap">
+                        <dt>
+                            <strong>
+                                <em class="ordered-table__product-label"><?= /* @escapeNotVerified */  $option['label'] ?>:</em>
+                            </strong>
+                        </dt>
+                        <dd>
+                            <span class="ordered-table__product-value">
+                                <?= /* @escapeNotVerified */  nl2br((string)$option['value']) ?>
+                            </span>
+                        </dd>
+                    </div>
+                <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+        <?php if ($addInfoBlock) :?>
+            <?= $addInfoBlock->setItem($_item)->toHtml() ?>
+        <?php endif; ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td class="ordered-table__td">
+        <?php if ($qtyOrdered > 1) : ?>
+            <?php $rowTotal = $_item->getRowTotal() ?>
+            <?php $rowTotalInclTax = $_item->getRowTotalInclTax() ?>
+            <?php $_item->setRowTotal($rowTotal / $qtyOrdered) ?>
+            <?php $_item->setRowTotalInclTax($rowTotalInclTax / $qtyOrdered) ?>
+        <?php endif; ?>
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+        <?php if ($qtyOrdered > 1) : ?>
+            <?php $_item->setRowTotal($rowTotal) ?>
+            <?php $_item->setRowTotalInclTax($rowTotalInclTax) ?>
+        <?php endif; ?>
+    </td>
+    <td class="ordered-table__td ordered-table__product--center">
+        <?= $block->escapeHtml($qtyOrdered) ?>
+    </td>
+    <td class="ordered-table__td ordered-table__td--price ordered-table__td--right">
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+    </td>
+</tr>
+<?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
+    <tr>
+        <td colspan="3" class="ordered-table__item-extra">
+            <table class="ordered-table__message-gift">
+                <tr>
+                    <td>
+                        <h3><?= $block->escapeHtml(__('Gift Message')) ?></h3>
+                        <strong><?= $block->escapeHtml(__('From:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= $block->escapeHtml(__('To:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= $block->escapeHtml(__('Message:')) ?></strong>
+                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+<?php endif; ?>

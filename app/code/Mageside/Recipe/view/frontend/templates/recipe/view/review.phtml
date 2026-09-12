@@ -1,0 +1,23 @@
+<?php /** @var \Mageside\Recipe\Block\Frontend\Recipe\Review $block */ ?>
+
+<div id="reviews" class="block block-dashboard-reviews">
+    <div class="page-main">
+        <div class="block-title-reviews">
+            <?php if ($count = $block->getReviewsSize()) : ?>
+                <strong><?= $block->escapeHtml(__('Reviews (%1)', $count)) ?></strong>
+            <?php else : ?>
+                <strong><?= $block->escapeHtml(__('Reviews')) ?></strong>
+            <?php endif; ?>
+        </div>
+        <div class="block-content review-content">
+            <div class="table-wrapper reviews">
+                <div id="recipe-review-container"
+                     data-role="recipe-review"
+                     data-mage-init='{"Mageside_Recipe/js/process-reviews": {}}'>
+                    <?= $block->getChildHtml('recipe_review_container') ?>
+                </div>
+                <?= $block->getChildHtml('recipe_review_form') ?>
+            </div>
+        </div>
+    </div>
+</div>

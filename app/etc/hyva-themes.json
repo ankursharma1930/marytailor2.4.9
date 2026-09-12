@@ -1,0 +1,49 @@
+{
+    "extensions": [
+        {
+            "src": "vendor\/hyva-themes\/magento2-theme-module\/src"
+        },
+        {
+            "src": "app\/code\/Hyva\/MagefanBlog"
+        },
+        {
+            "src": "app\/code\/Hyva\/DolphinProductfaq"
+        },
+        {
+            "src": "app\/code\/Hyva\/MagefanBlogAuthor"
+        },
+        {
+            "src": "app\/code\/Hyva\/MagefanBlogExtra"
+        },
+        {
+            "src": "vendor\/mirasvit\/module-rewards-hyva\/src\/MirasvitRewards"
+        },
+        {
+            "src": "vendor\/mirasvit\/module-rewards-hyva\/src\/MirasvitRewardsBehavior"
+        },
+        {
+            "src": "vendor\/mirasvit\/module-rewards-hyva\/src\/MirasvitRewardsCatalog"
+        },
+        {
+            "src": "vendor\/mirasvit\/module-rewards-hyva\/src\/MirasvitRewardsCheckout"
+        },
+        {
+            "src": "vendor\/mirasvit\/module-rewards-hyva\/src\/MirasvitRewardsCustomerAccount"
+        },
+        {
+            "src": "app\/code\/Hyva\/MirasvitSeo"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-plumrocket-checkoutspage\/src"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-plumrocket-shippingtracking-free\/src"
+        },
+        {
+            "src": "vendor\/magewirephp\/magewire\/src"
+        },
+        {
+            "src": "app\/code\/Snowdog\/Menu"
+        }
+    ]
+}

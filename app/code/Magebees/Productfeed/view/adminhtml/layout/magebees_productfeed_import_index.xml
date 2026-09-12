@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magebees. All rights reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<head>
+<css src="Magebees_Productfeed::css/feed.css"/>		
+	</head>
+    <body>
+
+	<referenceContainer name="content">
+            <block class="Magebees\Productfeed\Block\Adminhtml\Import\Edit" name="productfeed_import_edit"/>
+        </referenceContainer>
+    </body>
+</page>
+
+

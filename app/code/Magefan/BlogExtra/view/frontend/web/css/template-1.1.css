@@ -1,0 +1,28 @@
+/* Widget Template-1  Post List ***************************************************************************************/
+.template-1 .post-list .post-item {margin-bottom: 2.5rem;}
+.template-1 .post-list .image-container {-ms-flex: 0 0 24%;flex: 0 0 24%;max-width: 24%;width: 24%;order: 0;}
+.template-1 .post-list .post-info {padding: 0 0 0 25px;-ms-flex: 0 0 76%;flex: 0 0 76%;max-width: 76%;width: 76%;order: 1;}
+/*.template-1 .post-list .image-container .post-category {display: none;}*/
+.template-1 .post-list .image-container .post-category a {margin-top: 5px;}
+.template-1 .post-list .post-info h3.post-title a {font-size: 20px;line-height: 25px;font-weight: 500;display: inline-block;}
+@media (max-width: 1024px) {
+    .template-1 .post-list .post-description {max-height: 42px;overflow: hidden;}
+}
+@media (max-width: 768px) {
+    .template-1 .post-list .post-item {margin-bottom: 1.5rem;}
+    .template-1 .post-list .image-container {-ms-flex: 0 0 30%;flex: 0 0 30%;max-width: 30%;width: 30%;order: 0;}
+    .template-1 .post-list .post-info {padding: 0 0 0 25px;-ms-flex: 0 0 70%;flex: 0 0 70%;max-width: 70%;width: 70%;order: 1;}
+    .template-1 .post-list .post-info h3.post-title a {font-size: 14px !important;line-height: 20px !important;font-weight: 600;display: inline-block;
+        max-height: 39px;overflow: hidden;}
+    .template-1 .post-list .post-description {max-height: 42px;overflow: hidden;}
+}
+@media (max-width: 767px) {
+    /*.template-1 .post-list .post-item {-ms-flex-direction: column;flex-direction: column;}
+    .template-1 .post-list .image-container {-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;width: 100%;order: 0;margin-bottom: 10px;}
+    .template-1 .post-list .post-info {-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;width: 100%;order: 1;padding: 0 !important;}*/
+    .template-1 .post-list .post-title {max-height: 42px;overflow: hidden;}
+}
+@media (max-width: 575.98px) {
+    .template-1 .post-list .image-container .post-category {display: none;}
+}
+/* END Widget Template-1  Post List ***********************************************************************************/

@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+ -->
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Plumrocket_AmpEmail:etc/pramp_email_component.xsd">
+    <component id="bestsellers_carousel" class="Plumrocket\AmpEmail\Block\Component\Product\Bestsellers" ttl="86400">
+        <label translate="true">Bestsellers Carousel</label>
+        <description translate="true">Carousel of bestsellers Products</description>
+        <parameters>
+            <parameter name="period" xsi:type="select" required="true" visible="true">
+                <label translate="true">Period</label>
+                <options>
+                    <option name="default" value="month" selected="true">
+                        <label translate="true">Month</label>
+                    </option>
+                    <option name="item" value="week">
+                        <label translate="true">Week</label>
+                    </option>
+                    <option name="item" value="year">
+                        <label translate="true">Year</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="products_count" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to Display</label>
+                <value>10</value>
+            </parameter>
+
+            <parameter name="title" xsi:type="text" required="true" visible="true">
+                <label translate="true">Title</label>
+                <value>Recommended for You</value>
+            </parameter>
+
+            <parameter name="show_attributes" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="show_buttons" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="slides" value="component/:version/product/list/slides.phtml" selected="true">
+                        <label translate="true">Slides of Products</label>
+                    </option>
+                    <option name="carousel" value="component/:version/product/list/carousel.phtml">
+                        <label translate="true">Carousel of Products</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="related_products_carousel" class="Plumrocket\AmpEmail\Block\Component\Product\RelatedProducts" ttl="86400">
+        <label translate="true">Related Products Carousel</label>
+        <description translate="true">Carousel of Related Products</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="products_count" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to Display</label>
+                <value>10</value>
+            </parameter>
+
+            <parameter name="title" xsi:type="text" required="true" visible="true">
+                <label translate="true">Title</label>
+                <value>You Might Also Like</value>
+            </parameter>
+
+            <parameter name="show_attributes" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="show_buttons" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="slides" value="component/:version/product/list/slides.phtml">
+                        <label translate="true">Slides of Products</label>
+                    </option>
+                    <option name="carousel" value="component/:version/product/list/carousel.phtml" selected="true">
+                        <label translate="true">Carousel of Products</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="newsletter_subscribe" class="Plumrocket\AmpEmail\Block\Component\Newsletter\Subscribe" ttl="0">
+        <label translate="true">Newsletter Subscribe</label>
+        <description translate="true">Form for subscription</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="title" xsi:type="text" required="true" visible="true">
+                <label translate="true">Title</label>
+                <value>Subscribe to our Newsletter</value>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/newsletter/subscribe.phtml" selected="true">
+                        <label translate="true">Subscription</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="cms_block_identifier" xsi:type="select" required="true" visible="false">
+                <label translate="true">Additional Cms Block</label>
+                <options>
+                    <option name="social" value="pr_amp_email_social_buttons" selected="true">
+                        <label translate="true">Amp Email Social Buttons</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="cms_block_version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Cms Block Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="cms_block_template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Cms Block Template</label>
+                <options>
+                    <option name="default" value="component/:version/cms/block.phtml" selected="true">
+                        <label translate="true">Default template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="newsletter_confirm" class="Plumrocket\AmpEmail\Block\Component\Newsletter\Confirm" ttl="0">
+        <label translate="true">Newsletter Confirmation</label>
+        <description translate="true">Subscription confirmation block</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/newsletter/confirm.phtml" selected="true">
+                        <label translate="true">Subscription Confirmation</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="product_view" class="Plumrocket\AmpEmail\Block\Component\Product\View" ttl="0">
+        <label translate="true">Product View</label>
+        <description translate="true">Single Product</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="show_attributes" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="show_buttons" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/product/bestsellers.phtml" selected="true">
+                        <label translate="true">Carousel of Products</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/product/view/default.phtml" selected="true">
+                        <label translate="true">Default view</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="product_alert_stock" class="Plumrocket\AmpEmail\Block\Component\ProductAlert\Stock" ttl="0">
+        <label translate="true">Product Alert Stock</label>
+        <description translate="true">Product Alert Stock</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/product_alert/stock.phtml" selected="true">
+                        <label translate="true">Product Alert Stock</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_show_attributes" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="image-preview" value="image-preview">
+                        <label translate="true">Image Preview</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                    <option name="description" value="description">
+                        <label translate="true">Description</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_show_buttons" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Product Template</label>
+                <options>
+                    <option name="default" value="component/:version/product/view/default.phtml" selected="true">
+                        <label translate="true">Default view</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="product_alert_price" class="Plumrocket\AmpEmail\Block\Component\ProductAlert\Price" ttl="0">
+        <label translate="true">Product Alert Price</label>
+        <description translate="true">Product Alert Price</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/product_alert/price.phtml" selected="true">
+                        <label translate="true">Product Alert Price</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_show_attributes" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="image-preview" value="image-preview">
+                        <label translate="true">Image Preview</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                    <option name="description" value="description">
+                        <label translate="true">Description</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_show_buttons" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="product_template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Product Template</label>
+                <options>
+                    <option name="default" value="component/:version/product/view/default.phtml" selected="true">
+                        <label translate="true">Default view</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="order_actual_info" class="Plumrocket\AmpEmail\Block\Component\Sales\Order\ActualInfo" ttl="0">
+        <label translate="true">Order Actual Information</label>
+        <description translate="true">Load status and tracking number</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/sales/order/actual_info.phtml" selected="true">
+                        <label translate="true">Default template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+    <component id="cms_static_block" class="Plumrocket\AmpEmail\Block\Component\Cms\Block" ttl="0">
+        <label translate="true">CMS Static Block</label>
+        <description translate="true">Contents of a Static Block</description>
+        <parameters>
+            <parameter name="version" xsi:type="select" required="true" visible="false">
+                <label translate="true">Version</label>
+                <options>
+                    <option name="v1" value="1" selected="true">
+                        <label translate="true">Version 1</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="block_id" xsi:type="text" visible="true" required="true" sort_order="20">
+                <label translate="true">Block</label>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="component/:version/cms/block.phtml" selected="true">
+                        <label translate="true">Default template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </component>
+</components>

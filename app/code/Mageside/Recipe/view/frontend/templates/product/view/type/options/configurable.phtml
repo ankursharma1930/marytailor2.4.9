@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/** @var $block \Mageside\Recipe\Block\Product\View\Type\Configurable */
+$product    = $block->getProduct();
+$attributes = $block->decorateArray($block->getAllowAttributes());
+$attributeNamePrefix = $block->getAddWrapperSuperAttribute() ? "ingredients[{$product->getId()}][super_attribute]" : "super_attribute";
+?>
+<?php if ($product->isSaleable() && count($attributes)) :?>
+    <?php foreach ($attributes as $_attribute) : ?>
+        <div class="field configurable required">
+            <label class="label" for="attribute<?= $block->stripTags($_attribute->getAttributeId()) ?>">
+                <span><?= $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
+            </label>
+            <div class="control">
+                <select name="<?= $attributeNamePrefix ?>[<?= $block->stripTags($_attribute->getAttributeId()) ?>]"
+                        data-selector="super_attribute[<?= $block->stripTags($_attribute->getAttributeId()) ?>]"
+                        data-validate="{required:true}"
+                        id="attribute<?= $block->stripTags($_attribute->getAttributeId()) ?>"
+                        class="super-attribute-select">
+                    <option value=""><?= $block->escapeHtml(__('Choose an Option...')) ?></option>
+                </select>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=priceBox][data-price-box=product-id-<?= /* @noEscape */ $block->escapeJs($product->getId()) ?>]": {
+                "priceBox": {
+                    "priceConfig": {
+                        "priceFormat": <?= /* @noEscape */ $block->getPriceFormatJson(); ?>,
+                        "prices": <?= /* @noEscape */ $block->getPricesJson(); ?>
+                    }
+                }
+            },
+            "<?= /* @noEscape */ $block->getBlockSelector() . $product->getId() ?>": {
+                "configurable": {
+                    "spConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                    "priceHolderSelector": "[data-price-box=product-id-<?= /* @noEscape */ $product->getId() ?>]",
+                    "mediaGallerySelector": "<?= /* @noEscape */ $block->getBlockSelector() . $product->getId() ?> .product-image-container",
+                    "slyOldPriceSelector": "<?= /* @noEscape */ $block->getBlockSelector() . $product->getId() ?> .sly-old-price",
+                    "normalPriceLabelSelector": "<?= /* @noEscape */ $block->getBlockSelector() . $product->getId() ?> .normal-price .price-label",
+                    "tierPriceBlockSelector": "<?= /* @noEscape */ $block->getBlockSelector() . $product->getId() ?> [data-role=tier-price-block]"
+                }
+            }
+        }
+    </script>
+    <?php $block->unsAllowProducts(); ?>
+<?php endif;?>

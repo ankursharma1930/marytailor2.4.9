@@ -1,0 +1,8 @@
+/* Widget Template 5-3 ************************************************************************************************/
+@media (max-width: 768px) {
+    .template-5-3 .block-post + .post-list .post-info h3 a {font-size: 14px;line-height: 20px;font-weight: 500;}
+}
+@media (max-width: 767px) {
+    .template-5-3.w-50 {width: 100% !important;}
+}
+/* END Widget Template 5-3 ********************************************************************************************/

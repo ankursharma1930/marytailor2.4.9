@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+
+
+use Mageside\Recipe\Block\Frontend\Index;
+use Mageside\Recipe\Helper\Config;
+
+/**
+ * @var Index $block
+ * @var Config $config
+ */
+
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+$writers = $block->getWritersCollection();
+?>
+<?php if ($config->isEnabled()) : ?>
+    <div class="recipe-search">
+        <div class="recipe-search_content max-w-lg mx-auto">
+            <form class="form max-w-lg mx-auto" id="form-search" x-data="recipeSearch()" @submit.prevent="submitSearch">
+                <div class="flex">
+                    <div class="relative w-full">
+                        <input x-model="query"
+                               name="search" type="text"
+                               class="focus:outline-none focus:shadow-current focus:border-transparent focus-visible:outline-none block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border input-text"
+                               autocomplete="off"
+                               placeholder="<?php /* @escapeNotVerified */
+                               echo $block->escapeHtml(__('Search recipes')); ?>"/>
+                        <button type="submit"
+                                class="action right-0 search absolute top-0 end-0 p-2.5 mr-1 text-sm font-medium h-full text-grey bg-transparent rounded-e-lg">
+                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            <span class="sr-only">Search</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="relative my-5">
+            <img class="w-full" src="<?php echo $this->getViewFileUrl('Mageside_Recipe::images/gurus_bg.png'); ?>"
+                 alt="banner">
+        </div>
+
+    </div>
+
+    <?= $block->getChildHtml('recipe_filters'); ?>
+    <?= $block->getChildHtml('recipe_list'); ?>
+<?php endif; ?>
+<script>
+    function recipeSearch() {
+        return {
+            query: '',
+            currentQuery: '',
+
+            init() {
+                this.initSearch();
+            },
+
+            initSearch() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('search')) {
+                    this.currentQuery = urlParams.get('search');
+                    this.query = this.currentQuery;
+                }
+            },
+
+            submitSearch() {
+                console.log(this.query)
+                if (this.query || this.currentQuery) {
+                    this.currentQuery = this.query;
+                    this.triggerSearchEvent(this.query);
+                }
+            },
+
+            triggerSearchEvent(searchQuery) {
+                window.location.href = `/recipe/recipe/listView/?search=${encodeURIComponent(searchQuery)}`;
+            }
+        };
+    }
+</script>

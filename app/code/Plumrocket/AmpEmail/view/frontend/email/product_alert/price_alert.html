@@ -1,0 +1,20 @@
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+-->
+
+<!--@pramp-styles-start@-->
+<style>
+/* add custome styles here */
+</style>
+<!--@pramp-styles-end@-->
+
+{{template config_path="design/email/header_template"}}
+
+<p class="user__name">{{trans "%name," name=$customerName}}</p>
+{{pramp_component type="Plumrocket\AmpEmail\Block\Component\ProductAlert\Price"}}
+
+{{template config_path="design/email/footer_template"}}

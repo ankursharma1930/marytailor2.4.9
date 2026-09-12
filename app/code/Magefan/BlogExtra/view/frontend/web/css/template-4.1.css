@@ -1,0 +1,7 @@
+/* Widget Template 4-1 ************************************************************************************************/
+.template-4-1 .block-content {margin-left: -1.5rem;margin-right: -1.5rem;}
+/*[class^=template-4] .post-list .post-info .post-title a {font-size: 14px;line-height: 20px;font-weight: 600;}*/
+@media (max-width: 767px) {
+    .template-4-1 .block-content {margin-left: 0;margin-right: 0;}
+}
+/* END Widget Template 4-1 ********************************************************************************************/

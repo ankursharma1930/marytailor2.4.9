@@ -1,0 +1,76 @@
+<?php
+
+use Dolphin\Productfaq\Block\Productfaq;
+use Magento\Framework\Escaper;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Productfaq $block */
+/** @var Escaper $escaper */
+
+$faqCollection = $block->getFaqQuery();
+
+?>
+<div class="column main">
+    <div class="block ticket-details">
+        <h2 class="block-title block-title text-2xl mb-6"><?= $block->escapeHtml('Question Details') ?></h2>
+        <?php if (count($faqCollection->getData()) > 0) :
+            foreach ($faqCollection->getData() as $collection) :
+            $productId = $collection['product_id'];
+            $product = $block->getProduct($productId);
+            $name = $product->getName();
+            $url = $product->getProductUrl();
+            ?>
+            <div class="card mb-4">
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-left text-gray-500 dark:text-gray-400">
+                        <tbody>
+                        <tr>
+                            <th scope="row"
+                                class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                <span><?= $block->escapeHtml('Product Name :') ?></span>
+                            </th>
+                            <td class="px-6 py-4">
+                                <a class="hover:underline" href="<?= $url;?>" target="_blank">
+                                    <?= $block->escapeHtml($name); ?></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"
+                                class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                <span><?= $block->escapeHtml('Question :') ?></span>
+                            </th>
+                            <td class="px-6 py-4">
+                                <span><?= $block->escapeHtml($collection['question_faq']) ?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"
+                                class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
+                                <span><?= $block->escapeHtml('Answer :') ?></span>
+                            </th>
+                            <td class="px-6 py-4">
+                                <span><?= $block->escapeHtml($collection['answer_faq']) ?></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php endforeach;?>
+        <?php else: ?>
+            <div class="message info empty"><span><?= $escaper->escapeHtml(__('data not found.')) ?></span></div>
+        <?php endif ?>
+    </div>
+
+    <div class="actions-toolbar">
+        <div class="flex flex-wrap gap-2">
+        </div>
+        <div class="secondary">
+            <a class="action back" onclick="window.history.go(-1); return false;" href="#">
+                <span><?= $block->escapeHtml(__('Back')) ?></span>
+            </a>
+        </div>
+    </div>
+</div>
+

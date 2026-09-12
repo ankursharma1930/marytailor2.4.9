@@ -1,0 +1,9 @@
+/* Widget Template 3-2 ************************************************************************************************/
+.template-3-2 .post-info h3.post-title a {font-size: 18px !important;line-height: 22px !important;font-weight: 500 !important;}
+/* Not 1, 2 */
+.template-3-2 .block-post:nth-child(-n+2) .post-category {display: block !important;}
+.template-3-2 .block-post:nth-child(-n+2) .post-info {padding: 15px 0 0;}
+.template-3-2 .block-post:nth-child(-n+2) .post-view {display: block !important;}
+.template-3-2 .block-post:nth-child(-n+2) .post-data-wrap .post-author-name {display: inline-block !important;}
+.template-3-2 .block-post:nth-child(-n+2) .post-description {display: block !important;}
+/* END Widget Template 3-2 ********************************************************************************************/

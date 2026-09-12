@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * YouTube Widget JS Block
+ *
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+?>
+<script data-mfmofile="true">
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.querySelectorAll('.mf-ytw-wrapper').length || document.querySelectorAll('[data-mf-ytw-youtube-link]').length) {
+            !function (f, b, e, v, t, s) {
+                if(f.mfytwcss)return;
+                f.mfytwcss=1;
+                t = b.createElement(e);
+                t.rel = 'stylesheet';
+                t.type = 'text/css';
+                t.href = v;
+                s = b.getElementsByTagName('HEAD')[0];
+                s.appendChild(t)
+            }(window, document, 'link', '<?= $block->getViewFileUrl('Magefan_YouTubeWidget::css/youtubewidget.css') ?>');
+        }
+        if (document.querySelectorAll('.mf-ytw-wrapper').length) {
+            !function (f, b, e, v, t, s) {
+                if(f.mfytwjs)return;
+                f.mfytwjs=1;
+                t = b.createElement(e);
+                t.type = 'text/javascript';
+                t.src = v;
+                s = b.getElementsByTagName('HEAD')[0];
+                s.appendChild(t)
+            }(window, document, 'script', '<?= $block->getViewFileUrl('Magefan_YouTubeWidget::js/iframe.js') ?>');
+        }
+        if (document.querySelectorAll('[data-mf-ytw-youtube-link]').length) {
+            !function (f, b, e, v, t) {
+                if(f.mflinkjs)return;
+                f.mflinkjs=1;
+                t = b.createElement(e);
+                t.type = 'text/javascript';
+                t.src = v;
+                s = b.getElementsByTagName('HEAD')[0];
+                s.appendChild(t)
+            }(window, document, 'script', '<?= $block->getViewFileUrl('Magefan_YouTubeWidget/js/link.js') ?>');
+        }
+    });
+</script>

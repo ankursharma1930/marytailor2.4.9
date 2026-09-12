@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var $block \Mageside\Recipe\Block\Widget\Recipe
+ */
+?>
+<div class="recipe-widget" id="recipe-widget-<?= $block->getNameInLayout() ?>">
+    <strong><?= $block->escapeHtml($block->getTitle()) ?></strong>
+    <div class="recipe-list-wrapper" id="recipe-list-wrapper-<?= $block->getNameInLayout() ?>">
+        <ul class="recipe-grid">
+            <?= $block->getChildHtml('recipe_items'); ?>
+        </ul>
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "#recipe-list-wrapper-<?= $block->getNameInLayout() ?>": {
+                "Mageside_Recipe/js/load-recipes-list": {
+                    "triggersEnabled": false,
+                    "ajaxEnabled": false
+                }
+            }
+        }
+    </script>
+</div>

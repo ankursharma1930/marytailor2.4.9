@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Dolphin\Productfaq\Api\ProductfaqRepositoryInterface" type="Dolphin\Productfaq\Model\ProductfaqRepository"/>
+	<preference for="Dolphin\Productfaq\Api\Data\ProductfaqInterface" type="Dolphin\Productfaq\Model\Data\Productfaq"/>
+	<preference for="Dolphin\Productfaq\Api\Data\ProductfaqSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="dolphin_productfaq_productfaq_listing_data_source" xsi:type="string">Dolphin\Productfaq\Model\ResourceModel\Productfaq\Grid\Collection</item>
+                <item name="product_question_listing_data_source" xsi:type="string">Dolphin\Productfaq\Model\ResourceModel\Productfaq\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Dolphin\Productfaq\Model\ResourceModel\Productfaq\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">dolphin_productfaq_productfaq</argument>
+            <argument name="eventPrefix" xsi:type="string">dolphin_productfaq_productfaq_collection</argument>
+            <argument name="eventObject" xsi:type="string">dolphin_productfaq_productfaq_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Dolphin\Productfaq\Model\ResourceModel\Productfaq\Collection</argument>
+        </arguments>
+    </type>
+    <virtualType name="DolphinProductfaqGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Dolphin\Productfaq\Model\ResourceModel\Productfaq\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">DolphinProductfaqGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="DolphinProductfaqGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

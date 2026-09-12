@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+	<module name="Magefan_BlogExtra" setup_version="2.11.3">
+		<sequence>
+			<module name="Magefan_Blog" />
+			<module name="Magefan_BlogPlus" />
+			<module name="Magefan_BlogAuthor" />
+            <module name="Magento_Widget" />
+		</sequence>
+	</module>
+</config>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<body>
+    <referenceContainer name="content.aside">
+        <block class="Mageside\Recipe\Block\Frontend\Recipe\RecipeList"
+               name="product.recipes"
+               template="Mageside_Recipe::product/recipe/recipes.phtml"
+               after="-">
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\RecipeList" name="recipe_list" as="recipe_list" template="recipe/list.phtml">
+                <block class="Mageside\Recipe\Block\Frontend\Recipe\RecipeList" name="recipe_items" as="recipe_items" template="recipe/list/items.phtml"/>
+            </block>
+        </block>
+    </referenceContainer>
+</body>

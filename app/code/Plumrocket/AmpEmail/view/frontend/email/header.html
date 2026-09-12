@@ -1,0 +1,267 @@
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+-->
+<!--@subject {{trans "Header"}} @-->
+<!--@vars {
+"var logo_height":"Email Logo Image Height",
+"var logo_width":"Email Logo Image Width",
+"var template_styles|raw":"Template CSS"
+} @-->
+
+<!doctype html>
+<html amp4email>
+<head>
+    <meta charset="utf-8">
+    <style amp4email-boilerplate>body{visibility:hidden}</style>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <!--@ pramp_email_js_components @-->
+    <style amp-custom>
+        body {
+            font: 14px/1.4 Helvetica, sans-serif;
+            color: #494949;
+        }
+
+        p, h2, h3 {
+            margin: 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        a, .a-link {color:#45A4DC; cursor: pointer;}
+        a:hover, .a-link:hover {text-decoration: underline}
+
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .visibility-hidden {
+            visibility: hidden;
+        }
+
+        .user__name {
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .amp-form-submit-success .initial-content,
+        .amp-form-submitting .initial-content,
+        .amp-form-submit-error .initial-content,
+        .no-display {
+            display: none;
+        }
+
+        .main-content {
+            padding: 20px 20px 0;
+            border-bottom: 1px solid #929292;
+        }
+
+        .header {
+            padding: 10px 20px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #929292;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px 8px 12px;
+            box-sizing: border-box;
+            font-size: 17px;
+            line-height: 1;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            background-color: #3161B2;
+            transition: 0.2s;
+            cursor: pointer;
+            min-height: 52px;
+        }
+
+        .btn_icon-wrap {
+            margin-right: 12px;
+        }
+        
+        .btn--to-cart {
+            width: 215px;
+        }
+
+        .btn--link {
+            width: auto;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn--large {
+            width: 100%;
+        }
+
+        .btn--checkout {
+            width: 215px;
+            background-color: #FF8016;
+        }
+
+        .btn--subs {
+            min-width: 223px;
+            margin: 0 auto;
+            padding: 18.5px 8px 16.5px;
+        }
+
+        .btn--visit {
+            max-width: 223px;
+            background-color: #FF8016;
+        }
+
+        .btn--primary {
+            max-width: 223px;
+            background-color: #FF8016;
+        }
+
+        .btn--secondary {
+            background-color: #3161B2;
+        }
+
+        .btn--tertiary {
+            background-color: #b7b7b7;
+        }
+
+        .loader-bar,
+        .loader>span {visibility: hidden; position: absolute; left:-9999px;}
+
+        .loader .loader-bar {visibility: visible; position: static;}
+
+        .btn:hover {
+            opacity: 0.9;
+            text-decoration: none;
+        }
+
+        .c-green,
+        .price-change-down {color:#00B232;}
+
+        .c-red,
+        .price-change-up {color:#A90100;}
+
+        .upd-time {font-size: 11px; color: #979797;}
+
+        .carousel-slides .towishlist {
+            background: url("{{view url='Plumrocket_AmpEmail/images/product/like_icon.png'}}") center no-repeat;
+        }
+
+        .carousel-slides .towishlist--already {
+            background: url("{{view url='Plumrocket_AmpEmail/images/product/like_active_icon.png'}}") center no-repeat;
+        }
+
+        .amp-carousel-button {
+            background-color: transparent;
+            background-size: 24px 24px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .amp-carousel-button-next {
+            background-image: url("{{view url='Plumrocket_AmpEmail/images/right_arrow.png'}}");
+            right: 8px;
+        }
+
+        .amp-carousel-button-prev {
+            background-image: url("{{view url='Plumrocket_AmpEmail/images/left_arrow.png'}}");
+            left: 8px;
+        }
+
+        .social {
+            width: 177px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+        }
+
+        /*----*/
+        /*--Start footer block--*/
+        .footer {
+            padding-top: 31px;
+        }
+
+        .footer__sender {
+            margin-top: 16px;
+            margin-bottom: 0;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .footer__nav {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .footer__nav-item {
+            display: flex;
+            align-items: center;
+            margin-right: 4px;
+            color: #666;
+        }
+
+        .footer__nav-link {
+            margin-left: 3px;
+            font-size: 11px;
+            color: #666;
+            text-decoration: none;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .footer__nav-link:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        .footer__nav-link--no-margin {
+            margin-left: 0;
+        }
+
+        @media (max-width: 420px) {
+            .footer__nav {
+                flex-wrap: wrap;
+                padding: 0 10px;
+            }
+        }
+        {{var pramp_email_styles|raw}}
+    </style>
+</head>
+<body>
+<!--@ pramp_email_states @-->
+<div class="wrapper">
+    <header class="header">
+        <a class="logo" href="{{store url=""}}">
+        <amp-img
+            {{if logo_width}}
+            width="{{var logo_width}}"
+            {{else}}
+            width="115"
+            {{/if}}
+            {{if logo_height}}
+            height="{{var logo_height}}"
+            {{else}}
+            height="33"
+            {{/if}}
+
+            src="{{var logo_url}}"
+            alt="{{var logo_alt}}"></amp-img>
+        </a>
+    </header>
+    <main class="main-content">
+                    <!-- Begin Content -->

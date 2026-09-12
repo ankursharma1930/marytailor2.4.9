@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <productfaq>
+            <productfaq>
+                <status>1</status>
+                <sender_email_identity>general</sender_email_identity>
+                <question_admin_email>productfaq_productfaq_question_admin_email</question_admin_email>
+                <answer_email>productfaq_productfaq_answer_email</answer_email>
+                <question_per_page_values>5,10,15,20,25</question_per_page_values>
+                <questions_per_page>5</questions_per_page>
+                <ask_questions>1</ask_questions>
+                <questions_collapsible>0</questions_collapsible>
+            </productfaq>
+            <captcha_setting>
+                <captcha_enable>1</captcha_enable>
+            </captcha_setting>
+        </productfaq>
+    </default>
+</config>

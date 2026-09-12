@@ -1,0 +1,23 @@
+{
+  "name": "hyva-themes/magento2-dolphin-productfaq",
+  "description": "Hyvä Themes Compatibility module for Dolphin_Productfaq",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "hyva-themes/magento2-compat-module-fallback": "*",
+    "dolphin/module-productfaq": "*"
+  },
+  "authors": [{
+    "name": "Hyvä Themes B.V.",
+    "email": "info@hyva.io"
+  }],
+  "license": "see LICENSE.md",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Hyva\\DolphinProductfaq\\": ""
+    }
+  }
+}

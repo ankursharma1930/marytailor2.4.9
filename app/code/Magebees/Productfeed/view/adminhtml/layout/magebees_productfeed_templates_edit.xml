@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magebees. All rights reserved.
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<head>
+		<css src="Magebees_Productfeed::css/codemirrordesign.css"/>
+		<css src="Magebees_Productfeed::css/feed.css"/>		
+	</head>
+	
+    <body>
+
+     <referenceContainer name="left">
+            <block class="Magebees\Productfeed\Block\Adminhtml\Templates\Edit\Tabs" name="magebees_productfeed_templates_edit_tabs">
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magebees\Productfeed\Block\Adminhtml\Templates\Edit" name="productfeed_templates_edit"/>
+        </referenceContainer>
+    </body>
+</page>

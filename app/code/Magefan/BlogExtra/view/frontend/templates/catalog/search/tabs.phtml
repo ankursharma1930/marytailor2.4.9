@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/** @var $block \Magefan\BlogExtra\Block\Catalog\Search\Tabs */
+?>
+
+<?php if ($block->getPostsCount()) { ?>
+    <?php
+        $hasProducts = $block->hasProducts();
+        $postsTabUrl = $block->getBlogPostsTabUrl();
+    ?>
+    <?php if ($hasProducts) { ?>
+        <div class="product data items">
+
+            <div class="data item title <?php if ($block->getActiveTabName() == 'product') { ?>active<?php } ?>" id="tab-label-products">
+                <a class="data switch"
+                   tabindex="-1"
+                   href="<?= $block->escapeUrl($block->getCatalogProductsTabUrl()) ?>"
+                   id="tab-label-products-title">
+                    <?= $block->escapeHtml(__('Products')) ?>
+                </a>
+            </div>
+            <div class="data item title <?php if ($block->getActiveTabName() == 'blog') { ?>active<?php } ?>" id="tab-label-blog">
+                <a class="data switch"
+                   tabindex="-1"
+                   href="<?= $block->escapeUrl($postsTabUrl) ?>"
+                   id="tab-label-blog-title">
+                    <?= $block->escapeHtml(__('Blog')) ?>
+                </a>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($block->getActiveTabName() == 'product') { ?>
+        <?php if (!$hasProducts) { ?>
+            <script>
+                require(['jquery', 'loader'], function ($) {
+                    'use strict';
+                    $('body').loader('show');
+                });
+                var postTabUrlConfig = <?= json_encode(['url' => $postsTabUrl]) ?>;
+                window.location = postTabUrlConfig.url;
+            </script>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>

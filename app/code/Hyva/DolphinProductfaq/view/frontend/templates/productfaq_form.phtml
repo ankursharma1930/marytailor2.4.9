@@ -1,0 +1,213 @@
+<?php
+
+use Hyva\Theme\ViewModel\ReCaptcha;
+
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Dolphin\Productfaq\Block\Productfaq $block */
+/** @var ReCaptcha $recaptcha */
+/** @var Hyva\Theme\ViewModel\HeroiconsOutline $heroicons */
+
+$heroicons = $viewModels->require(\Hyva\Theme\ViewModel\HeroiconsOutline::class);
+
+$recaptcha = $block->getData('viewModelRecaptcha');
+
+$button_disable = '';
+$currentProduct = $block->getCurrentProduct();
+$customerSession = $block->isCustomerLoggedIn();
+
+$customer = $customerSession ? $block->getCustomer() : "";
+$customerId = $customerSession ? $customer->getEntityId() : "";
+$customerName = $customerSession ? $customer->getFirstname() : "";
+$customerEmail = $customerSession ? $customer->getEmail() : "";
+
+$helper = $block->getFaqHelper();
+$queCollapsible = $helper->getQueCollapsible();
+$pageFilter = $helper->getPageFilter();
+
+$show_data = $block->getDataAfterError();
+$ques_faq = $show_data ? $show_data['question_faq'] : "";
+
+$customerLoginRequired = $helper->getCustomerLoginRequired();
+
+$askQuestions = $helper->getAskQuestions();
+
+$faqCollect = $block->getFaqQuery();
+$productCollection = $block->getProductCollection();
+$faqCollection = $block->getProductfaq();
+$productFaqCollection = $block->getProductCount();
+$queCollapsible = $helper->getQueCollapsible();
+
+$title = $block->getProductCount()
+    ? __('Questions %1', '(' . $productFaqCollection->getSize() . ')')
+    : __('Questions');
+$block->setTitle($title);
+?>
+<?php if ($productFaqCollection && $productFaqCollection->getSize() == 0 && $askQuestions == 1) : ?>
+    <div class="message info">
+        <span><?= $escaper->escapeHtml(__("No questions available.")); ?></span>
+    </div>
+<?php endif; ?>
+
+<?php if ($customerLoginRequired == 1 && $askQuestions == 1 && !$customerSession) : ?>
+    <div class="prose">
+        <p><a class="font-semibold" href="<?= $escaper->escapeHtmlAttr($block->getRefferalUrl()); ?>">
+                <?= $escaper->escapeHtml(__("Click here")); ?>
+            </a><?= $escaper->escapeHtml(__("to login and submit your question.")); ?></p>
+    </div>
+<?php endif; ?>
+
+<?php if ((($customerLoginRequired == 0) && ($askQuestions == 1))
+    || (($customerSession) && ($askQuestions == 1))) : ?>
+
+    <div x-data="initMyForm()" class="h-96 mt-4">
+    <div x-show="!open" class="flex justify-end" id="askquebtn">
+        <button @click="open = ! open" class="btn btn-primary">
+            <?= $escaper->escapeHtml(__("Ask Question")); ?>
+        </button>
+    </div>
+
+    <form x-show="open" x-transition style="display: none" class="form" name="question_form"
+          action="productfaq/index/save" id="question_form" method="post"
+          autocomplete="off" x-data="hyva.formValidation($el)"
+          @submit.prevent="submitForm()">
+        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
+
+        <input type="hidden" name="customer_id"
+               value="<?= $customerId; ?>"/>
+        <input type="hidden" name="product_id"
+               value="<?= $currentProduct->getId(); ?>"/>
+        <input type="hidden" name="product_sku"
+               value="<?= $currentProduct->getSku(); ?>"/>
+        <input type="hidden" name="product_name"
+               value="<?= $currentProduct->getName(); ?>"/>
+        <input type="hidden" name="store_faq"
+               value="<?= $block->getStoreId(); ?>"/>
+        <input type="hidden" name="visibility_faq" value="1"/>
+        <input type="hidden" name="group_faq" value="0"/>
+
+        <div class="field field-reserved w-full required">
+            <label for="name_faq" class="label font-semibold">
+                <span><?= $block->escapeHtml('Name') ?></span>
+            </label>
+            <div class="control">
+                <input type="text" name="name_faq" id="name_faq" title="<?= $block->escapeHtml('Name') ?>"
+                       value="<?= $block->escapeHtml($customerName) ?>" class="w-full form-input"
+                       data-validate='{"required": true}'>
+            </div>
+        </div>
+
+        <div class="field field-reserved w-full required">
+            <label for="email_faq" class="label font-semibold">
+                <span><?= $block->escapeHtml('Email') ?></span>
+            </label>
+            <div class="control">
+                <input type="text" name="email_faq" id="email_faq" title="<?= $block->escapeHtml('Email') ?>"
+                       value="<?= $block->escapeHtml($customerEmail) ?>" class="w-full form-input"
+                       data-validate='{"required": true , "email": true}'>
+            </div>
+        </div>
+
+        <div class="field field-reserved w-full required">
+            <label class="label font-semibold" for="question_faq">
+                <span><?= $block->escapeHtml(__('Message')) ?></span>
+            </label>
+            <div class="control">
+            <textarea name="question_faq" id="question_faq" title="<?= $block->escapeHtmlAttr(__('Message')) ?>"
+                      class="w-full form-input required-entry"
+                      data-validate='{"required": true}'></textarea>
+            </div>
+        </div>
+
+        <?php if ($helper->getReCaptchaStatus()) : ?>
+            <?= $recaptcha ? $recaptcha->getInputHtml("productfaq_recaptcha_frontend") : '' ?>
+        <?php endif; ?>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" id="inq-submit" class="action submit primary" title="Submit">
+                    <span>Ask Question</span>
+                </button>
+            </div>
+            <div class="secondary">
+                <button @click="open = ! open" type="button" class="btn" title="Close">
+                    <span>Close</span>
+                </button>
+            </div>
+        </div>
+    </form>
+        <?php endif; ?>
+    <div class="flex flex-col p-4">
+        <?php if(!empty($productFaqCollection) && $productFaqCollection->getSize()) : ?>
+        <div>
+            <form id="sort_option" method="post" x-data="initSortingForm()">
+                <?= $block->getBlockHtml('formkey')?>
+                <select name="select_id" data-role="sorter" class="form-select sorter-options mr-3" aria-label="Sort By" @change="submitSortingForm($el)">
+                    <option <?php if ($block->getDirection() == 'desc') {echo 'selected';} ?>
+                            value="<?= /* @noEscape */ $block->getFormUrl('desc') ?>">Newest</option>
+                    <option <?php if ($block->getDirection() == 'asc') { echo 'selected';} ?>
+                            value="<?= /* @noEscape */ $block->getFormUrl('asc') ?>">Oldest</option>
+                </select>
+            </form>
+        </div>
+        <?php endif; ?>
+        <?php foreach ($productFaqCollection as $question) : if ($question->getAnswerFaq() != "") : ?>
+            <div x-data="{ open: <?= $queCollapsible?> }" class="py-3">
+                <div @click="open = !open"
+                     class="flex items-center justify-between bg-gray-100 border p-4">
+                    <div class="flex">
+                        <span class="p-1"><?= $heroicons->questionMarkCircleHtml()?></span>
+                        <span class="p-1"><?= $escaper->escapeHtml(__($question->getQuestionFaq())); ?></span>
+                    </div>
+                    <span style="display: none;" x-show="open"><?= $heroicons->chevronUpHtml()?></span>
+                    <span style="display: none;" x-show="!open"><?= $heroicons->chevronDownHtml()?></span>
+                </div>
+                <div x-show="open" x-transition.duration.500ms class="border p-4" style="display: none;">
+                    <?= $escaper->escapeHtml(__($question->getAnswerFaq())); ?>
+                </div>
+            </div>
+        <?php endif; endforeach; ?>
+        <?php if ($block->getPagerHtml()): ?>
+            <div class="toolbar bottom">
+                <?= $block->getPagerHtml() ?>
+            </div>
+        <?php endif ?>
+        <script>
+            function initMyForm() {
+                return {
+                    open: false,
+                    errors: 0,
+                    hasCaptchaToken: 0,
+                    submitForm() {
+                        this.validate()
+                            .then(() => {
+                                // all fields validated
+                                const $form = document.querySelector('#question_form');
+                                <?php if ($helper->getReCaptchaStatus()) : ?>
+                                <?= $recaptcha ? $recaptcha->getValidationJsHtml("productfaq_recaptcha_frontend") : '' ?>
+                                if (this.errors === 0) {
+                                    $form.submit();
+                                }
+                                <?php else: ?>
+                                $form.submit();
+                                <?php endif; ?>
+                            })
+                            .catch((invalid) => {
+                                if (invalid.length > 0) {
+                                    invalid[0].focus();
+                                }
+                            });
+                    }
+                }
+            }
+            function initSortingForm() {
+                return {
+                    submitSortingForm($el) {
+                        if ($el.value) {
+                            window.location.href = $el.value;
+                        }
+                    }
+                }
+            }
+        </script>
+
+    </div>

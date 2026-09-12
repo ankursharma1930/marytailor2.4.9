@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * Blog post contents
+ *
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+?>
+<div class="mfblog-contents" style="display: block">
+    <p>
+        <span class="mfblog-contents-header"><?= $block->escapeHtml(__('Post Contents')) ?></span>
+        [<span class="mfblog-contents-toggle"><?= $block->escapeHtml(__('hide')) ?></span>]
+    </p>
+    <div class="mfblog-contents-toc">
+    <?php
+        $level = 1;
+        $first = true;
+        foreach ($this->getItems() as $item) {
+            $newLevel = $item->getLevel();
+
+            if ($level == $newLevel && !$first) {
+                echo '</li>';
+            }
+
+            if ($level < $newLevel) {
+                echo '<ol>';
+            }
+
+            if ($level > $newLevel) {
+                for ($i = $level; $i > $newLevel; $i--) {
+                    echo '</ol></li>';
+                }
+            }
+
+        ?>
+        <li>
+            <a href="<?= $block->escapeUrl($item->getUrl()) ?>">
+                <?= $block->escapeHtml($item->getTitle()) ?>
+            </a>
+            <?php
+            $level = $newLevel;
+            $first = false;
+            }
+            ?>
+    </div>
+</div>
+
+<script>
+    require(['jquery', 'domReady!'], function($) {
+        $('.mfblog-contents .mfblog-contents-toggle').click(function() {
+            $('.mfblog-contents .mfblog-contents-toc').toggle();
+
+            $(this).text(function(i, text) {
+                return text === "<?= $block->escapeHtml(__('hide')) ?>" ?
+                    "<?= $block->escapeHtml(__('show')) ?>" :
+                    "<?= $block->escapeHtml(__('hide')) ?>";
+            });
+        });
+    })
+</script>

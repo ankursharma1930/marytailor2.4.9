@@ -1,0 +1,16 @@
+{
+    "name": "magefan/module-blog-author",
+    "description": "Magefan Blog Author for Magento 2",
+    "version": "2.11.3",
+    "type": "magento2-module",
+    "license": "EULA",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Magefan\\BlogAuthor\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}

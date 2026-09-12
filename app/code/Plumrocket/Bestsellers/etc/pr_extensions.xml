@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_Bestsellers
+ * @copyright   Copyright (c) 2022 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license/  End-user License Agreement
+ */
+-->
+<extensions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:module:Plumrocket_Base:etc/pr_extensions.xsd">
+    <extension name="Bestsellers"
+               title="Bestsellers"
+               config_section="pr_bestsellers"
+               is_enabled_path="pr_bestsellers/general/enabled"
+               documentation="https://plumrocket.com/docs/magento-bestsellers/v1"
+    >
+        <customer key="88551ef9ffbf13a30a86ee90dc5f298a8f88412993"/>
+    </extension>
+</extensions>

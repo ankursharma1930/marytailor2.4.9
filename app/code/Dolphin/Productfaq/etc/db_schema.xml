@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="dolphin_productfaq_productfaq" resource="default" engine="innodb" comment="Productfaq table">
+    <column xsi:type="int" name="productfaq_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Productfaq Id"/>
+    <column xsi:type="int" name="customer_id" padding="10" unsigned="false" nullable="false" identity="false" comment="Customer Id"/>
+    <column xsi:type="int" name="status" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Status"/>
+    <column xsi:type="text" name="question_faq" nullable="false" comment="Question FAQ"/>
+    <column xsi:type="text" name="answer_faq" nullable="false" comment="Answer FAQ"/>
+    <column xsi:type="varchar" name="name_faq" nullable="false" length="255" comment="Name faq"/>
+    <column xsi:type="varchar" name="store_faq" nullable="false" length="255" comment="Store faq"/>
+    <column xsi:type="varchar" name="email_faq" nullable="false" length="255" comment="Email faq"/>
+    <column xsi:type="varchar" name="group_faq" nullable="false" length="255" comment="Group faq"/>
+    <column xsi:type="varchar" name="visibility_faq" nullable="false" length="255" comment="Visibility faq"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="productfaq_id"/>
+    </constraint>
+  </table>
+  <table name="dolphin_productfaqgrid_rel" resource="default" engine="innodb" comment="Dolphin Productfaq Product Attachment relation table">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+    <column xsi:type="int" name="productfaq_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Productfaq Id"/>
+    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Magento Product Id"/>
+    <constraint xsi:type="foreign" referenceId="DOLPHIN_PRDFAQ_PRDFAQ_PRDFAQ_ID_DOLPHIN_PRDFAQGRID_REL_PRDFAQ_ID" table="dolphin_productfaqgrid_rel" column="productfaq_id" referenceTable="dolphin_productfaq_productfaq" referenceColumn="productfaq_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="DOLPHIN_PRDFAQGRID_REL_PRDFAQ_ID_CAT_PRD_ENTT_ENTT_ID" table="dolphin_productfaqgrid_rel" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+</schema>

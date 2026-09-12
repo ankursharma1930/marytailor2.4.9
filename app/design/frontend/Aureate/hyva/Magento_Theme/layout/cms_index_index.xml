@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <referenceContainer name="columns" htmlClass="columns max-w-fit" />
+        <referenceContainer name="content">
+            <block name="slider-c" template="Magento_Theme::elements/slider-c.phtml" before="-">
+                <arguments>
+                    <argument name="slider_style" xsi:type="string">slide</argument> <!-- Slider slide style (fade/slide)-->
+                    <argument name="show_arrows" xsi:type="string">end</argument> <!-- Show Slider nav arrows (true/false/start/end) -->
+                    <argument name="show_dots" xsi:type="boolean">true</argument> <!-- Show dots (true/false) -->
+                    <argument name="speed" xsi:type="number">1000</argument> <!-- Slide animation speed -->
+                    <argument name="loop" xsi:type="boolean">true</argument> <!-- Should the slider loops (true/false) -->
+                    <argument name="autoplay" xsi:type="boolean">true</argument> <!-- Should the slider autoplay (true/false) -->
+                    <argument name="load_first_eager" xsi:type="boolean">true</argument> <!-- Load the first slider image eager (true/false) -->
+                </arguments>
+            </block>
+            <block name="homepage-content" template="Magento_Theme::html/homepage.phtml"/>
+            <block name="best-seller-slider" template="Magento_Catalog::product/slider/bestseller-slider.phtml">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true">Feature Products</argument>
+                    <argument name="category_ids" xsi:type="string">6</argument>
+                    <!--                    <argument name="include_child_category_products" xsi:type="boolean">true</argument>-->
+                    <argument name="page_size" xsi:type="string">4</argument>
+                    <!--                    <argument name="sort_attribute" xsi:type="string">position</argument>-->
+                    <!--                    <argument name="sort_direction" xsi:type="string">ASC</argument>-->
+                </arguments>
+            </block>
+            <block name="homepage-middle" template="Magento_Theme::html/middle-homepage.phtml"/>
+            <block class="Magefan\Blog\Block\Widget\Recent" name="latest_blog_posts">
+                <arguments>
+                    <argument name="title" xsi:type="string">Latest Blog Posts</argument>
+                    <argument name="no_repeat_posts_enable" xsi:type="string">1</argument>
+                    <argument name="number_of_posts" xsi:type="string">3</argument>
+                    <argument name="category_id" xsi:type="string">0</argument>
+                    <argument name="tag_id" xsi:type="string">0</argument>
+                    <argument name="author_id" xsi:type="string">0</argument>
+                    <argument name="custom_template" xsi:type="string">Hyva_MagefanBlog::widget/recent.phtml</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="script-alpine-js">
+            <block name="alpine-plugin-splide-js" template="Magento_Theme::page/js/plugins/splide-js.phtml"/>
+        </referenceBlock>
+<!--        <move element="slider-1" destination="content" after="homepage-content"/>-->
+        <referenceBlock name="hero" remove="true"/>
+        <referenceBlock name="content-1" remove="true"/>
+        <referenceBlock name="slider-1" remove="true"/>
+        <referenceBlock name="slider-2" remove="true"/>
+    </body>
+</page>

@@ -1,0 +1,20 @@
+{
+    "email_template": {
+        "column": {
+            "pramp_email_enable": true,
+            "pramp_email_content": true,
+            "pramp_email_styles": true,
+            "pramp_email_mode": true,
+            "pramp_email_testing_method": true,
+            "pramp_email_automatic_emails": true,
+            "pramp_email_manual_email": true,
+            "pramp_email_manual_order": true,
+            "pramp_email_manual_send": true
+        }
+    },
+    "plumrocket_amp_email_sender": {
+        "column": {
+            "email": true
+        }
+    }
+}

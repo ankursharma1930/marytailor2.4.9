@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var \Mageside\Recipe\Block\Frontend\Recipe\RecipeList $block
+ */
+?>
+<div class="recipe-list-wrapper">
+    <ul class="recipe-grid">
+        <?php if (!$block->isAjaxEnabled()) : ?>
+            <?= $block->getChildHtml('recipe_items'); ?>
+        <?php endif; ?>
+    </ul>
+    <div class="more-recipes" style="text-align: center">
+        <button class="update-recipes action tocart primary action-allcart-primary">
+            <span class="label"><?= $block->escapeHtml(__('See more recipes')); ?></span>
+        </button>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".recipe-list-wrapper": {
+            "Mageside_Recipe/js/load-recipes-list": {
+                "url": "<?= $block->getAjaxUrl() ?>",
+                "countPage": <?= $block->getCountPage() ?>,
+                "ajaxEnabled": <?= $block->isAjaxEnabled() ? 'true' : 'false' ?>,
+                "params": <?= $block->getJsonParams() ?>,
+                "hideParams": <?= $block->getHideParams() ?>
+            }
+        }
+    }
+</script>

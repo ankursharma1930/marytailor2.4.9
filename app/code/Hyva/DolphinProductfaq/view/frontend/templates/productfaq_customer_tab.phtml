@@ -1,0 +1,56 @@
+<?php
+
+use Dolphin\Productfaq\Block\Productfaq;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Productfaq $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$collection = $block->getCustomerFaqQuery();
+?>
+
+<?php if ($collection && count($collection)): ?>
+    <div class="card grid grid-cols-3 mb-3">
+        <div class="text-sm items-center text-secondary p-2"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
+        <div class="text-sm items-center text-secondary p-2"><?= $escaper->escapeHtml(__('Question')) ?></div>
+        <div class="text-sm items-center text-secondary p-2"><?= $escaper->escapeHtml(__('Action')) ?></div>
+        <?php $i = 0; ?>
+        <?php foreach ($collection as $item): ?>
+            <?php
+            $productId = $item['product_id'];
+            $product = $block->getProduct($productId);
+            $name = $product->getName();
+            $url = $product->getProductUrl();
+            $i++; ?>
+            <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <a class="hover:underline" href="<?= $block->escapeHtmlAttr($url) ?>">
+                    <?= $escaper->escapeHtml($name) ?>
+                </a>
+            </div>
+            <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <?= $escaper->escapeHtml($item['question_faq']) ?>
+            </div>
+    
+            <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <a href="<?= $escaper->escapeUrl($block->getBaseUrl().'productfaq/customer/view?id='.$item['productfaq_id']) ?>"
+                   class="inline-block text-sm underline text-secondary-darker"
+                   title="<?= $escaper->escapeHtmlAttr(__('View')) ?>">
+                    <?= $heroicons->eyeHtml() ?>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="toolbar bottom"><?= $block->getPagerHtml() ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?= $escaper->escapeHtml(__('You have not asked any question yet.')) ?></span></div>
+<?php endif ?>

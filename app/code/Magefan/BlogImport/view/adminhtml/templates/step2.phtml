@@ -1,0 +1,71 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ *
+ * @var $block \Magefan\BlogImport\Block\Adminhtml\Step2
+ */
+?>
+
+<?php
+    $rows = $block->getRows();
+    $colums = $block->getColumns();
+?>
+<style>
+    .csv-map td,
+    .csv-map th {padding:10px; margin:5px; border:1px solid grey;text-align: left}
+    .csv-map th {background: #373330; color:white;}
+    .csv-map select {color:black;}
+</style>
+<form action="<?= $block->escapeHtml($block->getUrl('blog/import/run', ['form' => 'blogimport_import_step1'])) ?>" method="post">
+    <table class="csv-map">
+    <?php foreach ($rows as $number => $row) {  ?>
+    <tr>
+        <?php if (!$number) { ?>
+            <?php foreach ($row as $text) { ?>
+                <th>
+                    <em>(<?php echo $block->escapeHtml($text) ?>)</em><br/>
+                    <select name="column[]">
+                        <?php foreach ($colums as $value => $label) { ?>
+                            <?php
+                                $selected = ( $text == $value
+                                    || ($text == 'post_id' && $value == 'existing_posts' )
+
+                                );
+                            ?>
+                            <option <?php if ($text == $value || ($text == 'post_id' && $value == 'existing_posts' )) { echo 'selected="selected" '; } ?> value="<?= $block->escapeHtml($value) ?>"><?= $block->escapeHtml($label) ?></option>
+                        <?php } ?>
+                    </select>
+                </th>
+            <?php } ?>
+        <?php } else { ?>
+            <?php foreach ($row as $text) { ?>
+                <td>
+                    <?php
+                    if (is_array($text)) {
+                        $text = '';
+                    } elseif (mb_strlen($text) > 255) {
+                        $text = mb_substr($text, 0, 255) . '...';
+                    }
+                    ?>
+                    <?php echo $block->escapeHtml($text) ?>
+                </td>
+            <?php } ?>
+        <?php } ?>
+    <tr>
+    <?php } ?>
+    </table>
+    <br/>
+    <button id="save" title="Next" type="submit" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"  role="button">
+        <span class="ui-button-text">
+            <span>Next</span>
+        </span>
+    </button>
+    <input type="hidden" name="store_id" value="<?php echo (int)$block->getRequest()->getParam('store_id') ?>" />
+    <input type="hidden" name="type" value="csv" />
+    <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+</form>

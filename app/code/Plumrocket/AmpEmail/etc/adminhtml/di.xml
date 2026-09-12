@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Email\Block\Adminhtml\Template\Edit">
+        <plugin name="pramp_email_set_form_block" type="Plumrocket\AmpEmail\Plugin\Magento\Email\Block\Adminhtml\Template\EditPlugin" sortOrder="100"/>
+    </type>
+    <type name="Magento\Email\Model\ResourceModel\Template">
+        <plugin name="pramp_template_plugin" type="Plumrocket\AmpEmail\Plugin\Magento\Email\Model\ResourceModel\TemplatePlugin" sortOrder="100" />
+    </type>
+    <type name="Magento\Ui\Component\Wysiwyg\ConfigInterface">
+        <plugin name="pramp_template_plugin_1" type="Plumrocket\AmpEmail\Plugin\Magento\Ui\AddAmpHtmlInWysiwygPlugin" sortOrder="100" />
+    </type>
+    <type name="Plumrocket\AmpEmail\Plugin\Magento\Ui\AddAmpHtmlInWysiwygPlugin">
+        <arguments>
+            <argument name="extendedValidElements" xsi:type="array">
+                <item name="amp-img" xsi:type="string">amp-img[*]</item>
+            </argument>
+            <argument name="customElements" xsi:type="array">
+                <item name="amp-img" xsi:type="string">~amp-img</item>
+            </argument>
+            <argument name="validChildren" xsi:type="array">
+                <item name="amp-img" xsi:type="string">a[amp-img]</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Config\Model\Config\Source\Email\Template\PrAmpEmailHeader" type="Magento\Config\Model\Config\Source\Email\Template">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="path" xsi:type="string">design/email/pramp_header_template</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Config\Model\Config\Source\Email\Template\PrAmpEmailFooter" type="Magento\Config\Model\Config\Source\Email\Template">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="path" xsi:type="string">design/email/pramp_footer_template</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * Blog sidebar post contents
+ *
+ * @var $block \Magefan\BlogExtra\Block\Sidebar\Contents
+ */
+?>
+<div class="widget block block-<?= $block->escapeHtml(str_replace('_', '-', $block->getWidgetKey() ?: '')) ?> _block-list-posts block-posts-list modern-template">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml(__($block->getBlockTitle() ?: 'Post Contents')) ?></strong>
+    </div>
+    <div class="block-content">
+        <?php
+        $level = 1;
+        $first = true;
+        foreach ($this->getItems() as $item) {
+        $newLevel = $item->getLevel();
+
+        if ($level == $newLevel && !$first) {
+            echo '</li>';
+        }
+
+        if ($level < $newLevel) {
+            echo '<ol>';
+        }
+
+        if ($level > $newLevel) {
+            for ($i = $level; $i > $newLevel; $i--) {
+                echo '</ol></li>';
+            }
+        }
+
+        ?>
+        <li>
+            <a href="<?= $block->escapeUrl($item->getUrl()) ?>">
+                <?= $block->escapeHtml($item->getTitle()) ?>
+            </a>
+            <?php
+            $level = $newLevel;
+            $first = false;
+            }
+            ?>
+
+    </div>
+</div>
+

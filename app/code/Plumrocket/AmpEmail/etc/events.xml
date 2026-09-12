@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="pramp_email_template_render_after">
+        <observer name="reset_pramp_locators" instance="Plumrocket\AmpEmail\Observer\ResetLocatorsObserver" />
+        <observer name="add_verified_sender" instance="Plumrocket\AmpEmail\Observer\AddVerifiedSenderObserver" />
+    </event>
+</config>

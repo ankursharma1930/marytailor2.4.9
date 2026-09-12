@@ -1,0 +1,454 @@
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+& when (@media-common = true) {
+
+  //
+  // Slider
+  //_____________________________________
+  .writers-wrapper {
+    margin: 34px -10px 0 -10px;
+    padding: 29px 20px 29px 200px;
+    max-height: 150px;
+    background: url('Mageside_Recipe::images/gurus_bg.png') transparent;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    .writers-gurus {
+      position: absolute;
+      left: 3%;
+      font-size: 26px;
+      width: 8%;
+      text-align: center;
+      top: 15%;
+      font-weight: 600;
+    }
+  }
+
+  .writers-wrapper .bx-wrapper {
+    background: transparent;
+    margin: 0 auto;
+  }
+
+  .writers-wrapper .bx-wrapper .bx-viewport {
+    border: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .writers-wrapper .bx-wrapper .bx-controls-direction .bx-next, .writers-wrapper .bx-wrapper .bx-controls-direction .bx-prev {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    width: 123px;
+    height: 21px;
+    border-radius: 2px;
+    top: 55px;
+    text-indent: 0;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .writers-wrapper .bx-wrapper .bx-controls-direction .bx-next i, .writers-wrapper .bx-wrapper .bx-controls-direction .bx-prev i {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    font-size: 20px;
+    margin: 0 auto;
+    float: none;
+    position: relative;
+    color: #fff;
+    right: -51px;
+  }
+
+  .writers-wrapper .bx-wrapper .bx-controls-direction .bx-next {
+    right: -70px;
+    background: #207abf;
+  }
+
+  .writers-wrapper .bx-wrapper .bx-controls-direction .bx-next .button {
+    background: transparent;
+  }
+
+  .writers-wrapper .bx-wrapper .bx-controls-direction .bx-prev {
+    left: -100px;
+    background: #207abf;
+  }
+  .writers-wrapper .writers-list {
+    position: relative;
+  }
+
+  .writers-wrapper .writers-list .writer {
+    width: 200px;
+  }
+
+  .writers-wrapper .writers-list .writer .writer-avatar {
+    width: 100px;
+    height: 100px;
+    float: left;
+    border-radius: 50%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 2px solid #fff;
+  }
+
+  .writers-wrapper .writers-list .writer .writer-name {
+    width: auto;
+    max-width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+    padding-left: 110px;
+  }
+
+  .writers-wrapper .writers-list .writer .writer-name h3 {
+    word-wrap: break-word;
+    font-weight: normal;
+    font-size: 20px;
+    color: #000;
+    margin-top: 0;
+  }
+
+  .writers-wrapper .writers-list .show-writer-recipes {
+    position: absolute;
+    bottom: 0;
+    box-sizing: border-box;
+    left: 110px;
+    width: 100px;
+    font-size: 13px;
+    text-align: center;
+    line-height: normal;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    background: #207abf;
+    padding: 4px 8px;
+  }
+
+  .writers-wrapper .writers-list .show-writer-recipes:hover {
+    cursor: pointer;
+  }
+
+  @media (max-width: 1242px) {
+    .writers-wrapper .writers-list .writer .writer-avatar {
+      width: 42%;
+      height: auto;
+    }
+    .writers-wrapper .writers-list .writer .writer-avatar img {
+      height: auto;
+    }
+    .writers-wrapper .writers-list .show-writer-recipes {
+      left: 42%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .writers-wrapper {
+      padding: 29px 20px 29px 40px;
+      position: relative;
+    }
+
+    .writers-wrapper .no-display {
+      display: block;
+      position: absolute;
+      top: 0;
+      font-size: 14px;
+      width: 220px;
+      left: 50%;
+      margin-left: -110px;
+      text-align: center;
+    }
+    .writers-wrapper .writers-gurus {
+      display: none;
+    }
+    .writers-wrapper .bx-wrapper .bx-controls-direction .bx-next, .writers-wrapper .bx-wrapper .bx-controls-direction .bx-prev {
+      top: 47px;
+    }
+    .writers-wrapper .bx-wrapper .bx-controls-direction .bx-prev {
+      left: -89px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .writers-wrapper .writers-list .writer .writer-name h3 {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 425px) {
+    .writers-wrapper .writers-list .writer .writer-avatar {
+      float: none;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    .writers-wrapper .writers-list .writer .writer-avatar img {
+      width: auto;
+      max-width: 100%;
+    }
+    .writers-wrapper .writers-list .writer .writer-name {
+      width: 100%;
+      max-width: 100%;
+      text-align: center;
+      padding: 0;
+    }
+    .writers-wrapper .writers-list .show-writer-recipes {
+      left: 50%;
+      margin-left: -50px;
+      bottom: -24px;
+    }
+  }
+
+  //
+  // Recipe Grid
+  //_____________________________________
+  .recipe-list-wrapper {
+    margin-top: 2%;
+    .recipe-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      //max-width: 1050px;
+      //margin: auto;
+      padding: 0;
+      .recipe-item {
+        list-style-type: none;
+        box-sizing: border-box;
+        border: 2px solid #e5e5e5;
+        border-radius: 2px;
+        width: 23%;
+        margin: 0 1% 40px;
+        padding-bottom: 8px;
+        .recipe-item-info {
+          .recipe-item-details {
+            display: flex;
+            padding: 2px 5px;
+            border-bottom: 2px solid #e5e5e5;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            .recipe-item-name {
+              a {
+                color: #020202;
+                font-size: 17px;
+                font-weight: 600;
+                line-height: 1;
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+          .recipe-media {
+            border-bottom: 2px solid #e5e5e5;
+            text-align: center;
+            .recipe-item-photo {
+              display: flex;
+              justify-content: center;
+              img {
+                height: 145px;
+              }
+            }
+          }
+        }
+        .container-recipe-cooking {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          padding: 0 5px;
+          .cooking {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            width: 33%;
+            align-items: center;
+            letter-spacing: -0.04em;
+            text-align: center;
+            line-height: 16px;
+          }
+        }
+        .filter-icon {
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          margin-top: -18.5px;
+          z-index: 999;
+          position: relative;
+          min-height: 50px;
+          li {
+            list-style-type: none;
+            margin: 0 5px 0 5px;
+          }
+        }
+      }
+    }
+  }
+  .more-recipes {
+    text-align: center;
+    display: none;
+    clear: both;
+    button {
+      position: relative;
+    }
+  }
+  .more-recipes.active {
+    display: block;
+  }
+}
+
+//@screen__m: 768px;
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+  .recipe-search {
+    width: 80%;
+  }
+  .writers-wrapper {
+    padding: 29px 10px;
+  }
+  .writers-wrapper .bx-wrapper .bx-viewport {
+    height: 130px !important;
+  }
+  .writers-wrapper .bx-wrapper .bx-controls-direction {
+    display: none;
+  }
+  .writers-wrapper .writers-list {
+    height: 110px !important;
+  }
+
+  .recipe-list-wrapper {
+    .recipe-grid {
+      justify-content: center;
+      .recipe-item {
+        width: 100%;
+        max-width: 225.3px;
+        margin: 0 1% 20px;
+      }
+    }
+  }
+  .recipe__column {
+    display: flex;
+    flex-direction: column;
+    .recipe__column-media {
+      margin-top: 2rem;
+    }
+  }
+
+  .block-ingredients-method {
+    .recipe-extended-description {
+      display: flex;
+      flex-direction: column-reverse;
+      .recipe-ingredients {
+        width: 80vw;
+        button {
+          display: flex;
+          margin: auto;
+        }
+      }
+      .recipe-method {
+        width: 80vw;
+      }
+    }
+  }
+}
+
+//@screen__s: 640px;
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+  .recipe-list-wrapper {
+    .recipe-grid {
+      .recipe-item {
+        width: 100%;
+      }
+    }
+  }
+  .block-ingredients-method {
+    .table-wrapper.ingredients-method {
+      border-top: none;
+    }
+  }
+  .review-content .table-wrapper {
+    border-top: none;
+  }
+}
+
+//@screen__xs: 480px;
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+  .recipe-block-title-products {
+    flex-direction: column;
+  }
+  .container-recipe-cooking {
+    .cooking {
+      flex-direction: column;
+      width: 33%;
+      text-align: center;
+    }
+  }
+  .recipe-short-description {
+    margin-top: 10px;
+  }
+  .recipe-share h2 {
+    font-size: 2.5rem;
+  }
+  .writers-wrapper .writers-list .writer .writer-avatar {
+    width: 28%;
+  }
+
+  .writer-page-wrap {
+    .writer-page-info {
+      justify-content: flex-end;
+      .writer-info {
+        &__social-link {
+          top: 10px;
+          right: 10px;
+          left: 10px;
+        }
+        &__nickname {
+          font-size: 30px;
+        }
+        &__about-writer {
+          font-size: 15px;
+          line-height: 1.1;
+          font-weight: 600;
+          padding: 0 15px;
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+}
+//
+//@screen__xxs: 320px;
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xxs) {
+
+}
+
+//@screen__xl: 1440px;
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+
+}
+//
+//@screen__l: 1024px;
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+  .recipe-list-wrapper {
+    .recipe-grid {
+      .recipe-item {
+        width: 23%;
+      }
+    }
+  }
+}
+//
+//@screen__m: 768px;
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+  .recipe-list-wrapper {
+    .recipe-grid {
+      .recipe-item {
+        width: 31.33%;
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Ingredient\AllRecipeProducts $block
+ */
+?>
+
+<?php
+$productUrl = $this->getUrl('recipe/ingredient/view');
+?>
+<div class="page-wrapper">
+    <div class="page-title-wrapper product">
+        <h1 class="page-title">
+            <span class="page-title-wrapper"><?php echo $block->escapeHtml($block->getTitle()) ?></span>
+        </h1>
+    </div>
+    <div class="page-main">
+        <?php ob_start();?>
+        <div class="page-main abc-content">
+            <div class="abc">
+                        <?php
+                        /** @var $item \Mageside\Recipe\Model\RecipeProductIngredient */
+                        $tempItems = $block->getRecipeProductCollection();
+                        $preChar='';
+                        foreach ($tempItems as $item) {
+                            $tempChar=mb_substr($item['name'],0,1,'UTF-8');
+                            if ($tempChar==$preChar) { ?>
+                                <li>
+                                    <a href="<?= $block->getRecipesUrl(["productId"=>$item['entity_id'],"productName"=>$item['name']]);?>"><?= $block->escapeHtml($item['name'] . ' (' . $item['recipes_count'] . ')') ?></a>
+                                </li>
+                                <?php
+                            } else {
+
+                                if (!($preChar=='')) {
+                                    ?>
+                                        </ul>
+                                    </div>
+                                    <?php
+                                }
+                                $preChar = $tempChar;
+                                $block->abcMenu.="<a < class=\"page-main abc-menu\" href=\"#abc-".$preChar."\"> ".$preChar.'</a><span> </span>';
+                                ?>
+                                <div class="abc-section"><span class="anchor" id="abc-<?= $preChar?>"></span>
+                                    <div>
+                                        <a class="page-main abc-menu" href="#abc-menu"><?= $preChar?></a>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <a href="<?= $block->getRecipesUrl(["productId"=>$item['entity_id'],"productName"=>$item['name']]);?>"><?= $block->escapeHtml($item['name'] . ' (' . $item['recipes_count'] . ')') ?></a>
+                                        </li>
+                            <?php }
+                        }
+                        if (!($preChar=='')) {
+                        ?>  </ul>
+                            </div>
+                        <?php
+                        }?>
+        </div>
+        <?php $block->abcContent = ob_get_clean();?>
+        <div class="page-main abc-menu" id="abc-menu">
+            <?php echo $block->abcMenu;?>
+        </div>
+        <?php echo $block->abcContent;?>
+    </div>
+</div>

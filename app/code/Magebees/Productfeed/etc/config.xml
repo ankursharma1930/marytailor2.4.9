@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<productfeed>
+			<general>
+				<batch_size>200</batch_size>
+				<file_path>var/export/</file_path>
+			</general>
+		</productfeed>
+    </default>
+</config>

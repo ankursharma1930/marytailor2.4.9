@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<!--@subject {{trans "New comment was posted on %post_title" post_title=$post.getTitle()}} @-->
+<!--@vars {
+"var post":"Blog post",
+"var comment":"Comment"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p><strong>{{trans 'New comment on "%post_title" post was posted.' post_title=$post.getTitle()}}</strong></p>
+<p></p>
+<p>{{trans 'You\'re receiving this message because new comment needs your approval.' }}</p>
+
+{{template config_path="design/email/footer_template"}}
+

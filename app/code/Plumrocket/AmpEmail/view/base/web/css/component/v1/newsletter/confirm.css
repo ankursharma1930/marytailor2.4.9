@@ -1,0 +1,26 @@
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+.confirm-btn {
+  padding: 0.7em 0.57em;
+  text-transform: uppercase;
+  outline-width: 0;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  background-color: #4d90fe;
+  color: #fff;
+  border: 0;
+  border-radius: 3px;
+}
+
+.subscribe-form,
+.confirm-form,
+.already-done {
+  display: block;
+}
+
+.list-imitator {
+  height: 100px;
+}

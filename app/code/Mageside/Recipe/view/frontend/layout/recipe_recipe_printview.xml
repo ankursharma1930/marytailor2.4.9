@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<head>
+    <css src="Mageside_Recipe::css/print.css"/>
+</head>
+    <body>
+        <attribute name="class" value="page-print"/>
+        <referenceContainer name="header.container" remove="true"/>
+        <referenceContainer name="head.additional" remove="true"/>
+        <referenceBlock name="catalog.topnav" remove="true"/>
+        <referenceContainer name="footer-container" remove="true"/>
+        <referenceBlock name="breadcrumbs" remove="true"/>
+        <referenceBlock name="before.body.end" remove="true"/>
+        <move element="logo" destination="main.content" before="-" />
+
+        <referenceContainer name="content">
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\Recipe"
+                   name="recipe-menu" template="recipe/view/print-menu.phtml" before="page.title"/>
+
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\Recipe"
+                   name="recipe" template="recipe/view/print-view.phtml">
+
+            <block class="Mageside\Recipe\Block\Frontend\Recipe\ListProduct"
+                   name="ingredients_list"
+                   template="recipe/view/ingredients.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

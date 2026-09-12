@@ -1,0 +1,67 @@
+{{template config_path="design/email/header_template"}}
+<!--@subject {{trans "Question Asked By Customer"}}  @-->
+<!--@vars
+{
+    "var name_faq":"Name Faq",
+    "var email_faq":"Email Faq",
+    "var product_sku":"Product sku",
+    "var product_name":"Product name",
+    "var question_faq":"Question faq"
+}
+@-->
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+                <td align="center" valign="top" style="padding:20px 0 20px 0">
+                    <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                         <tr>
+                            <td>
+                                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                                    <tbody>
+                                        <tr>
+                                            <td style="vertical-align: middle;">Name</td>
+                                            <td colspan="2" valign="top" style="font-size:12px;padding:7px 9px 9px 9px;border:1px solid #EAEAEA;">
+                                                {{var name_faq}}
+                                            </td>
+                                        </tr>
+										<tr>
+											<td style="vertical-align: middle;">Email</td>
+                                            <td colspan="2" valign="top" style="font-size:12px;padding:7px 9px 9px 9px;border:1px solid #EAEAEA;">
+                                                {{var email_faq}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: middle;">Product SKU</td>
+                                            <td colspan="2" valign="top" style="font-size:12px;padding:7px 9px 9px 9px;border:1px solid #EAEAEA;">
+                                                {{var product_sku}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: middle;">Product Name</td>
+                                            <td colspan="2" valign="top" style="font-size:12px;padding:7px 9px 9px 9px;border:1px solid #EAEAEA;">
+                                                {{var product_name}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: middle;">Question</td>
+                                            <td colspan="2" valign="top" style="font-size:12px;padding:7px 9px 9px 9px;border:1px solid #EAEAEA;">
+                                                {{var question_faq}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA;text-align:center;">
+                                <center>
+                                    <p style="font-size:12px;margin:0;">
+                                        <strong>{{trans "Thank you"}}</strong>
+                                    </p>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+{{template config_path="design/email/footer_template"}}

@@ -1,0 +1,122 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Plumrocket\AmpEmail\Block\Component\ProductAlert\Price $block */
+?>
+<?php foreach ($block->getProducts() as $product) : ?>
+    <?php $block->initFrontPrice($product); ?>
+    <?php $productId = (int) $product->getId(); ?>
+    <div>
+        <?php if ($initialPrice = $block->getInitialPrice($productId)) : ?>
+            <amp-list class="price-compare-list"
+                      height="200"
+                      layout="fixed-height"
+                      items="."
+                      single-item="."
+                      src="<?= $block->escapeUrl($block->getActualPriceUrl($productId, $initialPrice)) ?>"
+            >
+                <div class="table" placeholder>
+                    <div class="price-compare">
+                        <strong></strong>
+                        <div></div>
+                    </div>
+                    <div class="price-compare">
+                        <strong></strong>
+                        <div></div>
+                    </div>
+                    <div class="price-compare">
+                        <strong></strong>
+                        <div></div>
+                    </div>
+                </div>
+                <template type="amp-mustache">
+                    <div>
+                        <p><div>{{{priceAlertTitle}}}</div></p>
+                        <div class="table">
+                            <div class="price-compare">
+                                <strong><?= $block->escapeHtml(__('Desired Price:')) ?></strong>
+                                <div><?= $block->formatPrice($initialPrice) ?></div>
+                            </div>
+                            <div class="price-compare">
+                                <strong><?= $block->escapeHtml(__('Current Price:')) ?></strong>
+                                <div>{{{formattedPrice}}}</div>
+                            </div>
+                            <div class="price-compare">
+                                <strong><?= $block->escapeHtml(__('Difference:')) ?></strong>
+                                <div class="price-change-{{priceChange}}">{{{formattedDifference}}}</div>
+                            </div>
+                        </div>
+                        <div class="upd-time">{{updatedDateString}}</div>
+                    </div>
+                </template>
+                <div fallback>
+                    <p>
+                        <?= /* @noEscape */ __(
+                                'The price for <b>%1</b> has dropped and is now %2 below your desired price.',
+                                $product->getName(),
+                                $block->formatPrice($initialPrice - $product->getPrice(), false)
+                        ) ?>
+                    </p>
+                    <div class="table">
+                        <div class="price-compare">
+                            <strong><?= $block->escapeHtml(__('Desired Price:')) ?></strong>
+                            <div><?= $block->formatPrice($initialPrice) ?></div>
+                        </div>
+                        <div class="price-compare">
+                            <strong><?= $block->escapeHtml(__('Current Price:')) ?></strong>
+                            <div><?= $product->getFormattedPrice() ?></div>
+                        </div>
+                        <div class="price-compare">
+                            <strong><?= $block->escapeHtml(__('Difference:')) ?></strong>
+                            <div class="price-change-down"><?= $block->formatPrice($initialPrice - $product->getFinalPrice()) ?></div>
+                        </div>
+                    </div>
+                    <div class="upd-time"><?= $block->escapeHtml(__('Information current as of %1', $block->getCurrentDate())) ?></div>
+                </div>
+            </amp-list>
+        <?php endif; ?>
+        <?= $block->createProductBlock($product)->toHtml() ?>
+        <div class="pr-subsciption-options">
+            <div class="price-unsubscribe-form-container">
+                <?php $formId = "price-unsubscribe-prod-$productId"; ?>
+                <form id="<?= $block->escapeHtmlAttr($formId) ?>"
+                    method="POST"
+                    action-xhr="<?= $block->escapeUrl($block->getProductUnsubscribeUrl($productId)) ?>"
+                >
+                    <span class="btn-link a-link" role="button" tabindex="2" on="tap:<?= $block->escapeHtmlAttr($formId) ?>.submit">
+                        <?= $block->escapeHtml(__('Click here to stop alerts for this product')) ?>
+                    </span>
+                    <div submit-success>
+                        <template type="amp-mustache">{{success}}</template>
+                    </div>
+                    <div submit-error>
+                        <template type="amp-mustache">{{error}}</template>
+                    </div>
+                </form>
+            </div>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <?php $formId = "price-unsubscribe-all-$productId"; ?>
+            <div class="price-unsubscribe-form-container">
+                <form id="<?= $block->escapeHtmlAttr($formId) ?>"
+                    method="POST"
+                    action-xhr="<?= $block->escapeUrl($block->getUnsubscribeUrl()) ?>"
+                >
+                    <span class="btn-link a-link" role="button" tabindex="3" on="tap:<?= $block->escapeHtmlAttr($formId) ?>.submit">
+                        <?= $block->escapeHtml(__('Unsubscribe from all price alerts')) ?>
+                    </span>
+                    <div submit-success>
+                        <template type="amp-mustache">{{success}}</template>
+                    </div>
+                    <div submit-error>
+                        <template type="amp-mustache">{{error}}</template>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>

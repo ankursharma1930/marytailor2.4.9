@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="productfaq_productfaq_question_admin_email" label="Product Questions" file="question_admin_email.html" type="html" module="Dolphin_Productfaq" area="frontend"/>
+    <template id="productfaq_productfaq_answer_email" label="Product Answer" file="answer_email.html" type="html" module="Dolphin_Productfaq" area="frontend"/>
+</config>

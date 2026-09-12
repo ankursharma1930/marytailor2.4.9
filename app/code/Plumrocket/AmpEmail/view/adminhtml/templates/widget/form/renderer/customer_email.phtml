@@ -1,0 +1,136 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+?>
+<?php /** @var \Plumrocket\AmpEmail\Block\Adminhtml\Email\Template\Renderer\CustomerEmail $block */ ?>
+
+<div class="admin__field field field-<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?> with-note"
+     data-ui-id="template-edit-form-fieldset-element-form-field-pramp-email-manual-email"
+>
+    <label class="label admin__field-label" for="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>"
+           data-ui-id="template-edit-form-fieldset-element-text-pramp-email-manual-email-label"
+    >
+        <span><?= $block->escapeHtmlAttr($block->getElementParams('label')) ?></span>
+    </label>
+    <div class="admin__field-control control">
+        <input id="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>"
+               data-ui-id="template-edit-form-fieldset-element-text-pramp-email-manual-email"
+               value="<?= /* @noEscape */ $block->getElement()->getEscapedValue() ?>"
+               title="<?= $block->escapeHtmlAttr($block->getElementParams('title')) ?>"
+               type="email"
+               class="input-text admin__control-text"
+        />
+        <div id="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>-loader" class="lds-ellipsis hidden">
+            <div></div><div></div><div></div><div></div>
+        </div>
+        <div class="note admin__field-note" id="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>-note">
+            <?= $block->escapeHtml($block->getElementParams('note')) ?>
+        </div>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/alert',
+        'domReady!'
+    ], function($, alert) {
+        "use strict";
+
+        var customerEmailInputId = '<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>';
+
+        var elem = $('#' + customerEmailInputId);
+        var relatedElem = $('#pramp_email_manual_order');
+        var loader = document.getElementById(customerEmailInputId + '-loader');
+
+        var customerInfoLoader = new CustomerInfoLoader(elem, relatedElem, loader);
+
+        if (elem.length && relatedElem.length) {
+            elem.on('change', function () {
+                customerInfoLoader.loadOrders(elem.val());
+            });
+
+            if (elem.val()) {
+                elem.trigger('change');
+            }
+        }
+
+        /**
+         * @constructor
+         */
+        function CustomerInfoLoader(elem, relatedElem, loader) {
+            var self = this;
+            this.loadOrders = function (email) {
+                self.requestBefore();
+
+                $.get('<?= $block->escapeUrl($block->getUrl('prampemail/customer_order/list')) ?>', {'email': email}, function (data) {
+                    data.forEach(function (orderOption) {
+                        relatedElem.append(new Option('#' + orderOption.label, orderOption.value));
+                    });
+                }).always(function() {
+                    self.requestAfter();
+                }).fail(function(data) {
+                    if (400 === data.status) {
+                        self.showError(elem[0], data.responseJSON.message);
+                    } else {
+                        var message = $.mage.__('Something went wrong');
+
+                        if (data.responseJSON && data.responseJSON.message) {
+                            message = data.responseJSON.message;
+                        }
+
+                        alert({
+                            title: message,
+                            content: $.mage.__('Please review the log for details.'),
+                        });
+                    }
+                });
+            };
+
+            this.requestBefore = function () {
+                loader.classList.remove('hidden');
+                // Freeze elements
+                elem.prop('disabled', true);
+                relatedElem.prop('disabled', true);
+                // Clear previous options and value
+                relatedElem.html('');
+                relatedElem.val('');
+                // hide errors
+                document.querySelectorAll('label[generated="true"]').forEach(function(elem) {
+                    if (elem.classList.contains('mage-error')) {
+                        elem.remove();
+                    }
+                });
+                document.querySelectorAll('.mage-error').forEach(
+                    function(elem) {
+                        elem.classList.remove('mage-error');
+                    }
+                );
+            };
+
+            this.requestAfter = function () {
+                loader.classList.add('hidden');
+                // Enable elements
+                elem.prop('disabled', false);
+                relatedElem.prop('disabled', false);
+            };
+
+            this.showError = function (element, message) {
+                element.classList.add('mage-error');
+
+                var label = document.createElement('label');
+                label.id = element.id + '-error';
+                label.className = 'mage-error';
+                label.setAttribute('for', element.id);
+                label.setAttribute('generated', 'true');
+
+                label.innerText = message ? message : jQuery.mage.__('This is a required field.');
+
+                return element.parentNode.insertBefore(label, element.nextSibling);
+            };
+        }
+    })
+</script>

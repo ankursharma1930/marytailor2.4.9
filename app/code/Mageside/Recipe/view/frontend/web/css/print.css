@@ -1,0 +1,218 @@
+
+.action.print-menu {
+    border: 1px solid #1979c3;
+    color: #000000;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    padding: 7px 15px;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+    vertical-align: middle;
+    text-decoration: none;
+    border-radius:.1em;
+}
+
+.action.print-menu.primary {
+    background: #fff556;
+    border: 1px solid #1979c3;
+    color: #000000;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    padding: 7px 15px;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+    vertical-align: middle;
+    text-decoration: none;
+    border-radius:.1em;
+}
+
+.action.print-menu.primary:hover {
+    background: yellow;
+    font-weight: 600;
+    font-size: 1.4rem;
+    transition: .5s all;
+    text-decoration: none;
+}
+
+.action.print-menu:hover {
+    background: yellow;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.4rem;
+    transition: .5s all;
+    text-decoration: none;
+}
+
+.slideDown {
+    animation-name: slideDown;
+    -webkit-animation-name: slideDown;
+    animation-duration: 1.5s;
+    -webkit-animation-duration: 1.5s;
+    animation-timing-function: ease;
+    -webkit-animation-timing-function: ease;
+    visibility: visible !important;
+}
+
+.short-description {
+    border: 0px!important;
+
+}
+.page-options {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    text-align: center;
+    background-color: white;
+    padding: 10px 0 0;
+    color: #bbb;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+    z-index: 9999;
+
+}
+
+.units-options, .type-options, .notes-options, .image-options, #print-button {
+    display: inline-block;
+    padding: 0 10px 10px;
+}
+
+#page {
+    max-width: 7in;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 10px;
+}
+
+.recipe-block-title {
+    text-align: left!important;
+    margin-right: 200px;
+}
+
+.page-main {
+    padding-top: 40px!important;
+    padding-bottom: 0px!important;
+    width: 900px!important;
+}
+
+.product-info-main {
+    margin-left: 5px;
+    padding-left: 10px;
+    width: 250px!important;
+    height: auto;
+    float: right;
+}
+
+.page-title-wrapper {
+    text-align: center;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.page-title {
+    margin-bottom: 0px;
+    font-size: xx-large;
+}
+
+.logo {
+    position: absolute;
+    padding-top: 10px;
+}
+
+.recipe-short-description .container-recipe-cooking {
+    display: contents!important;
+    text-align: left!important;
+    margin-top: 2% !important;
+}
+
+.columns {
+    padding-bottom: 0px!important;
+    display: block;
+}
+
+.description {
+    padding-top: 1px;
+}
+
+.onPrintContent {
+    display:contents!important;
+    z-index: 0!important;
+}
+
+.noPrintContent {
+    display:none!important;
+    z-index: 0!important;
+}
+
+.block-content {
+    padding-right: 10px;
+}
+
+@media print {
+
+    .recipe-block-title {
+        text-align: left!important;
+        margin-right: 195px;
+        padding-right: 70px;
+    }
+
+    .product-info-main {
+        margin-left: 5px;
+        padding-left: 5px;
+        width: 250px!important;
+        height: auto;
+        float: right;
+    }
+
+    .noPrint {
+        display:none!important;
+        z-index: 0!important;
+    }
+
+    .onPrintContent {
+        display:contents!important;
+        z-index: 0!important;
+    }
+
+    .noPrintContent {
+        display:none!important;
+        z-index: 0!important;
+    }
+
+    .hide-on-screen {
+        display:block!important;
+        z-index: 0!important;
+    }
+    .page-main {
+        width: 860px!important;
+        padding-bottom: 0px!important;
+        font-size: 100%;
+    }
+
+    .page-title-wrapper {
+        text-align: center;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+    }
+
+    .page-title {
+        text-align: center;
+        margin-top: 5px;
+        padding-bottom: 0px;
+        margin-left: -50px!important;
+        margin-bottom: 0px;
+        font-size: xx-large;
+    }
+
+    .logo {
+        position: absolute;
+        padding-top: 0px;
+    }
+
+    .columns {
+        padding-top: 10px!important;
+        padding-bottom: 0px!important;
+        display: block;
+    }
+}

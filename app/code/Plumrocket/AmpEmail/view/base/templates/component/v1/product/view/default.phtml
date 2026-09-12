@@ -1,0 +1,207 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Plumrocket\AmpEmail\Block\Component\Product\View $block */
+$product = $block->getProduct();
+$id = $block->getProduct()->getId();
+$url = $block->getProduct()->getProductUrl();
+$gallery = $block->getGalleryImages();
+
+$imageWidth = $block->getImageAttribute('pr_amp_email_product_view', 'width');
+$imageHeight = $block->getImageAttribute('pr_amp_email_product_view', 'height');
+$previewIndex = 0;
+?>
+<div class="product-view">
+    <?php if ($block->canShowAttr('image')) : ?>
+        <?php /** @var \Magento\Catalog\Block\Product\Image $image */ ?>
+        <div class="amp-product-gallery">
+            <?php if ($gallery && $gallery->getSize() > 1) : ?>
+                <amp-carousel
+                    id="carousel-with-preview-id-<?= $block->escapeHtmlAttr($id) ?>"
+                    width="<?= $block->escapeHtmlAttr($imageWidth) ?>"
+                    height="<?= $block->escapeHtmlAttr($imageHeight) ?>"
+                    layout="fixed"
+                    type="slides"
+                    delay="5000"
+                >
+                    <?php foreach ($gallery as $image) : ?>
+                        <?php if (! $image->getData('disabled')) : ?>
+                            <amp-img
+                                src="<?= $block->escapeUrl($image->getUrl()) ?>"
+                                width="<?= $block->escapeHtmlAttr($imageWidth) ?>"
+                                height="<?= $block->escapeHtmlAttr($imageHeight) ?>"
+                                layout="responsive"
+                                alt="<?= $block->escapeHtmlAttr($product->getName()) ?>"
+                            ></amp-img>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </amp-carousel>
+
+                <?php if ($block->canShowAttr('image-preview')) : ?>
+                    <div class="carousel-preview">
+                        <?php foreach ($gallery as $image) : ?>
+                            <?php if (! $image->getData('disabled')) : ?>
+                                <?php if ($previewImageInfo = $block->getProductGalleryPreviewImage($image->getData('file'), 53)) : ?>
+                                    <amp-img
+                                        src="<?= $block->escapeUrl($previewImageInfo['url']) ?>"
+                                        width="<?= $block->escapeHtmlAttr($previewImageInfo['width'] ?? 120) ?>"
+                                        height="<?= $block->escapeHtmlAttr($previewImageInfo['height'] ?? 120) ?>"
+                                        layout="fixed"
+                                        on="tap:carousel-with-preview-id-<?= $block->escapeHtmlAttr($id) ?>.goToSlide(index=<?= $block->escapeHtmlAttr($previewIndex) ?>)"
+                                        role="button"
+                                        tabindex="3"
+                                        alt="<?= $block->escapeHtmlAttr(__('Go to slide %1', $previewIndex)) ?>"
+                                    ></amp-img>
+                                <?php endif; ?>
+                                <?php $previewIndex++; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php elseif ($productImage = $block->getProductImage()) : ?>
+                <amp-img
+                    width="<?= $block->escapeHtmlAttr($imageWidth) ?>"
+                    height="<?= $block->escapeHtmlAttr($imageHeight) ?>"
+                    layout="fixed"
+                    alt="<?= $block->escapeHtmlAttr($productImage->getLabel()) ?>"
+                    src="<?= $block->escapeUrl($productImage->getImageUrl()) ?>" >
+                </amp-img>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="product-info">
+        <?php if ($block->canShowAttr('name')) : ?>
+            <div class="name"><a href="<?= $block->escapeUrl($url) ?>"><?= $block->escapeHtml($product->getName()) ?></a></div>
+        <?php endif; ?>
+
+        <amp-list class="available-list"
+                  height="180"
+                  layout="fixed-height"
+                  items="."
+                  single-item="."
+                  src="<?= $block->escapeUrl($block->getActualInfoUrl($product->getId())) ?>"
+        >
+            <template type="amp-mustache">
+                <?php if ($block->canShowAttr('price')) : ?>
+                    <div class="price c-red">{{{formattedPrice}}}</div>
+                <?php endif; ?>
+
+                {{#isSalable}}
+                <div class="stock available c-green"><span><?= $block->escapeHtml(__('In Stock')) ?></span></div>
+                {{/isSalable}}
+                {{^isSalable}}
+                <div class="stock unavailable c-red"><span><?= $block->escapeHtml(__('Out of Stock')) ?></span></div>
+                {{/isSalable}}
+
+                <?php if ($block->canShowAddToCart()) : ?>
+                    <div class="default-add-to-cart">
+                        {{#isSalable}}
+                        <?php if (! $block->isGuest()) : ?>
+                            <?php if ($block->isProductHasRequireOption()) : ?>
+                                <a href="<?= $block->escapeUrl($url) ?>" class="btn btn--large btn--link"><?= $block->escapeHtml(__('Choose Options')) ?></a>
+                            <?php else : ?>
+                                <button class="btn btn--link btn--to-cart btn--large"
+                                        on="tap:AMP.setState({cart: {id: 'p<?= $block->escapeHtmlAttr($id) ?>', status: {p<?= $block->escapeHtmlAttr($id) ?>: false}}}), atc_form.submit"
+                                        [hidden]="cart.status.p<?= $block->escapeHtmlAttr($id) ?>"
+                                        [class]="cart.id == 'p<?= $block->escapeHtmlAttr($id) ?>' ? 'btn btn--link btn--to-cart btn--large loader' : 'btn btn--link btn--to-cart btn--large'"
+                                >   
+                                    <span class="btn_icon-wrap">
+                                        <amp-img src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/basket_icon.png') ?>" width="28" height="23" alt=""/>
+                                    </span>
+                                    <span class="loader-bar">
+                                        <amp-anim width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.gif')?>">
+                                            <amp-img placeholder width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.png')?>">
+                                            </amp-img>
+                                        </amp-anim>
+                                    </span>
+                                    <span><?= $block->escapeHtml(__('Add To Cart')) ?></span>
+                                </button>
+                                <a class="btn btn--link btn--checkout btn--large"
+                                   href="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"
+                                   hidden [hidden]="! cart.status.p<?= $block->escapeHtmlAttr($id) ?>"
+                                >
+                                    <span class="btn_icon-wrap">
+                                        <amp-img src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/lock_icon.png') ?>" width="17" height="25" alt=""/>
+                                    </span>
+                                    <?= $block->escapeHtml(__('Checkout Now')) ?>
+                                </a>
+                            <?php endif; ?>
+                        <?php else : ?>
+                            <a href="<?= $block->escapeUrl($url) ?>" class="btn btn--link btn--large"><?= $block->escapeHtml(__('View Product')) ?></a>
+                        <?php endif; ?>
+                        {{/isSalable}}
+                        {{^isSalable}}
+                        <a href="<?= $block->escapeUrl($url) ?>" class="btn btn--link btn--large"><?= $block->escapeHtml(__('View Product')) ?></a>
+                        {{/isSalable}}
+                    </div>
+                <?php endif; ?>
+            </template>
+            <div fallback>
+                <?php if ($block->canShowAttr('price')) : ?>
+                    <div class="price"><?= $block->formatPrice($product->getFinalPrice()) ?></div>
+                <?php endif; ?>
+                <?php if ($product->getIsSalable()) : ?>
+                    <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                <?php else : ?>
+                    <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                <?php endif; ?>
+                <?php if ($block->canShowAddToCart()) : ?>
+                    <div class="default-add-to-cart">
+                        <?php if (! $block->isGuest()) : ?>
+                            <?php if ($block->isProductHasRequireOption()) : ?>
+                                <a href="<?= $block->escapeUrl($url) ?>" class="btn btn--link btn--large"><?= $block->escapeHtml(__('Choose Options')) ?></a>
+                            <?php else : ?>
+                                <button class="btn btn--link btn--to-cart btn--large"
+                                        on="tap:AMP.setState({cart: {id: 'p<?= $block->escapeHtmlAttr($id) ?>', status: {p<?= $block->escapeHtmlAttr($id) ?>: false}}}), atc_form.submit"
+                                        [hidden]="cart.status.p<?= $block->escapeHtmlAttr($id) ?>"
+                                        [class]="cart.id == 'p<?= $block->escapeHtmlAttr($id) ?>' ? 'btn btn--link btn--to-cart btn--large loader' : 'btn btn--link btn--to-cart btn--large'"
+                                >
+                                    <span class="btn_icon-wrap">
+                                        <amp-img src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/basket_icon.png') ?>" width="28" height="23" alt=""/>
+                                    </span>
+                                    <span class="loader-bar">
+                                        <amp-anim width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.gif')?>">
+                                            <amp-img placeholder width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.png')?>">
+                                            </amp-img>
+                                        </amp-anim>
+                                    </span>
+                                    <span><?= $block->escapeHtml(__('Add To Cart')) ?></span>
+                                </button>
+                                <a class="btn btn--link btn--checkout btn--large"
+                                   href="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"
+                                   hidden [hidden]="! cart.status.p<?= $block->escapeHtmlAttr($id) ?>"
+                                >
+                                    <span class="btn_icon-wrap">
+                                        <amp-img src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/lock_icon.png') ?>" width="17" height="25" alt=""/>
+                                    </span>
+                                    <?= $block->escapeHtml(__('Checkout Now')) ?>
+                                </a>
+                            <?php endif; ?>
+                        <?php else : ?>
+                            <a href="<?= $block->escapeUrl($url) ?>" class="btn btn--link btn--large"><?= $block->escapeHtml(__('View Product')) ?></a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+                <div class="e-msg">
+                    <?= $block->escapeHtml(__('Cannot retrieve latest info')) ?>
+                </div>
+            </div>
+        </amp-list>
+
+        <?php if ($block->canShowAttr('description')) : ?>
+            <amp-accordion class="description">
+                <section>
+                    <h4><span class="ar-d">↓</span><?= $block->escapeHtml(__('View Description')) ?></h4>
+                    <div class="text"><?= $block->stripTags($product->getDescription()) ?></div>
+                </section>
+            </amp-accordion>
+        <?php endif; ?>
+    </div>
+</div>

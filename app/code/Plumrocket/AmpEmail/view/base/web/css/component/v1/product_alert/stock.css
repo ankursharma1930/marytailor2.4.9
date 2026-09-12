@@ -1,0 +1,26 @@
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+.pr-subsciption-options {
+  display: flex;
+  margin:28px auto;
+  justify-content: center;
+  padding:5px;
+  border-bottom:1px solid #ccc;
+  font-size: 12px;
+}
+
+.stock-unsubscribe-form-container form.amp-form-submit-success > .btn-link {
+  display: none
+}
+
+.stock-list__status-hld {
+  margin-bottom: 5px;
+}
+
+.stock-list__title {
+  margin-bottom: 5px;
+}

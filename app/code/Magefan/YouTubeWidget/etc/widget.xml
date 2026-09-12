@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="magefan_youtube_block" class="Magefan\YouTubeWidget\Block\Widget\YouTube"
+            placeholder_image="Magefan_YouTubeWidget::images/youtube.png">
+        <label translate="true">YouTube Widget by Magefan</label>
+        <description translate="true"> <![CDATA[ <br/>Do you have any questions about YouTube video widget? Please feel free to contact <a href="https://magefan.com/magento2-extensions?utm_source=m2admin_youtube_widget_config&utm_medium=link&utm_campaign=regular" target="_blank">Magefan</a>.
+               ]]></description>
+        <parameters>
+            <parameter name="video_url" xsi:type="text" visible="true" sort_order="10" required="true">
+                <label translate="true">YouTube Video Url</label>
+            </parameter>
+            <parameter name="short_video" xsi:type="select" visible="true" sort_order="15">
+                <label translate="true">It`s Short Video ?</label>
+                <options>
+                    <option name="yes" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0"  selected="true" >
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="width" xsi:type="text" visible="true" sort_order="20" >
+                <label translate="true">Width</label>
+                <description translate="true"><![CDATA[
+                   E.g. 50%, 500px. Leave blank to use 100%.
+                ]]></description>
+            </parameter>
+            <parameter name="height" xsi:type="text" visible="true" sort_order="30" >
+                <label translate="true">Max. Height</label>
+                <description translate="true"><![CDATA[
+                     E.g. 400px. Leve blank to use 500px.
+                ]]></description>
+            </parameter>
+            <parameter name="start_at" xsi:type="text" visible="true" sort_order="40" >
+                <label translate="true">Start At</label>
+                <description translate="true"><![CDATA[
+                     E.g.  2:36 (m:s) or 1:30:45 (h:m:s).
+                ]]></description>
+            </parameter>
+            <parameter name="loop" xsi:type="select" visible="true" sort_order="45" >
+                <label translate="true">Repeat (loop) Video</label>
+                <options>
+                    <option name="yes" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0"  selected="true" >
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="related_videos" xsi:type="select" visible="true" sort_order="50" >
+                <label translate="true">Display Related Videos</label>
+                <options>
+                    <option name="yes" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0"  selected="true" >
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="allow_full_screen" xsi:type="select" visible="true" sort_order="60" >
+                <label translate="true">Allow Full Screen</label>
+                <options>
+                    <option name="yes" value="1" selected="true" >
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="image_quality" xsi:type="select" visible="true" sort_order="70" >
+                <label translate="true">Preview Image Quality</label>
+                <options>
+                    <option name="medium_quality" value="mqdefault">
+                        <label translate="true">Medium Quality (320×180 pixels)</label>
+                    </option>
+                    <option name="high_quality" value="hqdefault">
+                        <label translate="true">High Quality (480×360 pixels)</label>
+                    </option>
+                    <option name="standard_definition" value="sddefault" selected="true" >
+                        <label translate="true">Standard Definition (640×480 pixels)</label>
+                    </option>
+                    <option name="maximum_resolution" value="maxresdefault">
+                        <label translate="true">Maximum Resolution (1920×1080 pixels)</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="image_size" xsi:type="select" visible="true" sort_order="75" >
+                <label translate="true">Preview Image Size</label>
+                <options>
+                    <option name="contain" value="contain">
+                        <label translate="true">Contain</label>
+                    </option>
+                    <option name="cover" value="cover">
+                        <label translate="true">Cover</label>
+                    </option>
+                    <option name="auto" value="auto" selected="true" >
+                        <label translate="true">Auto</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="enable_snippet" xsi:type="select" visible="true" sort_order="80">
+                <label translate="true">Enable Video Rich Snippet</label>
+                <options>
+                    <option name="disable" value="0"  selected="true" >
+                        <label translate="true">No</label>
+                    </option>
+                    <option name="enable" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="video_name" xsi:type="text" visible="true" sort_order="90" required="true">
+                <label translate="true">Name</label>
+                <description translate="true"><![CDATA[
+                     The title of the video
+                ]]></description>
+                <depends>
+                    <parameter name="enable_snippet" value="1"/>
+                </depends>
+            </parameter>
+            <parameter name="description" xsi:type="text" visible="true" sort_order="100" required="true">
+                <label translate="true">Description</label>
+                <description translate="true"><![CDATA[
+                     The description of the video. HTML tags are ignored.
+                ]]></description>
+                <depends>
+                    <parameter name="enable_snippet" value="1"/>
+                </depends>
+            </parameter>
+            <parameter name="upload_date" xsi:type="text" visible="true" sort_order="110" required="true">
+                <label translate="true">Upload Date</label>
+                <description translate="true"><![CDATA[
+                     The date the video was first published, e.g.  2019-09-27(YYYY-MM-dd)
+                ]]></description>
+                <depends>
+                    <parameter name="enable_snippet" value="1"/>
+                </depends>
+            </parameter>
+            <parameter name="video_duration" xsi:type="text" visible="true" sort_order="120" required="true" >
+                <label translate="true">Duration</label>
+                <description translate="true"><![CDATA[
+                    The duration of the video. E.g.  2:36 (m:s) or 1:30:45 (h:m:s).
+                ]]></description>
+                <depends>
+                    <parameter name="enable_snippet" value="1"/>
+                </depends>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

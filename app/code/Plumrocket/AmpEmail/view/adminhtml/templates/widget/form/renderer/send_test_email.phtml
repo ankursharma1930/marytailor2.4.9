@@ -1,0 +1,256 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+?>
+<?php /** @var \Plumrocket\AmpEmail\Block\Adminhtml\Email\Template\Renderer\SentTestEmail $block */ ?>
+
+<div class="admin__field field field-<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?> with-note"
+     data-ui-id="template-edit-form-fieldset-element-form-field-pramp-email-manual-email"
+>
+    <label class="label admin__field-label" for="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>"
+           data-ui-id="template-edit-form-fieldset-element-text-pramp-email-manual-email-label"
+    >
+        <span><?= $block->escapeHtmlAttr($block->getElementParams('label')) ?></span>
+    </label>
+    <div class="admin__field-control control">
+        <input id="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>"
+               data-ui-id="template-edit-form-fieldset-element-text-pramp-email-manual-email"
+               value="<?= /* @noEscape */ $block->getElement()->getEscapedValue() ?>"
+               title="<?= $block->escapeHtmlAttr($block->getElementParams('title')) ?>"
+               type="email"
+               class="input-text admin__control-text"
+        /><?= /* @noEscape */ $block->getSendButtonHtml() ?>
+        <div id="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>-loader" class="lds-ellipsis hidden">
+            <div></div><div></div><div></div><div></div>
+        </div>
+        <div class="note admin__field-note" id="<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>-note">
+            <?= $block->escapeHtml($block->getElementParams('note')) ?>
+        </div>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/alert',
+        'domReady!',
+        'prototype'
+    ], function(jQuery, alert) {
+        "use strict";
+
+        var testFormContent = '<div class="no-display">' +
+            '<input type="hidden" id="pramp_mag_ts_orig_template_code" name="orig_template_code" value="" />' +
+            '<input type="hidden" id="pramp_mag_ts_type" name="is_html" value="" />' +
+            '<input type="hidden" id="pramp_mag_ts_template_subject" name="template_subject" value="" />' +
+            '<input type="hidden" id="pramp_mag_ts_template_text" name="template_text" value="" />' +
+            '<input type="hidden" id="pramp_mag_ts_template_styles" name="template_styles" value="" />' +
+
+            '<input type="hidden" id="pramp_ts_content" name="content" value="" />' +
+            '<input type="hidden" id="pramp_ts_styles" name="styles" value="" />' +
+            '<input type="hidden" id="pramp_ts_customer_email" name="customer_email" value="" />' +
+            '<input type="hidden" id="pramp_ts_customer_order" name="customer_order" value="" />' +
+            '<input type="hidden" id="pramp_ts_test_email" name="test_email" value="" />' +
+            '</div>';
+
+        var testEmailInputId = '<?= $block->escapeHtmlAttr($block->getElement()->getHtmlId()) ?>';
+
+        var convertToHtmlButton = jQuery('#convert_button_back');
+        var origTemplateCodeElem = $('orig_template_code');
+
+        var templateSubjectElem = $('template_subject');
+        var templateTextElem = $('template_text');
+        var templateStylesElem = $('template_styles');
+
+        var testEmailInput = jQuery('#' + testEmailInputId);
+        var testEmailButton = jQuery('#pramp_email_send_test_email_button');
+        var testCustomerEmailElem = $('pramp_email_manual_email');
+        var testCustomerOrderElem = $('pramp_email_manual_order');
+        var ampContentElem = $('pramp_email_content');
+        var ampStylesElem = $('pramp_email_styles');
+        var loader = $(testEmailInputId + '-loader');
+
+        var sender = new TestEmailSender(testEmailInput, testEmailButton, loader);
+
+        window.prampSendTestEmail = sender.send;
+
+        /**
+         * @constructor
+         */
+        function TestEmailSender(testEmailInput, testEmailButton, loader) {
+            var self = this;
+
+            this.send = function () {
+                var emailData = self.parseEmailData();
+
+                if (! emailData) {
+                    return false;
+                }
+
+                self.requestBefore();
+                jQuery.post('<?= $block->escapeUrl($block->getUrl('prampemail/template/send')) ?>', emailData, function (data) {
+                    self.showSuccessMessage(testEmailInput[0], data.message);
+                }).always(function() {
+                    self.requestAfter();
+                }).fail(function(data) {
+                    var message = jQuery.mage.__('Something went wrong');
+
+                    if (data.responseJSON && data.responseJSON.message) {
+                        message = data.responseJSON.message;
+                    }
+
+                    alert({
+                        title: message,
+                        content: jQuery.mage.__('Please review the log for details.'),
+                    });
+                });
+            };
+
+            this.parseEmailData = function () {
+                var testEmailInputElem = testEmailInput[0];
+
+                self.hideAllError();
+
+                if (! ampContentElem.value) {
+                    self.showError(ampContentElem, 'Please enter Content of Amp Email');
+                    return false;
+                }
+
+                if (! testEmailInputElem.value) {
+                    self.showError(testEmailInputElem, 'Please enter recipient email address');
+                    return false;
+                }
+
+                if (! testCustomerEmailElem.value) {
+                    self.showError(testCustomerEmailElem, 'Please enter Customer Email');
+                    return false;
+                }
+
+                if (! testCustomerOrderElem.value) {
+                    self.showError(testCustomerOrderElem, 'Please select Customer Order');
+                    return false;
+                }
+
+                $('pramp_ts_content').value = ampContentElem.value;
+                $('pramp_ts_styles').value = ampStylesElem.value;
+
+                $('pramp_ts_customer_email').value = testCustomerEmailElem.value;
+                $('pramp_ts_customer_order').value = testCustomerOrderElem.value;
+                $('pramp_ts_test_email').value = testEmailInputElem.value;
+
+                $('pramp_mag_ts_type').value = convertToHtmlButton.is(':hidden');
+                $('pramp_mag_ts_orig_template_code').value = origTemplateCodeElem.value;
+
+                $('pramp_mag_ts_template_subject').value = templateSubjectElem.value;
+                $('pramp_mag_ts_template_text').value = templateTextElem.value;
+                $('pramp_mag_ts_template_styles').value = templateStylesElem.value;
+
+                return $('pramp_email_test_send_form').serialize();
+            };
+
+            this.requestBefore = function () {
+                loader.classList.remove('hidden');
+                this.hideAllSuccess();
+                // Freeze elements
+                testEmailInput.prop('disabled', true);
+                testEmailButton.prop('disabled', true);
+            };
+
+            this.requestAfter = function () {
+                self.hideAllError();
+                loader.classList.add('hidden');
+                // Enable elements
+                testEmailInput.prop('disabled', false);
+                testEmailButton.prop('disabled', false);
+            };
+
+            /**
+             * @param {HTMLElement} element
+             * @param {string} message
+             * @return {HTMLElement}
+             */
+            this.showError = function (element, message) {
+                element.classList.add('mage-error');
+
+                var label = document.createElement('label');
+                label.id = element.id + '-error';
+                label.className = 'mage-error';
+                label.setAttribute('for', element.id);
+                label.setAttribute('generated', 'true');
+
+                label.innerText = message ? message : jQuery.mage.__('This is a required field.');
+
+                var anchorElem = element.nextSibling;
+                // Fix for send button
+                if ('pramp_email_manual_send' === element.id) {
+                    anchorElem = anchorElem.nextSibling;
+                }
+
+                return element.parentNode.insertBefore(label, anchorElem);
+            };
+
+            this.hideAllError = function () {
+                document.querySelectorAll('label[generated="true"]').forEach(function(elem) {
+                    if (elem.classList.contains('mage-error')) {
+                        elem.remove();
+                    }
+                });
+                document.querySelectorAll('.mage-error').forEach(
+                    function(elem) {
+                        elem.classList.remove('mage-error');
+                    }
+                );
+            };
+
+            this.hideAllSuccess = function () {
+                document.querySelectorAll('label[generated="true"]').forEach(function(elem) {
+                    if (elem.classList.contains('pramp-elem-success')) {
+                        elem.remove();
+                    }
+                });
+            };
+
+            this.initForm = function () {
+                if (! document.getElementById('pramp_email_test_send_form')) {
+                    var form = document.createElement('form');
+                    form.action = '<?= $block->escapeUrl($block->getTestSendUrl()) ?>';
+                    form.id = 'pramp_email_test_send_form';
+                    form.method = 'post';
+                    form.innerHTML = testFormContent;
+                    document.getElementById('email_template_preview_form').parentElement.appendChild(form);
+                }
+
+                return this;
+            };
+
+            /**
+             * @param {HTMLElement} element
+             * @param {string}      message
+             * @return {HTMLElement}
+             */
+            this.showSuccessMessage = function (element, message) {
+                var label = document.createElement('label');
+                label.id = element.id + '-success';
+                label.className = 'message message-success pramp-elem-success';
+                label.setAttribute('for', element.id);
+                label.setAttribute('generated', 'true');
+
+                label.innerHTML = message
+                    ? message
+                    : jQuery.mage.__('You got an invalid json. Please check the response for an error message.');
+
+                var anchorElem = element.nextSibling;
+                // Fix for send button
+                if ('pramp_email_manual_send' === element.id) {
+                    anchorElem = anchorElem.nextSibling;
+                }
+
+                return element.parentNode.insertBefore(label, anchorElem);
+            };
+
+            this.initForm();
+        }
+    });
+</script>

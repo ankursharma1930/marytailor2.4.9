@@ -1,0 +1,259 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Recipe\Recipe $block
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+$recipe = $block->getRecipe();
+$writer = $block->getWriter();
+?>
+<div class="page-wrapper">
+    <div class="page-main">
+        <div class="columns">
+            <div class="column main recipe__column">
+                <div class="product-info-main">
+                    <div class="page-title-wrapper product">
+                        <h1 class="page-title">
+                            <span class="page-title-wrapper"><?php echo $block->escapeHtml($recipe->getTitle()) ?></span>
+                        </h1>
+                    </div>
+                    <?php echo $block->getChildHtml('summary_recipe') ?>
+                        <div class="writer-info">
+                            <div class="writer-content">
+                                <?php if ($writer->getAvatar()) : ?>
+                                    <img alt="<?php echo $block->escapeHtml($writer->getNickname()) ?>"
+                                         src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getWriterAvatar(), 'recipe_page_writer_image')); ?>"
+                                         width="30"
+                                         height="30">
+                                <?php else : ?>
+                                    <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getImageStub(), 'recipe_page_writer_image')); ?>"
+                                         alt="<?php $block->escapeHtml(__('Recipe Image')); ?>"
+                                         width="30"
+                                         height="30">
+                                <?php endif; ?>
+                                <div class="writer-name"><?php echo $block->escapeHtml($writer->getNickname()) ?></div>
+                            </div>
+                            <div id="writer-popup" class="modal" style="display: none;">
+                                <div class="triangle"></div>
+                                <div class="modal-content">
+                                    <div class="writer-left-col-popup">
+                                        <?php if ($writer->getAvatar()) : ?>
+                                            <img alt="<?php echo $block->escapeHtml($writer->getNickname()) ?>"
+                                                 src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getWriterAvatar(), 'recipe_page_modal_image')); ?>"
+                                                 width="58" height="58">
+                                        <?php else : ?>
+                                            <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getImageStub(), 'recipe_page_modal_image')); ?>"
+                                                 alt="<?php $block->escapeHtml(__('Recipe Image')); ?>">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="writer-right-col-popup">
+                                        <ul>
+                                            <li>
+                                                <?php echo $block->escapeHtml(__('Recipe by: ')) ?>
+                                                <a href="<?php echo $block->escapeHtml($block->getUrl($config->getSeoRoute()) . $writer->getWriterUrlKey()) ?>">
+                                                    <strong><?php echo $block->escapeHtml($writer->getNickname()) ?></strong>
+                                                </a>
+                                            </li>
+                                            <li><?php echo $block->escapeHtml($writer->getAboutWriter()) ?></li>
+                                            <li class="writer-website-link">
+                                                <a href="<?php echo $block->escapeHtml($writer->getWebsiteLink()) ?>" target="_blank">
+                                                    <span><?php echo $block->escapeHtml(__('View their website')) ?></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-recipe">
+                            <ul class="filter-icon">
+                                <?php if (!empty($recipe->getOptions())) : ?>
+                                    <?php foreach ($recipe->getOptions() as $filterOption) : ?>
+                                        <?php foreach ($filterOption as $optionData) : ?>
+                                            <?php if (!empty($optionData['option_image'])) : ?>
+                                                <li><img title="<?php echo $block->escapeHtml($optionData['option_label']); ?>"
+                                                         src="<?php echo $block->escapeHtml($block->getImageUrl() . '/' . $optionData['option_image']); ?>"
+                                                         width="35" height="35"></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <div class="short-description">
+                            <div class="recipe-short-description">
+                                <div class="container-recipe-cooking">
+                                    <div class="cooking recipe-servings-number">
+                                        <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/serving.png')); ?>"
+                                             title="<?php echo $block->escapeHtml(__('Servings Number')) ?>" width="35"
+                                             height="35">
+                                        <?php $servingsNumber = $block->getFormatServingsNumber($recipe->getServingsNumber()); ?>
+                                        <span><?php echo $servingsNumber . ' ' . (($servingsNumber == '1') ? $block->escapeHtml(__('person')) : $block->escapeHtml(__('people'))); ?></span>
+                                    </div>
+                                    <div class="cooking prep-time">
+                                        <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/prep-time.png')); ?>"
+                                             title="<?php echo $block->escapeHtml(__('Prep Time')) ?>" width="35"
+                                             height="35">
+                                        <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getPrepTime())); ?></span>
+                                    </div>
+                                    <div class="cooking cooking-time">
+                                        <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/cooking-time.png')); ?>"
+                                             title="<?php echo $block->escapeHtml(__('Cooking Time')) ?>" width="35"
+                                             height="35">
+                                        <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getCookTime())); ?></span>
+                                    </div>
+                                </div>
+                                <div class="description">
+                                    <?php if (!empty($recipe->getShortDescription())) : ?>
+                                        <?php echo $recipe->getShortDescriptionHtml(); ?>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="button-description">
+                                    <?php if (!empty($recipe->getAssignedProductIds())) : ?>
+                                        <button type="submit"
+                                                title="<?php echo $block->escapeHtml(__('Add All Ingredients To Basket')); ?>"
+                                                class="action tocart primary action-allcart-primary">
+                                <span><?php /* @escapeNotVerified */
+                                    echo $block->escapeHtml(__('Add All Ingredients To Basket')); ?></span>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php echo $block->getChildHtml('recipe.view.print.button'); ?>
+                    <?php echo $block->getChildHtml('social_sharing'); ?>
+                </div>
+                <div class="recipe__column-media">
+                    <div class="product media">
+                        <?php echo $block->getChildHtml('recipe_image'); ?>
+                        <?php if ($recipe->getMediaType() == 'video') : ?>
+                            <?php echo $block->getChildHtml('recipe_video'); ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block block-dashboard-reviews block-ingredients-method">
+            <div class="block-title-ingredients-method">
+                <strong><?php echo $block->escapeHtml(__('Ingredients and Method')) ?></strong>
+            </div>
+            <div class="block-content">
+                <div class="table-wrapper ingredients-method">
+
+                    <div class="recipe-extended-description">
+                        <div class="recipe-ingredients">
+                            <div class="recipe-block-title">
+                                <h3 class="block-title">
+                                    <span class="base"><?php echo $block->escapeHtml(__('Ingredients')) ?></span>
+                                </h3>
+                            </div>
+                            <ul>
+                                <?php foreach ($recipe->getIngredients() as $ingredientData) : ?>
+                                    <li>
+                                        <?php echo $block->escapeHtml($ingredientData['measure']); ?>
+                                        <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
+                                        <a
+                                                href="<?php echo $block->escapeHtml($ingredientData['url']); ?>"
+                                                target="_blank"
+                                        >
+                                            <?php endif; ?>
+                                            <?php echo $block->escapeHtml($ingredientData['ingredient']); ?>
+                                            <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
+                                        </a>
+                                    <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="recipe-method">
+                            <div class="recipe-block-title">
+                                <h3 class="block-title">
+                                    <span class="base"><?php echo $block->escapeHtml(__('Method')) ?></span>
+                                </h3>
+                                <ol>
+                                    <?php foreach ($recipe->getMethod() as $methodData) : ?>
+                                        <?php if (isset($methodData['step'])) : ?>
+                                            <li>
+                                                <?php echo $block->escapeHtml($methodData['step']); ?>
+                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if (!empty($recipe->getAssignedProductIds())) : ?>
+    <div class="page-wrapper products" style="margin: 3rem 0">
+        <div class="page-main">
+            <div class="columns">
+                <div class="block">
+                    <div class="block-title-products recipe-block-title-products">
+                        <strong><?php echo $block->escapeHtml(__('Products you will need')) ?></strong>
+                        <button type="submit"
+                                title="<?php echo $block->escapeHtml(__('Add All Ingredients To Basket')); ?>"
+                                class="action tocart primary action-allcart-primary">
+                        <span><?php /* @escapeNotVerified */
+                            echo $block->escapeHtml(__('Add All Ingredients To Basket')) ?></span>
+                        </button>
+                    </div>
+                    <div class="ingredients_list">
+                        <?php echo $block->getChildHtml('ingredients_list') ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+<?php if ($config->getReviewEnabled()) : ?>
+    <?php echo $block->getChildHtml('recipe_review') ?>
+<?php endif; ?>
+
+<script type="text/javascript">
+    require([
+        'jquery'
+    ], function ($) {
+        $(window).load(function () {
+            $(".writer-info").mouseover(function () {
+                $("#writer-popup").show();
+            }, function () {
+                $("#writer-popup").show();
+                $("#writer-popup").hover(function () {
+                    $(this).show();
+                }, function () {
+                    $(this).hide();
+                });
+            })
+                .mouseleave(function () {
+                    $("#writer-popup").hide();
+                });
+
+        });
+    });
+</script>
+
+<?php if (!empty($recipe->getAssignedProductIds())) : ?>
+<div class="review-ingredients-recipe-<?= $recipe->getId() ?> review-ingredients"></div>
+<script type="text/x-magento-init">
+    {
+        ".action-allcart-primary": {
+            "Mageside_Recipe/js/add-all-to-cart": {
+                "url": "<?= $block->escapeHtml($block->getUrl('recipe/recipe/addAllCart', ["recipe_id" => $recipe->getId()])) ?>",
+                "reviewUrl": "<?= $block->escapeHtml($block->getUrl('recipe/recipe/review', ["recipe_id" => $recipe->getId()])) ?>",
+                "reviewIngredientsModalSelector": ".review-ingredients-recipe-<?= $recipe->getId() ?>"
+            }
+        }
+    }
+</script>
+<?php endif; ?>

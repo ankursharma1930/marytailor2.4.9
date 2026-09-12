@@ -1,0 +1,22 @@
+<div class="noPrint page-options" id="noPrint" data-mage-init='{"print_recipe": {}}'>
+
+    <div class="type-options">
+        <a class="action print-menu primary" id="decfont" href="#" title="reduce text size" ><i class="fa fa-font"><?php echo $block->escapeHtml(__(' -'))?></i></a>
+        <a class="action print-menu" id="incfont" href="#" title="increase text size" ><i class="fa fa-font"><?php echo $block->escapeHtml(__(' +'))?></i></a>
+    </div>
+
+    <div class="notes-options">
+        <a class="action print-menu primary" id="showsum" href="#" title="print notes" ><i class="fa fa-file-text"> </i><?php echo $block->escapeHtml(__('  intro'))?></a>
+        <a class="action print-menu" id="hidesum" href="#" title="don't print notes" ><i class="fa fa-ban"> </i><?php echo $block->escapeHtml(__('  no intro'))?></a>
+    </div>
+
+    <div class="image-options">
+        <a class="action print-menu primary" id="showimg" href="#" title="print recipe photo" ><i class="fa fa-image"> </i><?php echo $block->escapeHtml(__('  photo'))?></a>
+        <a class="action print-menu" id="hideimg" href="#" title="don't print recipe photo" ><i class="fa fa-ban"> </i><?php echo $block->escapeHtml(__('  no photo'))?></a>
+    </div>
+
+    <div id="print-button">
+        <a href="javascript:window.print()" class="action primary print" ><i class="fa fa-print"> </i><?php echo $block->escapeHtml(__(' PRINT'))?></a>
+    </div>
+
+</div>

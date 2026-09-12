@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magebees. All rights reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<head>
+<css src="Magebees_Productfeed::css/feed.css"/>		
+	</head>
+    <body>
+       <referenceContainer name="content">
+			<block class="Magebees\Productfeed\Block\Adminhtml\Dynamicattributes" name="admin.block.dynamicattributes.grid.container"/>
+		</referenceContainer>
+    </body>
+</page>

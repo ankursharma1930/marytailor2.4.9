@@ -1,0 +1,15 @@
+/* Widget Template 5-1 ************************************************************************************************/
+/*.template-5-1 .block-post + .post-list .post-info h3 a {font-size: 18px;line-height: 22px;font-weight: 500;}*/
+@media (min-width: 992px) and (max-width: 1023.98px) {
+    .template-5-1 .post-list .post-item {}
+}
+@media (max-width: 991px) {
+    .page-layout-2columns-left .template-5-1 .block-row,
+    .page-layout-2columns-right .template-5-1 .block-row {-ms-flex-direction: column !important;flex-direction: column !important;}
+    .page-layout-2columns-left .template-5-1 .row-cols-md-3 > *,
+    .page-layout-2columns-right .template-5-1 .row-cols-md-3 > * {-ms-flex: 0 0 100% !important;flex: 0 0 100% !important;max-width: 100% !important;}
+}
+@media (max-width: 768px) {
+    .template-5-1 .block-post + .post-list .post-info h3 a {font-size: 14px;line-height: 20px;font-weight: 500;}
+}
+/* END Widget Template 5-1 ********************************************************************************************/

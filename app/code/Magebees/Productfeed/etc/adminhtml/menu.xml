@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magebees. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Backend/etc/menu.xsd">
+    <menu>
+        
+		<add id="Magebees_Productfeed::Heading" title="MageBees Product Feed" module="Magebees_Productfeed" 
+		 sortOrder="50" parent="Magento_Backend::marketing" resource="Magebees_Productfeed::Heading" />
+		<add id="magebees_productfeed::productfeedTemplate" title="Manage Templates" module="Magebees_Productfeed" sortOrder="20" parent="Magebees_Productfeed::Heading" action="magebees_productfeed/templates/" resource="Magebees_Productfeed::templates"/>
+		
+		<add id="magebees_productfeed::productfeedFeed" title="Manage Feed" module="Magebees_Productfeed" sortOrder="50" parent="Magebees_Productfeed::Heading" action="magebees_productfeed/feed/" resource="Magebees_Productfeed::feed"/>
+		<add id="magebees_productfeed::productfeedMapping" title="Manage Mapping" module="Magebees_Productfeed" sortOrder="30" parent="Magebees_Productfeed::Heading" action="magebees_productfeed/mapping/" resource="Magebees_Productfeed::mapping"/>
+		
+		<add id="magebees_productfeed::productfeedDynamicAttributes" title="Manage Dynamic Attributes" module="Magebees_Productfeed" sortOrder="30" parent="Magebees_Productfeed::Heading" action="magebees_productfeed/dynamicattributes/" resource="Magebees_Productfeed::dynamicattributes"/>
+		
+		
+    </menu>
+</config>

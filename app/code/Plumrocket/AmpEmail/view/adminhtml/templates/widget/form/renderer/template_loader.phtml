@@ -1,0 +1,75 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+?>
+<?php /** @var \Plumrocket\AmpEmail\Block\Adminhtml\Email\Template\Renderer\Load $block */ ?>
+<div class="admin__field">
+    <label class="admin__field-label" for="pramp_email_load_template"><?= $block->escapeHtml(__('Load AMP Template')) ?></label>
+    <div class="admin__field-control">
+        <select id="pramp_email_load_template" name="code" class="admin__control-select">
+            <?php foreach ($block->getTemplateOptions() as $group => $options) : ?>
+                <?php if ($group) : ?>
+                    <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
+                <?php endif; ?>
+                <?php foreach ($options as $option) : ?>
+                    <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"><?= $block->escapeHtml($option['label']) ?></option>
+                <?php endforeach; ?>
+                <?php if ($group) : ?>
+                    </optgroup>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+<div class="admin__field">
+    <span class="admin__field-label"></span>
+    <div class="admin__field-control">
+        <?= /* @noEscape */ $block->getLoadButtonHtml() ?>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/alert',
+        'loader',
+        'domReady!'
+    ], function($, alert) {
+        "use strict";
+
+        window.prampLoadTemplate = function() {
+            $.ajax({
+                url: "<?= $block->escapeJs($block->getUrl('prampemail/template/load')) ?>",
+                data: {template_id: $('#pramp_email_load_template').val()},
+                type: 'GET',
+                cache: true,
+                dataType: 'json',
+                showLoader: true,
+
+                /**
+                 * Response handler
+                 * @param {Object} data
+                 */
+                success: function (data) {
+                    if (data.success) {
+                        $('#pramp_email_content').text(data.content);
+                        $('#pramp_email_styles').text(data.style);
+                    } else {
+                        alert({
+                            title: data.message ? data.message : $.mage.__('Something went wrong'),
+                            content: $.mage.__('Please try again later.'),
+                        });
+                    }
+                },
+                error: function () {
+                    alert({
+                        title: $.mage.__('Something went wrong'),
+                        content: $.mage.__('The template did not load. Please review the log for details.'),
+                    });
+                }
+            });
+        };
+    });
+</script>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">productcustomtabs_form.productcustomtabs_form_data_source</item>
+            <item name="deps" xsi:type="string">productcustomtabs_form.productcustomtabs_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Tab Information</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">productcustomtabs_form</item>
+        </item>
+        <item name="spinner" xsi:type="string">general_information</item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Dolphin\Productcustomtabs\Block\Adminhtml\Productcustomtabs\Edit\Button\Back</item>
+            <item name="delete" xsi:type="string">Dolphin\Productcustomtabs\Block\Adminhtml\Productcustomtabs\Edit\Button\Delete</item>
+            <item name="reset" xsi:type="string">Dolphin\Productcustomtabs\Block\Adminhtml\Productcustomtabs\Edit\Button\Reset</item>
+            <item name="save" xsi:type="string">Dolphin\Productcustomtabs\Block\Adminhtml\Productcustomtabs\Edit\Button\Save</item>
+        </item>
+       <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <dataSource name="productcustomtabs_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Dolphin\Productcustomtabs\Model\DataProvider</argument>
+            <argument name="name" xsi:type="string">productcustomtabs_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">tab_id</argument>
+            <argument name="requestFieldName" xsi:type="string">tab_id</argument>
+            <argument name="data" xsi:type="array">
+              <item name="config" xsi:type="array">
+                 <item name="submit_url" xsi:type="url" path="*/*/save"/>
+              </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+    <fieldset name="tabs_information">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="label" xsi:type="string" translate="true">Tabs Information</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+
+    		<field name="is_active">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="sortOrder" xsi:type="number">10</item>
+					<item name="dataType" xsi:type="string">boolean</item>
+					<item name="formElement" xsi:type="string">checkbox</item>
+					<item name="source" xsi:type="string">is_active</item>
+					<item name="prefer" xsi:type="string">toggle</item>
+					<item name="label" xsi:type="string" translate="true">Active</item>
+					<item name="valueMap" xsi:type="array">
+						<item name="true" xsi:type="string">1</item>
+						<item name="false" xsi:type="string">0</item>
+					</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+					<item name="default" xsi:type="string">1</item>
+				</item>
+			</argument>
+		</field>
+
+    		<field name="title">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+    					<item name="sortOrder" xsi:type="number">30</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="label" xsi:type="string" translate="true">Title</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">title</item>
+                        <item name="dataScope" xsi:type="string">title</item>
+                        <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    </item>
+                </argument>
+            </field>
+
+    		<field name="content" template="ui/form/field" sortOrder="40" formElement="wysiwyg">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+    					<item name="visible" xsi:type="boolean">true</item>
+                        <item name="wysiwygConfigData" xsi:type="array">
+                            <item name="height" xsi:type="string">100px</item>
+                            <item name="add_directives" xsi:type="boolean">true</item>
+                            <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                        </item>
+                        <item name="source" xsi:type="string">content</item>
+                    </item>
+                </argument>
+                <settings>
+                    <label translate="true">Content</label>
+                    <dataScope>content</dataScope>
+                </settings>
+                <formElements>
+                    <wysiwyg>
+                        <settings>
+                            <rows>8</rows>
+                            <wysiwyg>true</wysiwyg>
+                        </settings>
+                    </wysiwyg>
+                </formElements>
+            </field>
+
+    		<field name="position">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="label" xsi:type="string" translate="true">Position</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">position</item>
+                        <item name="dataScope" xsi:type="string">position</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                        <item name="default" xsi:type="string">0</item>
+                    </item>
+                </argument>
+            </field>
+
+            <field name="visible" formElement="select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="source" xsi:type="string">visible</item>
+                        <item name="default" xsi:type="string">0</item>
+                    </item>
+                </argument>
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Visible for Purchasing Customers Only</label>
+                    <dataScope>visible</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+    	</fieldset>
+
+    <fieldset name ="Stores_and_groups">
+        <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="label" xsi:type="string" translate="true">Stores And Customer Groups</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+
+        <field name="customer_group">
+                <argument name="data" xsi:type="array">
+                    <item name="options" xsi:type="object">Dolphin\Productcustomtabs\Model\Config\Source\CustomerGroups
+                    </item>
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">50</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="label" xsi:type="string" translate="true">Customer Group</item>
+                        <item name="formElement" xsi:type="string">multiselect</item>
+                        <item name="source" xsi:type="string">customer_group</item>
+                        <item name="dataScope" xsi:type="string">customer_group</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+
+            <field name="storeview">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Cms\Ui\Component\Listing\Column\Cms\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">int</item>
+                    <item name="label" xsi:type="string" translate="true">Store View</item>
+                    <item name="formElement" xsi:type="string">multiselect</item>
+                    <item name="source" xsi:type="string">storeview</item>
+                    <item name="dataScope" xsi:type="string">storeview</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+
+    <fieldset name="assign_products">
+         <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="label" xsi:type="string" translate="true">Assign Attributes</item>
+                <item name="sortOrder" xsi:type="number">30</item>
+            </item>
+        </argument>
+
+        <container name="assign_products_container">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Dolphin\Productcustomtabs\Block\Adminhtml\Productcustomtabs\AssignAttributes</argument>
+            </htmlContent>
+        </container>
+    </fieldset>
+
+    <fieldset name="conditions_serialized">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="label" xsi:type="string" translate="true">Assign to Products</item>
+                <item name="sortOrder" xsi:type="number">40</item>
+            </item>
+        </argument>
+
+        <container name="conditions_serialized">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Dolphin\Productcustomtabs\Block\Adminhtml\Productcustomtabs\Edit\Tab\Conditions</argument>
+            </htmlContent>
+        </container>
+    </fieldset>
+</form>

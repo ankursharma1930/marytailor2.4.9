@@ -1,0 +1,79 @@
+/* Widget Templates Mosaica *******************************************************************************************/
+
+/* Animation Zoom Templates*/
+[class^=mosaica] .image-container .animation-type-zoom {-webkit-transition: transform .3s ease,opacity .3s;transition: transform .3s ease,opacity .3s;}
+[class^=mosaica] .image-container:hover .animation-type-zoom {transform: scale3d(1.1,1.1,1);  -webkit-transform: scale3d(1.1,1.1,1);}
+
+
+
+[class^=mosaica] * {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+[class^=mosaica] *:before,
+[class^=mosaica] *:after {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+[class^=mosaica] {position: relative;overflow: hidden;}
+[class^=mosaica] .block-inner {margin-left: -2px;margin-right: -2px;}
+
+/* Block Title */
+[class^=mosaica] .block-title-wrap {border-bottom: 2px solid #222222;margin-bottom: 26px;line-height: 24px;}
+[class^=mosaica] .block-title-wrap h4 {display: inline-block;background: #222222;color: #fff;padding: 7px 12px 7px;font-weight: 500;}
+/* Post Images */
+[class^=mosaica] .image-container {overflow: hidden;}
+[class^=mosaica] .image-wrap {display: block;position: relative;}
+[class^=mosaica] .image-container .image-wrap .bg-img {position: absolute;display: block;width: 100%;height: 100%;background-size: cover;background-position: center;}
+/* Post Info */
+[class^=mosaica] .post-info {position: absolute;left: 0;bottom: 0;width: 100%;pointer-events: none;z-index: 1;}
+/* Post Category */
+[class^=mosaica] .post-category {display: inline-block;margin: 0 0 10px;padding: 5px 10px;font-size: 11px;line-height: 13px;font-weight: 500;text-transform: uppercase;pointer-events: auto;background-color: #000;color: #fff;text-decoration: none;transition: all .2s ease;}
+[class^=mosaica] .post-category:hover {/*background-color: #4db2ec;*/ transition: all .2s ease;}
+/* Post Title */
+[class^=mosaica] .post-title {background: rgba(0,0,0,0.2);display:inline-block;margin-bottom: 0;}
+[class^=mosaica] .block-left .post-info h3.post-title {margin: 0;}
+[class^=mosaica] h3.post-title {margin-top: 0;}
+[class^=mosaica] h3.post-title a {color: #fff;text-decoration: none;text-shadow: 1px 1px 3px rgba(0,0,0,.2);font-size: 20px;line-height: 25px;font-weight: 500;}
+/* Post Date*/
+[class^=mosaica] .post-data-wrap {display: inline-block;font-size: 11px;text-shadow: 1px 1px 3px rgba(0,0,0,.2);background: rgba(0,0,0,0.2)}
+[class^=mosaica] .post-author {font-weight: 700;color: #fff;}
+[class^=mosaica] .post-author a,
+[class^=mosaica] .post-author span,
+[class^=mosaica] .post-data {color: #fff;/*pointer-events: auto;*/}
+[class^=mosaica] .post-author a:hover {text-decoration: none;}
+/* Block Left */
+[class^=mosaica] .m-block-left {border-width: 0 2px;border-style: solid;border-color: transparent;}
+[class^=mosaica] .m-block-left .post-top  {border-width: 0 0 4px 0;border-style: solid;border-color: transparent;}
+/* Block Center */
+[class^=mosaica] .m-block-center {border-width: 0 2px;border-style: solid;border-color: transparent;}
+[class^=mosaica] .m-block-center .image-wrap {display: block;position: relative;overflow: hidden;padding-bottom: 450px;}
+/* Block Right */
+[class^=mosaica] .m-block-right {border-width: 0 2px;border-style: solid;border-color: transparent;}
+[class^=mosaica] .m-block-right .image-wrap {display: block;padding-bottom: 223px;position: relative;overflow: hidden;}
+[class^=mosaica] .m-block-right .post-top  {border-width: 0 0 4px 0;border-style: solid;border-color: transparent;}
+/*[class^=mosaica] .m-block-right .post-top .post-title {margin: 0;font-size: 21px;line-height: 27px;font-weight: 500;}*/
+[class^=mosaica] .m-block-right .post-b-left {border-width: 0 2px 0 0;border-style: solid;border-color: transparent;}
+[class^=mosaica] .m-block-right .post-info {width: 100%;padding: 11px 15px;}
+[class^=mosaica] .m-block-right .post-bottom .post-title a {font-size: 16px;}
+[class^=mosaica] .m-block-right .post-top .post-data-wrap {display: none;}
+[class^=mosaica] .m-block-right .post-b-right {border-width: 0 0 0 2px;border-style: solid;border-color: transparent;}
+
+
+@media (max-width: 1024px) {
+    [class^=mosaica] .m-block-right .post-top .post-title {margin: 0;}
+    [class^=mosaica] .m-block-right .post-top .post-title a {font-size: 21px;line-height: 27px;font-weight: 600;}
+}
+
+@media (max-width: 767px) {
+    [class^=mosaica] {height: auto !important;}
+    [class^=mosaica] .block-inner {flex-direction: column;-ms-flex-direction: column;margin-left: 0;margin-right: 0;}
+    [class^=mosaica] .block-inner > * {border-width: 0 !important;}
+    [class^=mosaica] .block-inner .post-block {border-width: 0 0 8px 0 !important;border-style: solid;border-color: transparent;}
+    [class^=mosaica] .post-info  h3.post-title a {font-size: 14px !important;line-height: 20px !important;font-weight: 600 !important;}
+    /* Left */
+    [class^=mosaica] .m-block-left {-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;-ms-flex-direction: column !important;flex-direction: column !important;}
+    [class^=mosaica] .block-inner .image-wrap {display: block;padding-bottom: 60%;}
+    /* Center */
+    [class^=mosaica] .block-inner .m-block-center {-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;}
+    /* Right */
+    [class^=mosaica] .m-block-right {-ms-flex: 0 0 100%;flex: 0 0 100%;max-width: 100%;border-width: 2px 0 0;}
+    [class^=mosaica] .m-block-right .post-bottom {-ms-flex-direction: column;flex-direction: column;}
+    [class^=mosaica] .m-block-right .post-b-left {width: 100% !important;border-width: 0 0 4px;}
+    [class^=mosaica] .m-block-right .post-b-right {width: 100% !important;border-width: 0;}
+}
+/* END Widgets Templates Mosaica **************************************************************************************/

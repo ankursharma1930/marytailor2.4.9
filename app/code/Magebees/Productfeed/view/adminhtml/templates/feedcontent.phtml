@@ -1,0 +1,342 @@
+<?php 
+$csv_content = array();
+if($this->getRequest()->getParam('id')){
+$feed_id = $this->getRequest()->getParam('id');	
+}else{
+$feed_id = '';	
+}
+if($this->getRequest()->getParam('template')){
+$template_id = $this->getRequest()->getParam('template');	
+}else{
+$template_id = '';	
+}
+$template = $this->getFeedModelTemplate(); 
+$category_mapping = $this->getCategoryMappingCollection();
+$feed = $this->getfeedModel();
+if($feed_id!=""){
+	$feed_information = $feed->load($feed_id);
+	if($feed_information->getType()=="csv"){
+		$csv_json_content = $feed_information->getContent();
+		$csv_content = json_decode($csv_json_content,true);
+	}
+}
+
+if($template_id!=""){
+	$feed_information = $template->load($template_id);
+	
+	if($feed_information->getType()=="csv"){
+		$csv_json_content = $feed_information->getContent();
+		$csv_content = json_decode($csv_json_content,true);
+	}
+}
+?>
+<fieldset id="item_base_fieldset" class="fieldset admin__fieldset">
+	<legend class="admin__legend legend"><span>CSV Templates Information </span></legend><br>
+
+
+	<div id="csv_options" style="display:block">
+		<div class="fieldset" id="feed_csv">
+			<div class="admin__field field field-title">
+				<label class="label admin__field-label" for="csv_header"><span>Include Columns Header</span></label>
+				<div class="admin__field-control control">
+					<select id="csv_header" name="csv[csv_header]" class="select">
+						<?php 
+							foreach($template->getCsvHeader() as $key => $value):
+							if(isset($csv_content['csv_header'])){
+								if($csv_content['csv_header']==$value['value']){
+								echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';	
+								}else{
+								echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+								}
+							} else {
+								echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+							}
+							endforeach;
+						?>
+					</select>
+				</div>
+			</div>
+			<div class="admin__field field field-title">
+				<label class="label admin__field-label" for="csv_delimiter"><span>Fields Delimiter</span></label>
+				<div class="admin__field-control control">
+					<select id="csv_delimiter" name="csv[csv_delimiter]" class="select">
+						<?php 
+							foreach($template->getCsvDelimiter() as $key => $value):
+							if(isset($csv_content['csv_delimiter'])){
+								if($csv_content['csv_delimiter']==$value['value']){
+									echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';	
+								} else {
+									echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+								}
+							} else {
+								echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+							}
+							endforeach;
+						?>
+					</select>
+				</div>
+			</div>
+			<div class="admin__field field field-title">
+				<label class="label admin__field-label" for="csv_enclosure"><span>Fields enclosure</span></label>
+				<div class="admin__field-control control">
+					<select id="csv_enclosure" name="csv[csv_enclosure]" class="select">
+						 <?php 
+							foreach($template->getCsvEnclosure() as $key => $value):
+								if(isset($csv_content['csv_enclosure'])){
+									if($csv_content['csv_enclosure']==$value['value']){
+										echo '<option value="'.$value['value'].'" selected >'.$value['label']->getText().'</option>';	
+									} else {
+										echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+									}
+								} else {
+									echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+								}
+							endforeach;
+						 ?>
+					</select>
+				</div>
+			</div>
+		</div>
+	<div class="entry-edit">
+		<fieldset class="fieldset admin__fieldset">
+			<legend class="admin__legend legend"><span>Fields</span></legend>
+					<div class="grid">
+					<table class="data-grid data-grid-draggable" style="width:100%" cellpadding="0" cellspacing="0">
+						<thead>
+							<tr class="headings">
+								<th class="data-grid-th" style="width:25px">Drag</th>
+								<th class="data-grid-th" style="width:25px"></th>
+								<th class="data-grid-th">Column Name</th>
+								<th class="data-grid-th" style="width:150px">Value Type</th>
+								<th class="data-grid-th">Value</th>
+								
+								<th class="data-grid-th" style="width:25px">Action</th>
+							</tr>
+						</thead> 
+						<tbody id="Column_container">
+							<?php
+								if(is_array($csv_content) || $feed_id!="" || $template_id!=""):
+									if(isset($csv_content['name'])){
+										if(array_filter($csv_content['name'])) {
+											$dynamic_column = count(array_filter($csv_content['name'], 'strlen'));
+											if($dynamic_column>0){
+											for($i=0;$i<=$dynamic_column;$i++){
+												if($csv_content['name'][$i]!=""):
+													$style = array('attribute'=> 'width:200px;',
+													'category'=>'width:200px;',
+													'text'=>'width:195px; ',
+													'images'=>'width:200px;',
+													'meta_tags'=>'width:200px; ',
+													'default'=>'width:200px;display:none',
+												);
+							?>
+								<tr class="data-row">
+									<td class="icons dragRow" title="Drag Row Top/Bottom"><i class="fa fa-arrows-v" aria-hidden="true"></i></td>
+									<td class="icons"><button type="button" class="icoBtn value-setting" title="setting"><i class="fa fa-cog" aria-hidden="true"></i></button></td>
+									<td><input class="input-text admin__control-text" name="csv[name][]" value="<?php echo $csv_content['name'][$i]; ?>"/></td>
+									<td>
+										<select name="csv[type][]" class="column-type">
+											<?php 
+												foreach($template->getColumnType() as $key => $value):
+													if($csv_content['type'][$i]==$value['value']){
+														echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';	
+													}else{
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';		
+													}
+												endforeach;
+											?>
+										</select>
+									</td>
+									<td id="attribute_values">
+										<select id="insert_attr_attribute" name="csv[attr][]" style="width:200px;">
+											<?php 
+												echo '<option value="please-select">Please Select Attribute</option>';
+												foreach($template->getAttributeList() as $key => $list):
+													echo "<optgroup label=".$key.">";
+													foreach($list as $key => $value):
+														if($csv_content['attr'][$i]==$key){
+															echo '<option value="'.$key.'" selected>'.$value.'</option>';	
+														} else {
+															echo '<option value="'.$key.'">'.$value.'</option>';		
+														}
+													endforeach;
+												endforeach;
+											?>
+										</select>
+										<select id="insert_attr_category" name="csv[category][]" style="width:200px; display:none">
+											<?php 
+												foreach($category_mapping as $key => $value):
+
+													if(isset($csv_content['category'][$i])&&($csv_content['category'][$i]==$value['id'])){
+															echo '<option value="'.$value['id'].'" selected>'.$value['name'].'</option>';
+														}else{
+															echo '<option value="'.$value['id'].'">'.$value['name'].'</option>';
+														}
+
+												endforeach;
+											?>
+										</select>
+										<input id="insert_attr_text" class="input-text admin__control-text" name="csv[txt][]" style="width:195px; display:none" value="<?php echo $csv_content['txt'][$i]; ?>"/>
+										<select id="insert_attr_meta_tags" name="csv[meta_tags][]" style="width:200px; display:none">
+											<?php 
+												foreach($template->getMetaTag() as $key => $value):
+													if(isset($csv_content['meta_tags'][$i])&&($csv_content['meta_tags'][$i]==$value['value'])){
+														echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';
+													} else {
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													}
+												endforeach;
+											?>
+										</select>
+										<select id="insert_attr_images" name="csv[images][]" style="width:200px; display:none;">
+											<?php 
+												foreach($template->getImageList() as $key => $value):
+													if(isset($csv_content['images'][$i])&&($csv_content['images'][$i]==$value['value'])){
+														echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';
+													} else {
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													}
+												endforeach;
+											?>
+										</select>
+									</td>
+									
+									<td class="icons"><button title="Delete" type="button" class="icoBtn delete column-delete" ><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+								</tr>
+								<tr class="row-format" style="display:none;">
+									<td></td>
+									<td></td>
+									<td><strong>Parent</strong><select name="csv[parent][]">
+											<?php 
+												foreach($template->getisParent() as $key => $value):
+													if(isset($csv_content['parent'][$i])&&($csv_content['parent'][$i]==$value['value'])){
+														echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';
+													} else {
+														echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+													}
+												endforeach;
+											?>
+										</select></td>
+									
+									
+									
+									<td>
+										<strong>Format</strong>
+										<select id="insert_format" name="csv[format][]" >
+											<?php 
+												foreach($template->getFormat() as $key => $value):
+												if(isset($csv_content['format'][$i])&&($csv_content['format'][$i]==$value['value'])){
+															echo '<option value="'.$value['value'].'" selected>'.$value['label']->getText().'</option>';
+														}else{
+															echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+														}
+
+												endforeach;
+											?>
+										</select>
+									</td>
+									<td>
+										<strong>Max Length</strong>
+										<input class="input-text admin__control-text" name="csv[length][]" value="<?php echo $csv_content['length'][$i]; ?>" />
+									</td>
+									<td colspan="3"></td>
+								</tr>
+							<?php
+									endif;
+									}
+									}
+								}
+								}
+								endif;
+							?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="7" class="a-right"><button title="Add Column" type="button" class="scalable add column-add"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span>Add Column</span></button></td>
+							</tr>
+						</tfoot>
+					</table>
+					<table cellpadding="0" cellspacing="0" style="display:none;">
+						<tbody id="Column_template">
+							<tr class="data-row">
+								<td class="icons dragRow" title="Drag Row Top/Bottom"><i class="fa fa-arrows-v" aria-hidden="true"></i></td>
+								<td class="icons"><button type="button" class="icoBtn value-setting" title="setting"><i class="fa fa-cog" aria-hidden="true"></i></button></td>
+								<td><input class="input-text admin__control-text" name="csv[name][]"  /></td>
+								<td>
+									<select style="width:96px" name="csv[type][]" class="column-type">
+										<?php 
+											foreach($template->getColumnType() as $key => $value):
+												echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+											endforeach;
+										?>
+									</select>
+								</td>
+								<td id="attribute_values">
+									<select id="insert_attr_attribute" name="csv[attr][]" style="width:200px">
+										<?php 
+										echo '<option value="please-select">Select Attribute</option>';
+											foreach($template->getAttributeList() as $key => $list):
+												echo "<optgroup label=".$key.">";
+												foreach($list as $key => $value):
+												 echo '<option value="'.$key.'">'.$value.'</option>';
+												endforeach;
+											endforeach;
+										?>
+									</select>
+									<select id="insert_attr_category" name="csv[category][]" style="width:200px; display:none">
+										<?php 
+											foreach($category_mapping as $key => $value):
+												echo '<option value="'.$value['id'].'">'.$value['name'].'</option>';
+											endforeach;
+										?>
+									</select>
+									<input id="insert_attr_text" class="input-text admin__control-text" name="csv[txt][]" style="width:195px; display:none"/>
+									<select id="insert_attr_images" name="csv[images][]" style="width:200px; display:none;">
+										<?php 
+											foreach($template->getImageList() as $key => $value):
+												echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+											endforeach;
+										?>
+									</select>
+								</td>
+								
+								<td class="icons"><button title="Delete" type="button" class="icoBtn delete column-delete" ><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+							</tr>
+							<tr style="display: none;" class="row-format">
+								<td></td>
+								<td></td>
+								<td><strong>Parent</strong>
+								<select name="csv[parent][]">
+										<?php 
+											foreach($template->getisParent() as $key => $value):
+												echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+											endforeach;
+										?>
+									</select>
+								</td>
+								<td>
+									<strong>Format</strong>
+									<select id="insert_format" name="csv[format][]" >
+										<?php 
+											foreach($template->getFormat() as $key => $value):
+												echo '<option value="'.$value['value'].'">'.$value['label']->getText().'</option>';
+											endforeach;
+										?>
+									</select>
+								</td>
+								<td><strong>Max Length</strong><input class="input-text admin__control-text" name="csv[length][]" /></td>
+								<td colspan="3"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div><!-- div grid -->              
+			</fieldset>
+		</div>
+	</div>
+</fieldset>
+<script>
+requirejs(['jquery','domReady!','csvcontent','jquery/ui'], function(jQuery){
+	jQuery('#csv_options').csvcontent();
+	  jQuery( "#Column_container" ).sortable();
+});
+</script>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="mfblog_post_collection_load_after">
+        <observer name="magefan_blog_post_collection_after_load_observer" instance="Magefan\BlogAuthor\Observer\PostCollectionLoadAfter" />
+    </event>
+</config>

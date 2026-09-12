@@ -1,0 +1,9 @@
+/* Widget All Template 2 **********************************************************************************************/
+[class^=template-2] .block-post-grid {position: relative;overflow: hidden;margin-left: -15px;margin-right: -15px;}
+[class^=template-2] .block-content {margin-left: -1.5rem;margin-right: -1.5rem;}
+[class^=template-2] .block-post-grid .block-post .image-container {position: relative;}
+[class^=template-2] .post-info {padding-top: 15px;}
+@media (max-width: 767px) {
+    [class^=template-2] .block-content {margin: 0 0;}
+}
+/* END Widget All Template 2 ******************************************************************************************/

@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="blog.comment.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="blog.comment.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">mfBlogCommentSubscriberGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magefan\BlogExtra\Model\ResourceModel\CommentSubscriber\Collection\Grid</argument>
+                    <argument name="default_sort" xsi:type="string">creation_time</argument>
+                    <argument name="default_dir" xsi:type="string">desc</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="blog.comment.grid.massaction" as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">id</argument>
+                        <argument name="form_field_name" xsi:type="string">id</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="subscribe" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Subscribe</item>
+                                <item name="url" xsi:type="string">*/*/massStatus/status/1/</item>
+                            </item>
+                            <item name="unsubscribe" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Unsubscribe</item>
+                                <item name="url" xsi:type="string">*/*/massStatus/status/0/</item>
+                            </item>
+                            <item name="delete" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Delete</item>
+                                <item name="url" xsi:type="string">*/*/delete</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="blog.comment.grid.columnSet" as="grid.columnSet">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Email</argument>
+                            <argument name="index" xsi:type="string">email</argument>
+                            <argument name="column_css_class" xsi:type="string">col-nickname</argument>
+                            <argument name="header_css_class" xsi:type="string">col-nickname</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Post</argument>
+                            <argument name="index" xsi:type="string">title</argument>
+                            <argument name="header_css_class" xsi:type="string">col-post</argument>
+                            <argument name="column_css_class" xsi:type="string">col-post</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magefan\Blog\Block\Adminhtml\Grid\Column\Statuses" as="Status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="index" xsi:type="string">status</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="status_unsubscribed" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">Unsubscribed</item>
+                                </item>
+                                <item name="status_subscribed" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">Subscribed</item>
+                                </item>
+                            </argument>
+                            <argument name="header_css_class" xsi:type="string">col-status</argument>
+                            <argument name="column_css_class" xsi:type="string">col-status</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

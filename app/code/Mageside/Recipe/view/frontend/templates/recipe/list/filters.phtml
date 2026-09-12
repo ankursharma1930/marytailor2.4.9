@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/** @var Mageside\Recipe\Block\Frontend\Recipe\Filters\RecipeFilterType $block
+ */
+$filterType = $block->getFilterType();
+?>
+<div class="recipe-filters">
+    <div id="filters" class="control" data-mage-init='{"Mageside_Recipe/js/filters":{}}'>
+        <?php foreach ($filterType->getItems() as $type) : ?>
+            <select name="<?= $block->escapeHtml($type->getCode()); ?>" id="<?= $block->escapeHtml($type->getCode()); ?>">
+                <?php $dataOption = $block->getFilterOption($type->getId()); ?>
+                <optgroup label="<?= $block->escapeHtml($type->getType()); ?>">
+                <option value="" selected><?= $block->escapeHtml('All '.$type->getType()); ?></option>
+                    <?php foreach ($dataOption->getData('options') as $option) : ?>
+                        <option value="<?= $block->escapeHtml($option['slug']); ?>"><?= $block->escapeHtml($option['label']); ?></option>
+                    <?php endforeach; ?>
+                </optgroup>
+            </select>
+        <?php endforeach; ?>
+    </div>
+</div>

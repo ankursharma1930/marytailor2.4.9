@@ -1,0 +1,101 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+declare(strict_types=1);
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Plumrocket\AmpEmail\Block\Component\Sales\Order\ActualInfo */
+$orderIncrementId = $block->escapeHtml($block->getOrder()->getIncrementId());
+$orderViewUrl = $block->escapeUrl($block->getOrderViewUrl());
+$order = $block->getOrder();
+?>
+<div class="order">
+    <h1 class="order__title"><?= $block->escapeHtml(__('Thanks for your order')) ?></h1>
+    <div class="order__description">
+        <?= $block->escapeHtml(
+            __(
+                'Hi %1, we\'ve received order and are working on it now. We\'ll email you an update when we\'ve shipped it.',
+                $order->getCustomerIsGuest() ? $order->getBillingAddress()->getName() : $block->getOrder()->getCustomerName()
+            )
+        ) ?>
+    </div>
+    <amp-list class="order__list"
+              height="100"
+              layout="fixed-height"
+              items="."
+              single-item="."
+              src="<?= $block->escapeUrl($block->getActualInfoUrl((int) $block->getOrder()->getId())) ?>"
+    >
+        <template type="amp-mustache">
+            <div class="order__item-list">
+                <div class="order__item">
+                    <span class="order__item-title"><?= $block->escapeHtml(__('Order Status:')) ?></span>
+                    <span class="order__item-value order__item-value--stat">{{orderStatusLabel}}</span>
+                </div>
+                <div class="order__item">
+                    <span class="order__item-title"><?= $block->escapeHtml(__('Order Number:')) ?></span>
+                    <span class="order__item-value order__item-value--number">
+                        <?php if ($order->getCustomerIsGuest()) : ?>
+                            #<?= /* @noEscape */ $orderIncrementId ?>
+                        <?php else : ?>
+                            <a class="a-link" href="<?= /* @noEscape */ $orderViewUrl ?>">#<?= /* @noEscape */ $orderIncrementId ?></a>
+                        <?php endif; ?>
+                    </span>
+                </div>
+                {{#hasTrackingNumbers}}
+                <div class="order__item">
+                    <span class="order__item-title"><?= $block->escapeHtml(__('Tracking Number:')) ?></span>
+                    <span class="order__item-value order__item-value--number">
+                        {{#trackingNumbers}}
+                            {{#url}}
+                                <a href="{{url}}" class="order-status__tracking-number a-link">{{number}}</a></br>
+                            {{/url}}
+                            {{^url}}
+                                <span class="order-status__tracking-number a-link">{{number}}</span></br>
+                            {{/url}}
+                        {{/trackingNumbers}}
+                    </span>
+                </div>
+                {{/hasTrackingNumbers}}
+            </div>
+            <div class="order__date">
+                <?= __('<strong>Order Date:</strong> %1', $block->getOrder()->getCreatedAtFormatted(\IntlDateFormatter::MEDIUM)) ?>
+            </div>
+        </template>
+        <div fallback>
+            <div class="order__item-list">
+                <div class="order__item">
+                    <span class="order__item-title"><?= $block->escapeHtml(__('Order Status:')) ?></span>
+                    <span class="order__item-value order__item-value--number"><?= $block->escapeHtml($block->getOrderStatusLabel()) ?></span>
+                </div>
+                <div class="order__item">
+                    <span class="order__item-title"><?= $block->escapeHtml(__('Order Number:')) ?></span>
+                    <span class="order__item-value order__item-value--number">
+                        <?php if ($order->getCustomerIsGuest()) : ?>
+                            #<?= /* @noEscape */ $orderIncrementId ?>
+                        <?php else : ?>
+                            <a href="<?= /* @noEscape */ $orderViewUrl ?>">#<?= /* @noEscape */ $orderIncrementId ?></a>
+                        <?php endif; ?>
+                    </span>
+                </div>
+                <?php if ($block->hasOrderTrackingNumbers()) : ?>
+                    <div class="order__item">
+                        <span class="order__item-title"><?= $block->escapeHtml(__('Tracking Number:')) ?></span>
+                        <?php foreach ($block->getOrderTrackingNumbers() as $trackingNumber) : ?>
+                            <span class="order__item-value order__item-value--number"><?= $block->escapeHtml($trackingNumber) ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="order__date">
+                <?= __('<strong>Order Date:</strong> %1', $block->getOrder()->getCreatedAtFormatted(\IntlDateFormatter::MEDIUM)) ?>
+            </div>
+            <div class="upd-time"><?= $block->escapeHtml(__('Information current as of %1', $block->getCurrentDate())) ?></div>
+        </div>
+    </amp-list>
+</div>

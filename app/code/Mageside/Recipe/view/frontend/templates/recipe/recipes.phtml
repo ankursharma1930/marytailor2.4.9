@@ -1,0 +1,82 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Index $block
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+$writers = $block->getWritersCollection();
+?>
+<?php if ($config->isEnabled()) : ?>
+    <div class="recipe-search">
+        <div class="recipe-search_content">
+            <form class="form" id="form-search" data-mage-init='{"Mageside_Recipe/js/search":{}}'>
+                <div class="search">
+                    <div class="control">
+                        <input name="search" type="text" class="input-text" autocomplete="off"
+                               placeholder="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Search recipes')); ?>"/>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="submit"
+                            title="<?php echo $block->escapeHtml(__('Search')) ?>"
+                            class="action search">
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="writers-wrapper">
+        <div class="no-display"><?php echo $block->escapeHtml(__('Our Recipe Gurus')); ?></div>
+        <div class="writers-gurus"><?php echo $block->escapeHtml(__('Our Recipe Gurus')); ?></div>
+        <ul class="writers-list writers-slider">
+            <?php foreach ($writers as $writer) : ?>
+                <li class="writer slide">
+                    <div class="writer-avatar">
+                        <?php if ($writer->getAvatar()) : ?>
+                            <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage(
+                                $block->getImageUrl() . DIRECTORY_SEPARATOR . $writer->getAvatar(),
+                                'recipe_guru_image'
+                            )); ?>"
+                                 alt="<?php $block->escapeHtml(__('Writer Avatar')); ?>" height="100" width="100"
+                                 title="<?php echo $block->escapeHtml($writer->getName()); ?>">
+                        <?php else : ?>
+                            <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getImageStub(), 'recipe_guru_image')); ?>"
+                                 alt="<?php $block->escapeHtml(__('Recipe Image')); ?>" height="100" width="100">
+                        <?php endif; ?>
+                    </div>
+                    <div class="writer-name"><h3><?php echo $block->escapeHtml($writer->getName()); ?></h3></div>
+                    <a href="<?php echo $block->escapeHtml($block->getUrl($config->getSeoRoute()) . $writer->getWriterUrlKey()) ?>" class="show-writer-recipes">
+                        <?php echo $block->escapeHtml(__('View Recipes')); ?></a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <script>
+        require([
+            'jquery',
+            'jquery/bxslider'
+        ], function($) {
+            $('.writers-slider').bxSlider({
+                minSlides: 2,
+                maxSlides: 4,
+                slideWidth: 240,
+                slideMargin: 10,
+                pager: false,
+                nextText: "<i class='fa fa-angle-left'></i>",
+                prevText: "<i class='fa fa-angle-right'></i>",
+                adaptiveHeight: true,
+                hideControlOnEnd: true,
+                infiniteLoop: false,
+                captions: false,
+                responsive: true
+            });
+        });
+    </script>
+    <?= $block->getChildHtml('recipe_filters'); ?>
+    <?= $block->getChildHtml('recipe_list'); ?>
+<?php endif; ?>

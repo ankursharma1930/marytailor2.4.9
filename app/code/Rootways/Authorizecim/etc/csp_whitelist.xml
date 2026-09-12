@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp/etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <!--<value id="authorize-js" type="host">js.authorize.net</value>
+                <value id="authorize-jstest" type="host">jstest.authorize.net</value>
+                <value id="authorizenet-js" type="host">accept.authorize.net</value>
+                <value id="testauthorizenet-js" type="host">test.authorize.net</value>-->
+                <value id="authorize-js" type="host">*.authorize.net</value>
+                <value id="visacheckout-js" type="host">assets.secure.checkout.visa.com</value>
+                <value id="visacheckoutsandbox-js" type="host">sandbox-assets.secure.checkout.visa.com</value>
+            </values>
+        </policy>
+        <policy id="form-action">
+            <values>
+                <!--<value id="authorize-js" type="host">js.authorize.net</value>
+                <value id="authorize-jstest" type="host">jstest.authorize.net</value>
+                <value id="authorizenet-js" type="host">accept.authorize.net</value>
+                <value id="testauthorizenet-js" type="host">test.authorize.net</value>-->
+                <value id="authorize-js" type="host">*.authorize.net</value>
+                <value id="visacheckout-js" type="host">assets.secure.checkout.visa.com</value>
+                <value id="visacheckoutsandbox-js" type="host">sandbox-assets.secure.checkout.visa.com</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <!--<value id="authorize-js" type="host">js.authorize.net</value>
+                <value id="authorize-jstest" type="host">jstest.authorize.net</value>
+                <value id="authorizenet-js" type="host">accept.authorize.net</value>
+                <value id="testauthorizenet-js" type="host">test.authorize.net</value>-->
+                <value id="authorize-js" type="host">*.authorize.net</value>
+                <value id="visacheckout-js" type="host">assets.secure.checkout.visa.com</value>
+                <value id="visacheckoutsandbox-js" type="host">sandbox-assets.secure.checkout.visa.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <!--<value id="authorize-js" type="host">js.authorize.net</value>
+                <value id="authorize-jstest" type="host">jstest.authorize.net</value>
+                <value id="authorizenet-js" type="host">accept.authorize.net</value>
+                <value id="testauthorizenet-js" type="host">test.authorize.net</value>-->
+                <value id="authorize-js" type="host">*.authorize.net</value>
+                <value id="visacheckout-js" type="host">assets.secure.checkout.visa.com</value>
+                <value id="visacheckoutsandbox-js" type="host">sandbox-assets.secure.checkout.visa.com</value>
+            </values>
+        </policy>
+        <policy id="frame-ancestors">
+            <values>
+                <!--<value id="authorize-js" type="host">js.authorize.net</value>
+                <value id="authorize-jstest" type="host">jstest.authorize.net</value>
+                <value id="authorizenet-js" type="host">accept.authorize.net</value>
+                <value id="testauthorizenet-js" type="host">test.authorize.net</value>
+                <value id="sandboxauthorizenet-js" type="host">sandbox.authorize.net</value>-->
+                <value id="authorize-js" type="host">*.authorize.net</value>
+                <value id="visacheckout-js" type="host">assets.secure.checkout.visa.com</value>
+                <value id="visacheckoutsandbox-js" type="host">sandbox-assets.secure.checkout.visa.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="authorize-js" type="host">*.authorize.net</value>
+                <value id="visa-img" type="host">assets.secure.checkout.visa.com</value>
+                <value id="visasandbox-img" type="host">sandbox.secure.checkout.visa.com</value>
+                <value id="visacheckoutsandbox-img" type="host">sandbox-assets.secure.checkout.visa.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

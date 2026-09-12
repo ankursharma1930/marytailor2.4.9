@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+ -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.system.email.template.grid.columnSet.type">
+            <arguments>
+                <argument name="index" xsi:type="string">template_id</argument>
+                <argument name="filter" xsi:type="string">Plumrocket\AmpEmail\Block\Adminhtml\Template\Grid\Filter\Type</argument>
+                <argument name="renderer" xsi:type="string">Plumrocket\AmpEmail\Block\Adminhtml\Template\Grid\Renderer\Type</argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceBlock name="adminhtml.system.email.template.grid.columnSet">
+            <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.email.template.grid.columnSet.pramp.enabled" as="pramp_enabled" after="type">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">AMP Status</argument>
+                    <argument name="index" xsi:type="string">template_id</argument>
+                    <argument name="filter" xsi:type="string">Plumrocket\AmpEmail\Block\Adminhtml\Template\Grid\Filter\AmpStatus</argument>
+                    <argument name="renderer" xsi:type="string">Plumrocket\AmpEmail\Block\Adminhtml\Template\Grid\Renderer\AmpStatus</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

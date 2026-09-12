@@ -1,0 +1,22 @@
+/* Mosaica 5 (4-column) *************************/
+.mosaica-5 .block-inner {margin: 0;}
+.mosaica-5 .block-content {display: flex;flex-wrap: wrap;margin: -2px;}
+.mosaica-5 .post-block {width: 25%;max-width: 25%;float: left;flex: 0 0 25%;padding: 2px;}
+.mosaica-5 .post-block .image-wrap {display: block;padding-bottom: 400px;padding-bottom: 120%;}
+.mosaica-5 .post-info h3.post-title {margin-top: 0;}
+.mosaica-5 .post-data-wrap {display: none;}
+
+@media (max-width: 1023px) {
+        /* Mosaica 5 **************************************/
+    .mosaica-5 .post-info .post-title-wrap {margin-bottom: 0 !important;}
+    .mosaica-5 .post-info h3.post-title a {font-size: 14px;line-height: 20px;font-weight: 600;}
+}
+@media (max-width: 767px) {
+    /* Mosaica 5 **************************************/
+    .mosaica-5 .block-content {margin: 0;}
+    .mosaica-5 .post-block {width: 100%;max-width: 100%;float: none;-ms-flex: 0 0 100%;flex: 0 0 100%;
+        padding: 0;margin-bottom: 8px;}
+    .mosaica-5 .post-block:last-of-type {margin-bottom: 0;}
+    .mosaica-5 .post-block .image-wrap {padding-bottom: 80%;}
+}
+/* END Widgets Templates Mosaica **************************************************************************************/

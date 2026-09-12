@@ -1,0 +1,83 @@
+.field-pramp_email_manual_email .admin__field-control,
+.field-pramp_email_manual_send .admin__field-control {
+  position: relative;
+}
+
+#pramp_email_manual_send {
+  width: calc(100% - 100px);
+}
+
+#pramp_email_send_test_email_button {
+  float: right;
+}
+
+.pramp-elem-success.message-success {
+  background: #fffbbb;;
+  border: 1px solid #f9f288;
+  margin: .2rem 0 0;
+  padding: 0.8rem 4rem .9rem 5.5rem;
+  display: block;
+}
+
+.field-pramp_email_manual_send .lds-ellipsis {
+  right: 64px;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: absolute;
+  width: 42px;
+  height: 13px;
+  transform: scale(0.4);
+  top: 0;
+  right: 0;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 27px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #7d7d7d;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(19px, 0);
+  }
+}
+

@@ -1,0 +1,101 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Recipe\View $block
+ */
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$writers = $block->getWriter();
+$countPage = 1;
+?>
+<div class="recipe-search">
+    <div class="recipe-search_content">
+        <form class="form" id="form-search" data-mage-init='{"Mageside_Recipe/js/search":{}}'>
+            <div class="search">
+                <div class="control">
+                    <input name="search" type="text" class="input-text" autocomplete="off"
+                           placeholder="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Search recipes')); ?>"/>
+                    <input class="writer-url-key" type="hidden" name="writer" value="<?php echo $writers->getWriterUrlKey(); ?>">
+                </div>
+            </div>
+            <div class="actions">
+                <button type="submit"
+                        title="<?php echo $block->escapeHtml(__('Search')) ?>"
+                        class="action search">
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="writer-page-wrap recipes-page">
+    <div class="writer-page-info"
+        <?php if ($writers->getWriterImage()) : ?>
+        style='color: #040404; background-image: url("<?php echo $block->escapeHtml($block->getImageUrl() . '/' . $writers->getWriterImage()); ?>")'
+        <?php endif; ?>>
+        <div class="writer-info__social-link">
+            <ul>
+                <?php if ($writers->getYoutubeLink()) : ?>
+                    <li>
+                        <a href="<?php echo $block->escapeHtml($writers->getYoutubeLink()); ?>" target="_blank">
+                            <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/icon-youtube.png')); ?>"
+                                 title="Youtube" width="50" height="50"/>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($writers->getFbLink()) : ?>
+                    <li>
+                        <a href="<?php echo $block->escapeHtml($writers->getFbLink()); ?>" target="_blank">
+                            <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/icon-facebook.png')); ?>"
+                                 title="Facebook" width="50" height="50"/>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($writers->getInLink()) : ?>
+                    <li>
+                        <a href="<?php echo $block->escapeHtml($writers->getInLink()); ?>" target="_blank">
+                            <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/icon-instagram.png')); ?>"
+                                 title="Instagram" width="50" height="50"/>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($writers->getSnapchatLink()) : ?>
+                    <li>
+                        <a href="<?php echo $block->escapeHtml($writers->getSnapchatLink()); ?>" target="_blank">
+                            <img src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/icon-snapchat.png')); ?>"
+                                 title="Snapchat" width="50" height="50"/>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($writers->getWebsiteLink()) : ?>
+                    <li class="writer-website-title-link">
+                        <a href="<?php echo $block->escapeHtml($writers->getWebsiteLink()); ?>" target="_blank"><?php echo $block->escapeHtml(__('Visit my site')) ?></a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <div class="writer-info__nickname" style="color: <?php echo $block->escapeHtml($writers->getTextColor()); ?>">
+            <?php echo $block->escapeHtml($writers->getNickname()); ?>
+        </div>
+        <div class="writer-info__avatar">
+            <?php if ($writers->getAvatar()) : ?>
+                <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getWriterAvatar(), 'recipe_guru_image')); ?>"
+                     title="<?php echo $block->escapeHtml($writers->getName()); ?>"
+                     alt="<?php $block->escapeHtml(__('Writer Avatar')); ?>"
+                     height="100"
+                     width="100">
+            <?php else : ?>
+                <img src="<?php echo $block->escapeHtml($imageHelper->getResizedImage($block->getImageStub(), 'recipe_guru_image')); ?>"
+                     alt="<?php $block->escapeHtml(__('Writer Avatar')); ?>" height="100" width="100">
+            <?php endif; ?>
+        </div>
+        <div class="writer-info__about-writer" style="color: <?php echo $block->escapeHtml($writers->getTextColor()); ?>">
+            <?php echo $block->escapeHtml($writers->getAboutWriter()); ?>
+        </div>
+    </div>
+</div>
+
+<?= $block->getChildHtml('recipe_filters'); ?>
+<?= $block->getChildHtml('recipe_list'); ?>

@@ -1,0 +1,30 @@
+<?php
+if ($block->enableInstantPurchase()) {
+    try {
+        $id = sprintf('%s%s', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    } catch (Exception $e) {
+        $id = 0;
+    }
+
+
+    $config = [
+        'Rootways_Authorizecim/js/applepay/implementations/shortcut' => [
+            'id' => $id,
+            //'clientToken' => $block->getClientToken(),
+            'quoteId' => $block->getQuoteId(),
+            'displayName' => $block->getMerchantName(),
+            //'actionSuccess' => $block->getActionSuccess(),
+            'grandTotalAmount' => $block->getAmount(),
+            'isLoggedIn' => $block->isCustomerLoggedIn(),
+            'storeCode' => $block->getStorecode(),
+            'merchantCountryCode' => $block->getMerchantCountryCode(),
+            'currencyCode' => $block->getCurrencyCode()
+        ]
+    ];
+
+    ?>
+    <div id="<?= $block->escapeHtmlAttr($id) ?>"
+         data-mage-init="<?= $block->escapeHtmlAttr(json_encode($config)) ?>"
+         class="rwauthorizecim-applepay-minicart <?= $block->escapeHtmlAttr($block->getExtraClassname()) ?>">
+    </div>
+<?php }

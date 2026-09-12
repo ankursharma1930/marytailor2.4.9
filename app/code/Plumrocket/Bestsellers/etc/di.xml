@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Plumrocket Inc.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End-user License Agreement
+ * that is available through the world-wide-web at this URL:
+ * http://wiki.plumrocket.net/wiki/EULA
+ * If you are unable to obtain it through the world-wide-web, please
+ * send an email to support@plumrocket.com so we can send you a copy immediately.
+ *
+ * @package     Plumrocket_Bestsellers
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (http://www.plumrocket.com)
+ * @license     http://wiki.plumrocket.net/wiki/EULA  End-user License Agreement
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Plumrocket\Bestsellers\Api\ProductIdsProviderInterface" type="Plumrocket\Bestsellers\Model\ResourceModel\ProductIdsProvider" />
+    <preference for="Plumrocket\Bestsellers\Api\PeriodListInterface" type="Plumrocket\Bestsellers\Model\PeriodList" />
+
+    <type name="Plumrocket\Bestsellers\Model\BestsellersReport">
+        <arguments>
+            <argument name="reportType" xsi:type="string">Magento\Sales\Model\ResourceModel\Report\Bestsellers</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="plumrocketBestsellersRefresh" xsi:type="object">Plumrocket\Bestsellers\Console\Command\RefreshBestsellers</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Plumrocket\Bestsellers\Model\ResourceModel\ProductIdsProvider">
+        <arguments>
+            <argument name="fallbackStrategies" xsi:type="array">
+                <item name="random" xsi:type="object">Plumrocket\Bestsellers\Model\Report\Fallback\RandomStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

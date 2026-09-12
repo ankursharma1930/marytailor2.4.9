@@ -1,0 +1,17 @@
+<?php $category_mapping = $this->getUrl('*/*/CategoryMapping');
+$loading_url=$this->getViewFileUrl("Magebees_Productfeed::images/loader.gif");
+if($this->getRequest()->getParam('id')){
+$mappingid = $this->getRequest()->getParam('id');	
+}else{
+$mappingid = '';	
+}
+?>
+<script>
+requirejs(['jquery','domReady!','mapping'], function(jQuery){
+	jQuery('.category-mapping-content').mapping({
+	mapping_url : "<?php echo $category_mapping; ?>",
+	loading_url : "<?php echo $loading_url;?>",
+	currentmapping_id : "<?php echo $mappingid; ?>",
+	});
+});
+</script>

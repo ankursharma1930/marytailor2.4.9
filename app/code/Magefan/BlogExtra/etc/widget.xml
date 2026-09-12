@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget class="Magefan\BlogExtra\Block\Widget\Contents" id="mfblogextra_contents_widget">
+        <label>Magefan Blog Extra Extension - Blog Post Contents</label>
+        <description>Display blog post contents</description>
+    </widget>
+</widgets>

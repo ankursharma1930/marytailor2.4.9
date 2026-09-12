@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\Gallery
+ */
+?>
+<div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
+    <img alt="<?= /* @escapeNotVerified */ __('Loading...') ?>"
+         class="w-full h-auto rounded-lg"
+         src="<?= /* @noEscape */ $block->returnImageUrl() ? $block->returnImageUrl() : $block->getViewFileUrl('images/loader-1.gif') ?>"
+         style="top: calc(50% - <?= /* @escapeNotVerified */ ($block->getImageAttribute('product_page_image_small', 'height'))/2 ?>px);"
+    />
+</div>

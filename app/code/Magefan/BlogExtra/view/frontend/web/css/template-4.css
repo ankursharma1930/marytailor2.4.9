@@ -1,0 +1,7 @@
+/* Widget Template 4 **************************************************************************************************/
+[class^=template-4] .post-list .post-info {padding: 0 10px 0 15px;width: 100%;}
+[class^=template-4] .post-list .post-info .post-title a {font-size: 14px;line-height: 20px;font-weight: 600;}
+@media (max-width: 767px) {
+    [class^=template-4] .post-list .post-info {padding: 0 0 0 15px;width: 100%;}
+}
+/* END Widget Template 4 **********************************************************************************************/

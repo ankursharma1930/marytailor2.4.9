@@ -1,0 +1,116 @@
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+.subscribe-form,
+.confirm-form,
+.already-done{display:block}
+
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0;
+}
+
+.newsletter {
+  width: 49%;
+  border: 1px solid #929292;
+}
+
+.newsletter__wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.newsletter--for-you {
+  margin-left: 6%;
+  height: 450px;
+}
+
+.newsletter__text {
+  margin-top: 16px;
+  padding: 0 5px;
+  text-align: center;
+}
+
+.newsletter__input {
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px 13px;
+  box-sizing: border-box;
+  border: 1px solid #C4C4C4;
+  border-radius: 3px;
+}
+
+.newsletter__btn {
+  margin-top: 21px;
+}
+
+.newsletter__social {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 23px 22px 19px;
+  margin-top: 45px;
+  background-color: #F3F1E9;
+}
+
+.newsletter__social--sm {
+  margin-top: 10px;
+}
+
+.newsletter__social-title {
+  margin-bottom: 33px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 400;
+}
+
+.newsletter__subs-link {
+  display: inline-block;
+  margin-top: 19px;
+  font-size: 13px;
+  color: #494949;
+}
+
+.newsletter__th-title {
+  margin-top: 13px;
+  font-size: 18px;
+  color: #2CA900;
+  text-align: center;
+}
+
+.newsletter__bg {
+  width: 100%;
+  height: 130px;
+  margin-bottom: 37px;
+  background-color: #EBAD51;
+}
+
+.newsletter__bg--success {
+  background-color: #71B47E;
+}
+
+.newsletter__bg-img {
+  position: relative;
+  left: 50%;
+  width: 166px;
+  transform: translate(-50%, 5px);
+}
+
+.newsletter__bg-img--success {
+  position: relative;
+  top: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 113px;
+  height: 114px;
+  border-radius: 50%;
+  background-color: #60FF59;
+}

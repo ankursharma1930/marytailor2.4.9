@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mageside_recipe>
+            <general>
+                <enabled>1</enabled>
+                <module_name>Recipes and Ingredients</module_name>
+                <module_page_link>https://mageside.com/recipes-and-ingredients.html</module_page_link>
+                <google_rich_snippets>1</google_rich_snippets><extensions_link>https://mageside.com</extensions_link>
+                <marketplace_link>https://marketplace.magento.com/mageside-recipes-and-ingredients.html</marketplace_link>
+                <marketplace_extensions_link>https://marketplace.magento.com/partner/Mageside</marketplace_extensions_link>
+                <!--Please, change it to 1 for the marketplace version-->
+                <is_marketplace>0</is_marketplace>
+            </general>
+            <recipe_list>
+                <load_by_ajax>0</load_by_ajax>
+                <recipe_per_page>16</recipe_per_page>
+                <social_share_enable>1</social_share_enable>
+                <facebook_share>1</facebook_share>
+                <twitter_share>1</twitter_share>
+                <google_share>1</google_share>
+                <pinterest_share>0</pinterest_share>
+            </recipe_list>
+            <seo>
+                <route>recipe</route>
+                <page_title_for_recipe>Recipes</page_title_for_recipe>
+            </seo>
+            <review>
+                <enabled>1</enabled>
+                <availability>1</availability>
+            </review>
+            <product_page>
+                <show_on_product_page>1</show_on_product_page>
+                <block_title>Check how this product is used in following recipes</block_title>
+                <recipes_per_page>4</recipes_per_page>
+            </product_page>
+            <recipe_ingredient>
+                <recipes_per_ingredient_page_title>Recipes Per Ingredient</recipes_per_ingredient_page_title>
+                <ingredient_page_title>{product_name} Recipes</ingredient_page_title>
+            </recipe_ingredient>
+
+        </mageside_recipe>
+
+        <sitemap>
+            <mageside_recipe>
+                <priority>0.25</priority>
+                <changefreq>daily</changefreq>
+            </mageside_recipe>
+        </sitemap>
+
+    </default>
+</config>

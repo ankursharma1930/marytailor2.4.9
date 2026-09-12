@@ -1,0 +1,118 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * Blog reading progress bar template
+ *
+ * @var $block \Magefan\BlogExtra\Block\Post\View\ReadingProgressBar
+ */
+?>
+<?php
+$opacity = $block->escapeHtml($block->getReadingProgressBarConfigData('highlight_color_opacity') ?: '0.9');
+$width = $block->escapeHtml($block->getReadingProgressBarConfigData('width') ?: '10px');
+$color = $block->escapeHtml($block->getReadingProgressBarConfigData('highlight_color') ?: 'ff5501');
+$position = $block->escapeHtml($block->getReadingProgressBarConfigData('position') ?: 'top');
+$isSide = ($position == 'left' || $position == 'right');
+$percentLabel = $isSide ? '<div class="percent">0%</div>' : '';
+$percent = $isSide ? 'document.getElementsByClassName("percent")[0].innerHTML = Math.round(percent) + "%";' : '';
+$readingProgressBarContainerPosition = $position . ':' . ($isSide ? "100px;" : "0;");
+$readingProgressBarWidth = $isSide ? 'width:' . $width . ';' : "height: ". $width .";width:0;";
+$readingProgressBarContainerWidth = $isSide ? 'width:' . ((int)$width * 4) . 'px' . ';' : "width: 100%;";
+?>
+<style>
+    .progress-bar-container {position: fixed;z-index: 5;<?= !$isSide ? 'left: 0;' : '' ?><?= $position ?>:0;height: <?= $width ?>;<?= $readingProgressBarContainerPosition ?><?= $readingProgressBarContainerWidth ?>}
+    .progress-bar-container.side {position: absolute;display: none;height: 200px;<?= $position ?>: 5%;background-color: #fff;}
+    .reading-progress-wrapper {margin: auto;height: 100%;width: 100%;}
+    .reading-progress-wrapper.side {height: 100%;width: 8px;background: #edebeb;}
+    .progress-bar {background: #<?= $color ?>;<?= $readingProgressBarWidth ?>; opacity: <?= $opacity ?>}
+    .progress-bar-container.side .progress-bar {margin: auto;}
+    .progress-bar-container.side .progress-bar:after{content:'';display: block;background-color: rgb(126,126,117);height: 100%;width: <?= $width ?>;position: absolute;z-index: -1;opacity: 0.1;}
+    .percent {font-weight: bold;text-align: center;right: 0;top: 0;}
+    .progress-bar-container.side .percent {height: 20px;background: #fff;}
+    .blog-post-view div.post-content {position: relative;}
+    @media only screen and (max-width: 768px) {  body .progress-bar-container.side {display: none!important;}  }
+</style>
+<div class="progress-bar-container <?= $isSide ? 'side' : '' ?>">
+    <div class="reading-progress-wrapper">
+        <div id="reading-progress" class="progress-bar"></div>
+    </div>
+    <?= $percentLabel ?>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const post = document.querySelector("div.post-content");
+        const progress = document.getElementById("reading-progress");
+        const top = 50;
+        let progressBarContainer = document.querySelector("div.progress-bar-container");
+        let postStartPx = post.getBoundingClientRect().top;
+        let inViewport = false;
+        new IntersectionObserver(handler).observe(post);
+
+        <?php if ($isSide) { ?>
+        progressBarContainer.style.top = Math.abs(postStartPx + top) + 'px';
+        <?php } ?>
+
+        progressBarContainer.style.display = 'block';
+
+        function handler(entries) {
+            for (entry of entries) {
+                inViewport = entry.isIntersecting;
+            }
+        }
+
+        function getScrollProgress(el) {
+
+            let scrollY = window.scrollY || window.pageYOffset;
+            let docHeight = Math.max(
+                document.body.scrollHeight, document.documentElement.scrollHeight,
+                document.body.offsetHeight, document.documentElement.offsetHeight,
+                document.body.clientHeight, document.documentElement.clientHeight
+            );
+            let windowHeight = window.innerHeight;
+            if (scrollY + windowHeight >= docHeight - 100) {
+                return 100;
+            }
+
+            let progressPercentage = 0;
+
+            if (inViewport) {
+                let coords = el.getBoundingClientRect();
+                if (coords.top < 0) {
+                    progressPercentage = (Math.abs(coords.top) / coords.height) * 100;
+                }
+            }
+
+            return progressPercentage;
+        }
+
+        function showReadingProgress() {
+            let percent = getScrollProgress(post);
+            <?php if ($isSide) { ?>
+            if (percent > 0) {
+                progressBarContainer.style.position = 'fixed';
+                progressBarContainer.style.top = top + 'px';
+            } else {
+                progressBarContainer.style.position = 'absolute';
+                progressBarContainer.style.top = Math.abs(postStartPx + top) + 'px';
+            }
+            <?php } ?>
+            progress.style.<?= $isSide ? 'height' : 'width' ?> = percent + "%";
+            <?= $percent ?>
+        }
+
+        let timeout;
+        window.addEventListener("scroll", () => {
+            if (timeout) {
+                window.cancelAnimationFrame(timeout);
+            }
+            timeout = window.requestAnimationFrame(function () {
+                showReadingProgress();
+            });
+        });
+    });
+</script>
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Magento_Catalog::catalog">
+						<resource id="Dolphin_Productfaq::parent" sortOrder="10" title="Product Questions/FAQ">
+							<resource id="Dolphin_Productfaq::manage" sortOrder="20" title="Manage Questions"/>
+						</resource>
+				</resource>
+				<resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Dolphin_Productfaq::productfaq_configuration" title="Product FAQ"/>
+                        </resource>
+                    </resource>
+                </resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

@@ -1,0 +1,10 @@
+<button class="action-delete"
+        data-bind="
+            click: function(){ $parent.processingDeleteRecord($record().index, $record().recordId); },
+            attr: {
+                title: $parent.deleteButtonLabel,
+                disabled: disabled
+            }
+        ">
+    <span translate="$parent.deleteButtonLabel"></span>
+</button>

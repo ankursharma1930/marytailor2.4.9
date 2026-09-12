@@ -1,0 +1,57 @@
+<?php declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$item = $block->getData('item');
+$itemUrl = $item['url'] ?? '';
+$itemTextLarge = $item['text_large'] ?? '';
+$itemTextSmall = $item['text_small'] ?? '';
+
+$hasLoadingAttribute = ($block->getImageAttributes() ?: [])['loading'] ?? false;
+
+?>
+
+<?php if ($itemUrl): ?>
+<a
+    href="<?= $escaper->escapeUrl($itemUrl)?>"
+    aria-label="<?= $escaper->escapeHtml(__('Visit %1', ($itemTextLarge ?? $item['image_alt'] || 'page'))) ?>"
+    class="block"
+>
+<?php endif; ?>
+    <figure class="relative grid w-full h-[460px] md:h-[580px] lg:h-[800px]">
+        <img
+            class="absolute inset-0 w-full h-full object-cover" src="<?= $escaper->escapeHtmlAttr($item['image_url']) ?>"
+            alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? $item['text_small'] ?? '') ?>"
+            width="<?= $escaper->escapeHtmlAttr($item['image_width'] ?? '1280') ?>"
+            height="<?= $escaper->escapeHtmlAttr($item['image_height'] ?? '853') ?>"
+            <?php if (! $hasLoadingAttribute): ?>
+            loading="lazy"
+            <?php endif; ?>
+            <?php foreach ($block->getImageAttributes() as $name => $value): ?>
+                <?= $escaper->escapeHtmlAttr($name) . '="' . $escaper->escapeHtmlAttr($value) . '"' ?>
+            <?php endforeach; ?>
+        >
+        <?php if ($itemTextSmall || $itemTextLarge): ?>
+            <figcaption class="relative col-start-1 row-start-1 self-end px-6 pt-12 pb-20 sm:pb-24 bg-gradient-to-t from-gray-800/50 to-transparent text-white text-center uppercase">
+                <?php if ($itemTextSmall): ?>
+                    <p class="text-base sm:text-xl sm:mb-3 last:mb-0 sm:leading-7 font-semibold drop-shadow-md">
+                        <?= $escaper->escapeHtml($itemTextSmall) ?>
+                    </p>
+                <?php endif; ?>
+                <?php if ($itemTextLarge): ?>
+                    <p class="text-2xl sm:text-3xl md:text-5xl sm:leading-none font-bold drop-shadow-md">
+                        <?= $escaper->escapeHtml($itemTextLarge) ?>
+                    </p>
+                <?php endif; ?>
+            </figcaption>
+        <?php endif; ?>
+    </figure>
+<?php if ($itemUrl): ?>
+</a>
+<?php endif; ?>

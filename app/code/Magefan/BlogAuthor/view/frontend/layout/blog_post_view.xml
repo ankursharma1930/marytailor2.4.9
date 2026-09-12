@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="blog.post.bottom">
+            <block class="Magefan\BlogAuthor\Block\Post\View\Author" name="blogauthor.post.author" after="blog.post.nextprev"  template="Magefan_BlogAuthor::author.phtml">
+                <action method="setDisplayShortContent">
+                    <argument name="value" xsi:type="string">1</argument>
+                </action>
+            </block>
+            <block class="Magefan\BlogAuthor\Block\Post\View\LatestPostsByAuthor" name="blogauthor.post.latest.posts.by.author" after="blogauthor.post.author" template="Magefan_BlogAuthor::post/view/latest-posts-by-author.phtml" />
+        </referenceContainer>
+    </body>
+</page>
+

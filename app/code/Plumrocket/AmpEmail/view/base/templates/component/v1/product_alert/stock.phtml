@@ -1,0 +1,76 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Plumrocket\AmpEmail\Block\Component\ProductAlert\Stock $block */
+?>
+<?php foreach ($block->getProducts() as $product) : ?>
+    <?php $productId = (int) $product->getId(); ?>
+    <div>
+        <amp-list class="stock-list__status-hld"
+                  height="50"
+                  layout="fixed-height"
+                  items="."
+                  single-item="."
+                  src="<?= $block->escapeUrl($block->getActualStockUrl($productId)) ?>"
+        >
+            <template type="amp-mustache">
+                <div>
+                    {{#isSalable}}
+                    <div class="stock-list__title"><?= /* @noEscape */ __('<b>%1</b> is back in stock!', $product->getName()) ?></div>
+                    {{/isSalable}}
+                    {{^isSalable}}
+                    <div class="stock-list__title"><?= /* @noEscape */ __('<b>%1</b> is currently not available. Please check back later for stock updates.', $product->getName()) ?></div>
+                    {{/isSalable}}
+                    <div class="upd-time">{{updatedDateString}}</div>
+                </div>
+            </template>
+            <div fallback>
+                <div class="stock-list__title"><?= /* @noEscape */ __('<b>%1</b> is back in stock!', $product->getName()) ?></div>
+                <div class="upd-time"><?= $block->escapeHtml(__('Information current as of %1', $block->getCurrentDate())) ?></div>
+            </div>
+        </amp-list>
+        <?= $block->createProductBlock($product)->toHtml() ?>
+        <div class="pr-subsciption-options">
+            <div class="stock-unsubscribe-form-container">
+                <?php $formId = "stock-unsubscribe-prod-$productId"; ?>
+                <form id="<?= $block->escapeHtmlAttr($formId) ?>"
+                    method="POST"
+                    action-xhr="<?= $block->escapeUrl($block->getProductUnsubscribeUrl($productId)) ?>"
+                >
+                    <span class="btn-link a-link" role="button" tabindex="2" on="tap:<?= $block->escapeHtmlAttr($formId) ?>.submit">
+                        <?= $block->escapeHtml(__('Click here to stop alerts for this product')) ?>
+                    </span>
+                    <div submit-success>
+                        <template type="amp-mustache">{{success}}</template>
+                    </div>
+                    <div submit-error>
+                        <template type="amp-mustache">{{error}}</template>
+                    </div>
+                </form>
+            </div>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <?php $formId = "stock-unsubscribe-all-$productId"; ?>
+            <div class="stock-unsubscribe-form-container">
+                <form id="<?= $block->escapeHtmlAttr($formId) ?>"
+                    method="POST"
+                    action-xhr="<?= $block->escapeUrl($block->getUnsubscribeUrl()) ?>"
+                >
+                    <span class="btn-link a-link" role="button" tabindex="3" on="tap:<?= $block->escapeHtmlAttr($formId) ?>.submit">
+                        <?= $block->escapeHtml(__('Unsubscribe from all stock alerts')) ?>
+                    </span>
+                    <div submit-success>
+                        <template type="amp-mustache">{{success}}</template>
+                    </div>
+                    <div submit-error>
+                        <template type="amp-mustache">{{error}}</template>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Amp For Email Order Items List" design_abstraction="custom">
+    <update handle="sales_email_order_items"/>
+    <body>
+        <referenceBlock name="sales.email.order.renderers.default">
+            <arguments>
+                <argument name="pramp_view_model" xsi:type="object">Plumrocket\AmpEmail\ViewModel\Sales\Order\Email\Items\DefaultItems</argument>
+            </arguments>
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Plumrocket_AmpEmail::email/items/order/default.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="items">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Plumrocket_AmpEmail::email/items.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="order_totals">
+            <arguments>
+                <argument name="label_properties" xsi:type="string">colspan="4"</argument>
+            </arguments>
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Plumrocket_AmpEmail::email/order/totals.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="sales.email.order.renderers">
+            <referenceBlock name="sales.email.order.renderers.bundle">
+                <arguments>
+                    <argument name="pramp_view_model" xsi:type="object">Plumrocket\AmpEmail\ViewModel\Sales\Order\Email\Items\DefaultItems</argument>
+                </arguments>
+                <action method="setTemplate">
+                    <argument name="template" xsi:type="string">Plumrocket_AmpEmail::email/items/order/bundle.phtml</argument>
+                </action>
+            </referenceBlock>
+        </referenceBlock>
+    </body>
+</page>

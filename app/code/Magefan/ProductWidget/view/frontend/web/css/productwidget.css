@@ -1,0 +1,55 @@
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+/* Pages */
+.page-layout-empty .mfpwb,
+.page-layout-1column .mfpwb,
+.page-layout-2columns-right .mfpwb,
+.page-layout-2columns-left .mfpwb,
+.page-layout-3columns .mfpwb {max-width: 600px;width: 65%;float: left}
+.mfpwb .wrap {padding: 20px 20px 20px 0}
+.mfpwb .mfpip {width: 47%;padding-right: 10px;float: left}
+.mfpwb .mfpip a {display: block}
+.mfpwb .mfpip a img {margin: 0;padding: 0}
+.mfpwb .mfpid {margin-left: 50%}
+.mfpwb .mfpid .product-item-name {font-size: 1.5em; margin: 0 0 10px 0}
+.mfpwb .mfpid .price-box {padding: 10px 0 15px 0; margin: 0}
+.mfpwb .mfpid .price-final_price .price {font-size: 18px}
+.mfpwb .mfpid .mf-product-item-description {margin-top: 10px}
+.mfpwb .mfpid .mf-product-item-description p {margin: 0 0 10px 0}
+.mfpwb .mfpid .product-reviews-summary {margin: 0 0 10px 0; padding: 0}
+.mfpwb .mfpid .product-reviews-summary .action.add {display: none}
+@media (max-width: 1024px) {
+    .page-layout-empty .mfpwb,
+    .page-layout-2columns-right .mfpwb,
+    .page-layout-2columns-left .mfpwb,
+    .page-layout-3columns .mfpwb {float: none;width: 100%}
+}
+@media (max-width: 860px) {
+    .page-layout-1column .mfpwb {float: none;width: 100%}
+}
+@media (max-width: 450px) {
+    .mfpwb .mfpip {width: 100%;text-align: center;float: none;padding:0;margin: 0 auto 10px auto}
+    .mfpwb .mfpid {max-width: 100%;margin: 0 auto}
+}
+
+/* Widgets */
+.sidebar.sidebar-additional .mfpwb {width: 100%}
+.sidebar.sidebar-additional .mfpwb .action.primary {padding: 7px 10px;border-radius: 3px}
+@media screen and (max-width: 1200px) {
+    .sidebar.sidebar-additional .mfpwb .mfpip {width: 100%;text-align: left;float: none;padding:0;margin: 0 auto 10px auto}
+    .sidebar.sidebar-additional .mfpwb .mfpip a img {max-width: 70%}
+    .sidebar.sidebar-additional .mfpwb .mfpid {max-width: 100%;margin: 0 auto}
+}
+@media screen and (max-width: 767px) {
+    .sidebar.sidebar-additional .mfpwb .mfpip {width: 50%;text-align: center;float: left}
+    .sidebar.sidebar-additional .mfpwb .mfpip a img {max-width: 70%}
+    .sidebar.sidebar-additional .mfpwb .mfpid {margin-left: 50%}
+}
+@media screen and (max-width: 320px) {
+    .sidebar.sidebar-additional .mfpwb .mfpip {width: 100%;text-align: center;float: none;padding:0;margin: 0 auto 10px auto}
+    .sidebar.sidebar-additional .mfpwb .mfpip a img {max-width: 70%}
+    .sidebar.sidebar-additional .mfpwb .mfpid {max-width: 100%;margin: 0 auto}
+}

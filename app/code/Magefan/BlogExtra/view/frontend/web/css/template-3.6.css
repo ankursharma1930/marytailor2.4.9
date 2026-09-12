@@ -1,0 +1,31 @@
+/* Widget Template 3-6 ************************************************************************************************/
+.template-3-6 .block-post-grid .block-post {margin-bottom: 25px;}
+.template-3-6 .post-info h3.post-title a {font-size: 20px !important;line-height: 25px !important;font-weight: 500 !important;}
+.template-3-6 .post-data-wrap .post-author-name {display: inline-block;}
+.template-3-6 .post-view {display: block !important;}
+.template-3-6 .post-description {display: block !important;}
+/* Not 1 */
+.template-3-6 .block-post:nth-child(1) {position: relative;}
+.template-3-6 .block-post:nth-child(1) .image-container {-ms-flex: 0 0 100%;flex: 0 0 100%;}
+.template-3-6 .block-post:nth-child(1) .image-container .image-wrap {padding-bottom: 35% !important;}
+.template-3-6 .block-post:nth-child(1) .post-category {display: none !important;}
+.template-3-6 .block-post:nth-child(1) .post-info {position: absolute;left: 0;bottom: 0;width: 100%;pointer-events: none;z-index: 1;padding: 0 30px 15px;}
+.template-3-6 .block-post:nth-child(1) .post-info h3.post-title a {font-size: 20px !important;line-height: 25px !important;font-weight: 500 !important;color: #fff;text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
+.template-3-6 .block-post:nth-child(1) .post-view {display: block !important;background: #fff;color: #000;}
+.template-3-6 .block-post:nth-child(1) .post-view:after {border-color: #fff transparent transparent;}
+.template-3-6 .block-post:nth-child(1) .post-data-wrap .post-author-name {display: inline-block !important;color: #fff;}
+.template-3-6 .block-post:nth-child(1) .post-data-wrap .post-author-name a,
+.template-3-6 .block-post:nth-child(1) .post-data-wrap .post-data {color: #fff;}
+.template-3-6 .block-post:nth-child(1) .post-description {display: none !important;}
+@media (max-width: 768px) {
+    /*.template-3-6 .block-post:nth-child(1) .post-info h3.post-title a {font-size: 16px !important;line-height: 18px !important;font-weight: 600 !important;}*/
+}
+@media (max-width: 767px) {
+    .template-3-6 .block-post:nth-child(1) .image-container .image-wrap {padding-bottom: 55%;}
+    .template-3-6 .post-view {display: none !important;}
+    .template-3-6 .post-info h3.post-title a {font-size: 14px !important;line-height: 20px !important;font-weight: 600 !important;}
+    .template-3-6 .block-post:nth-child(1) .post-info h3.post-title a {font-size: 14px !important;line-height: 20px !important;font-weight: 600 !important;}
+    .template-3-6 .post-description {display: none !important;}
+
+}
+/* END Widget Template 3-6 ********************************************************************************************/

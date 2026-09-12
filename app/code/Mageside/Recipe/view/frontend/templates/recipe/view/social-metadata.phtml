@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var $block Mageside\Recipe\Block\Frontend\Recipe\SocialMetadata
+ * @var Mageside\Recipe\Helper\Config $config
+ */
+
+$metadata = $block->getSocialMetadata();
+if ($metadata) : ?>
+    <!--Facebook-->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="<?= $block->escapeHtmlAttr($metadata['recipe_url']) ?>" />
+    <meta property="og:title" content="<?= $block->escapeHtmlAttr($metadata['title']) ?>" />
+    <meta property="og:description" content="<?= $block->escapeHtmlAttr($metadata['short_description']) ?>" />
+    <meta property="og:image" content="<?= $block->escapeHtmlAttr($metadata['image_url']) ?>" />
+
+    <!--Twitter-->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="<?= $block->escapeHtmlAttr($metadata['recipe_url']) ?>" />
+    <meta property="twitter:title" content="<?= $block->escapeHtmlAttr($metadata['title']) ?>" />
+    <meta property="twitter:description" content="<?= $block->escapeHtmlAttr($metadata['short_description']) ?>" />
+    <meta property="twitter:image" content="<?= $block->escapeHtmlAttr($metadata['image_url']) ?>" />
+<?php endif; ?>

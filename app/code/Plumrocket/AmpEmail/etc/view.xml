@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+ -->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <media>
+        <images module="Magento_Catalog">
+            <image id="pr_amp_email_sliders" type="small_image">
+                <width>400</width>
+                <height>400</height>
+            </image>
+            <image id="pr_amp_email_product_view" type="image">
+                <width>268</width>
+                <height>268</height>
+            </image>
+            <image id="pr_amp_cart_page_product_thumbnail" type="small_image">
+                <width>90</width>
+                <height>90</height>
+            </image>
+        </images>
+    </media>
+    <exclude>
+        <item type="directory">Plumrocket_AmpEmail::css/component</item>
+    </exclude>
+</view>

@@ -1,0 +1,18 @@
+<?php
+$faqCollection = $block->getFaqQuery();
+?>
+<?php if ($faqCollection) { ?>
+    <?php foreach ($faqCollection->getData() as $collection) { ?>
+        <?php
+            $productId = $collection['product_id'];
+            $product = $block->getProduct($productId);
+            $name = $product->getName();
+            $url = $product->getProductUrl(); ?>
+            <p><strong>Product Name: </strong>
+                <a href="<?= /* @noEscape */ $url;?>" target="_blank">
+                    <?= /* @noEscape */ $name; ?></a></p>
+            <p><strong>Question: </strong><?= /* @noEscape */ $collection['question_faq'];?></p>
+            <p><strong>Answer: </strong><?= /* @noEscape */ $collection['answer_faq'];?></p>
+    <?php } ?>
+<a href="#" onclick="window.history.go(-1); return false;">Back</a>
+<?php } ?>

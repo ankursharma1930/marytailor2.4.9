@@ -1,0 +1,117 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Plumrocket\AmpEmailApi\Block\ProductListComponentInterface|\Plumrocket\AmpEmailApi\Block\AbstractProductComponent $block */
+$height = 350;
+?>
+<div class="carousel-slides">
+    <?php if ($block->getTitle()) : ?>
+        <h3><?= $block->escapeHtml(__($block->getTitle())) ?></h3>
+    <?php endif; ?>
+    <amp-list 
+            class="crs crs--carousel"
+            width="600"
+            height="<?= $block->escapeHtmlAttr($height) ?>"
+            layout="fixed"
+            items="."
+            single-item="."
+            src="<?= $block->escapeUrl($block->getListUrl()) ?>"
+    >
+        <template type="amp-mustache">
+            <amp-carousel type="carousel" layout="fixed-height" height="<?= $block->escapeHtmlAttr($height) ?>">
+                {{#products}}
+                <div class="product-slide product-carousel-slide">
+                    <?php if ($block->canShowWishlist()) : ?>
+                        {{#isCustomer}}
+                        {{#isVisibleInSite}}
+                        <button class="crs__carousel-towishlist towishlist"
+                                [class]="! wishlist.status.p{{id}} ? 'crs__carousel-towishlist towishlist' : 'crs__carousel-towishlist towishlist towishlist--already'"
+                                on="tap:AMP.setState({wishlist: {id: 'p{{id}}', status: {p{{id}}: ''} }}), atw_form.submit"
+                                [disabled]="wishlist.status.p{{id}}"
+                        >
+                        </button>
+                        {{/isVisibleInSite}}
+                        {{/isCustomer}}
+                    <?php endif; ?>
+                    <?php if ($block->canShowAttr('image')) : ?>
+                        <div class="m-hld">
+                            <amp-img src="{{imageUrl}}" width="180" height="180" alt="{{alt}}"></amp-img>
+                            <?php if ($block->canShowAddToCart()) : ?>
+                                <span class="m-hld__item" [class]="cart.status.p{{id}} ? 'm-hld__item m-hld__item--show' : 'm-hld__item'">
+                                    <?= $block->escapeHtml(__('Added to Cart')) ?>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($block->canShowWishlist()) : ?>
+                                {{#isCustomer}}
+                                {{#isVisibleInSite}}
+                                <span class="m-hld__item" [class]="wishlist.status.p{{id}} ? 'm-hld__item m-hld__item--show' : 'm-hld__item'">
+                                    <?= $block->escapeHtml(__('Added to Wishlist')) ?>
+                                </span>
+                                {{/isVisibleInSite}}
+                                {{/isCustomer}}
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($block->canShowAttr('name')) : ?>
+                        <div class="crs__name"><a class="crs__name-link" href="{{url}}">{{name}}</a></div>
+                    <?php endif; ?>
+                    <?php if ($block->canShowAttr('price')) : ?>
+                        <div class="crs__price">
+                            {{#specialPrice}}
+                                <div class="crs__pb crs__pb--regular">{{{price}}}</div>
+                                <div class="crs__pb crs__pb--special">{{{specialPrice}}}</div>
+                            {{/specialPrice}}
+                            {{^specialPrice}}
+                                <div class="crs__pb crs__pb--special">{{{price}}}</div>
+                            {{/specialPrice}}
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($block->canShowAddToCart()) : ?>
+                        <div class="crs__to-cart">
+                            {{#isCustomer}}
+                                {{#withOptions}}
+                                <a href="{{url}}" class="crs__btn btn btn--link"><?= $block->escapeHtml(__('Choose Options')) ?></a>
+                                {{/withOptions}}
+                                {{^withOptions}}
+                                <button class="crs__btn btn btn--to-cart"
+                                        on="tap:AMP.setState({cart: {id: 'p{{id}}', status: {p{{id}}: false}}}), atc_form.submit"
+                                        [hidden]="cart.status.p{{id}}"
+                                        [class]="cart.id == 'p{{id}}' ? 'crs__btn btn btn--to-cart loader' : 'crs__btn btn btn--to-cart'"
+                                >
+                                    <span class="btn_icon-wrap">
+                                        <amp-img src="<?= $block->getViewFileUrl('Plumrocket_AmpEmail/images/basket_icon.png') ?>" width="19" height="16" alt=""/>
+                                    </span>
+                                    <span class="loader-bar">
+                                        <amp-anim width=32 height=8 src="<?= $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.gif')?>">
+                                            <amp-img placeholder width=32 height=8 src="<?= $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.png')?>">
+                                            </amp-img>
+                                        </amp-anim>
+                                    </span>
+                                    <span><?= $block->escapeHtml(__('Add To Cart')) ?></span>
+                                </button>
+                                <a class="crs__btn btn btn--link btn--checkout visibility-hidden"
+                                   href="<?= $block->escapeUrl($block->getCheckoutUrl()) ?>"
+                                   [class]="cart.status.p{{id}} ? 'crs__btn btn btn--link btn--checkout' : 'crs__btn btn btn--link btn--checkout visibility-hidden'"
+                                >
+                                <span class="btn_icon-wrap">
+                                    <amp-img src="<?= $block->getViewFileUrl('Plumrocket_AmpEmail/images/lock_icon.png') ?>" width="11" height="16" alt=""/>
+                                </span>
+                                <?= $block->escapeHtml(__('Checkout Now')) ?></a>
+                                {{/withOptions}}
+                            {{/isCustomer}}
+                            {{^isCustomer}}
+                            <a href="{{url}}" class="crs__btn btn btn--link"><?= $block->escapeHtml(__('View Product')) ?></a>
+                            {{/isCustomer}}
+                        </div>
+                    <?php endif; ?>
+                </div>
+                {{/products}}
+            </amp-carousel>
+        </template>
+    </amp-list>
+</div>

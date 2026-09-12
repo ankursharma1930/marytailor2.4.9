@@ -1,0 +1,220 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+/** @var \Plumrocket\AmpEmail\Block\Component\Newsletter\Subscribe $block */
+?>
+
+<?php
+$actionBackgroundImageHtml = '<div class="newsletter__bg-img"><amp-img src="' . $block->getViewFileUrl('Plumrocket_AmpEmail/images/newsletter/newsletter_icon.png') . '" ' .
+    'width="166" ' .
+    'height="164" ' .
+    'alt="' . $block->escapeHtmlAttr(__('Subscribe to our Newsletter')) . '"/></div>';
+
+$alreadyBackgroundImageHtml = '<div class="newsletter__bg-img newsletter__bg-img--success"><amp-img src="' . $block->getViewFileUrl('Plumrocket_AmpEmail/images/newsletter/yes_icon.png') . '" ' .
+    'width="53" ' .
+    'height="43" ' .
+    'alt="' . $block->escapeHtmlAttr(__('Subscribe to our Newsletter')) . '"/></div>';
+
+$loadingBackgroundImageHtml = $actionBackgroundImageHtml;
+$thanksBackgroundImageHtml = $alreadyBackgroundImageHtml;
+$errorBackgroundImageHtml = $actionBackgroundImageHtml;
+
+$additionalHtml = $block->getAdditionalHtml()
+?>
+
+<div class="newsletter newsletter--for-you">
+
+    <amp-list id="newsletter_subscription"
+              template="news_subs_list_temp"
+              width="3"
+              height="6"
+              layout="responsive"
+              src="<?= $block->escapeUrl($block->getCheckUrl()) ?>"
+    >
+        <div placeholder>
+            <div class="newsletter__bg">
+                <?= /* @noEscape */ $loadingBackgroundImageHtml ?>
+            </div>
+        </div>
+        <div fallback>
+            <div class="newsletter__bg newsletter__bg--success">
+                <?= /* @noEscape */ $actionBackgroundImageHtml ?>
+            </div>
+            <div class="newsletter__wrap">
+                <?php if ($block->getTitle()) : ?>
+                    <h2 class="title title--newsletter"><?= $block->escapeHtml(__($block->getTitle())) ?></h2>
+                    <a class="newsletter__subs-link" href="<?= $block->escapeUrl($block->getStoreUrl()) ?>"><?= $block->escapeHtml(__('To subscribe us follow this link.')) ?></a>
+                <?php endif; ?>
+                <div class="newsletter__social">
+                    <h3 class="newsletter__social-title">
+                        <?= $block->escapeHtml(__('Follow Us on Social Media')) ?>
+                    </h3>
+                    <?= $additionalHtml ?>
+                </div>
+            </div>
+        </div>
+    </amp-list>
+
+    <template id="news_subs_list_temp" type="amp-mustache">
+        <form id="news_subm_form" method="post" action-xhr="<?= $block->escapeUrl($block->getFormUrl()) ?>">
+            <div submit-success template="news_subs_success_response_temp"></div>
+            <div submit-error template="news_subs_error_response_temp"></div>
+
+            <div class="initial-content newsletter__content">
+                <input type="hidden" name="current_action" value="{{nextAction}}" [value]="subscriber.action ? subscriber.action : '{{nextAction}}'" />
+                <div class="{{class_subscribe}}">
+                <div class="newsletter__bg">
+                    <?= /* @noEscape */ $actionBackgroundImageHtml ?>
+                </div>
+                <div class="newsletter__wrap">
+                    <?php if ($block->getTitle()) : ?>
+                        <h2 class="title title--newsletter"><?= $block->escapeHtml(__($block->getTitle())) ?></h2>
+                    <?php endif; ?>
+                    <p class="newsletter__text">
+                        <?= $block->escapeHtml(__('Subscribe to get notified about new products and deals. You could unsubscribe at any time.')) ?>
+                    </p>
+                    <input class="newsletter__input" type="email" name="email" value="{{email}}" />
+                    <button class="newsletter__btn btn btn--large" type="submit">
+                        <span class="btn_icon-wrap">
+                            <amp-img src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/newsletter/subscribe_icon.png') ?>" width="22" height="19" alt=""/>
+                        </span>
+                        <?= $block->escapeHtml(__('Subscribe')) ?>
+                    </button>
+                </div>
+                </div>
+
+                <div class="{{class_confirm}}">
+                    <div class="newsletter__bg">
+                        <?= /* @noEscape */ $actionBackgroundImageHtml ?>
+                    </div>
+                    <div class="newsletter__wrap">
+                        <p class="newsletter__text">
+                            <?= $block->escapeHtml(__('Thank you for subscribing to our newsletter. To begin receiving the newsletter, you must first confirm your subscription by clicking on the following button:')) ?>
+                        </p>
+                        <input type="hidden" name="subscriber_code" value="{{confirmCode}}" [value]="subscriber.code ? subscriber.code : '{{confirmCode}}'" />
+                        <input type="hidden" name="subscriber_id" value="{{subscriberId}}" [value]="subscriber.id ? subscriber.id : '{{subscriberId}}'" />
+                        <button type="button"
+                                class="newsletter__btn btn btn--large"
+                                on="tap:AMP.setState({subscriber: {code: '{{confirmCode}}', id: '{{subscriberId}}', action: 'confirm'}}),news_subm_form.submit"
+                        ><?= $block->escapeHtml(__('Confirm')) ?></button>
+                    </div>
+                </div>
+
+                <div class="{{class_already}}">
+                    <div class="newsletter__bg newsletter__bg--success">
+                        <?= /* @noEscape */ $alreadyBackgroundImageHtml ?>
+                    </div>
+                    <div class="newsletter__wrap">
+                        <p class="newsletter__text">
+                            <?= $block->escapeHtml(__('You are now subscribed to our email newsletter.')) ?>
+                        </p>
+                        <div class="newsletter__social">
+                            <h3 class="newsletter__social-title">
+                                <?= $block->escapeHtml(__('Follow Us on Social Media')) ?>
+                            </h3>
+                            <?= $additionalHtml ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div submitting>
+                <div class="newsletter__bg">
+                    <?= /* @noEscape */ $loadingBackgroundImageHtml ?>
+                </div>
+                <div class="newsletter__text">
+                <amp-anim width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader-grey.gif')?>">
+                    <amp-img placeholder width=32 height=8 src="<?= /* @noEscape */ $block->getViewFileUrl('Plumrocket_AmpEmail/images/loader.png')?>">
+                    </amp-img>
+                </amp-anim> 
+                </div>
+            </div>
+        </form>
+    </template>
+
+    <template id="news_subs_success_response_temp" type="amp-mustache">
+        <div class="{{class_confirm}}">
+            <div class="newsletter__bg">
+                <?= /* @noEscape */ $actionBackgroundImageHtml ?>
+            </div>
+            <div class="newsletter__wrap">
+                <p class="newsletter__text">
+                    <?= $block->escapeHtml(__('Thank you for subscribing to our newsletter. To begin receiving the newsletter, you must first confirm your subscription by clicking on the following button:')) ?>
+                </p>
+                <button type="button" class="newsletter__btn btn btn--large"
+                    on="tap:AMP.setState({subscriber: {code: '{{confirmCode}}', id: '{{subscriberId}}', action: 'confirm'}}),news_subm_form.submit"><?= $block->escapeHtml(__('Confirm')) ?></button>
+            </div>
+        </div>
+
+        <div class="{{class_request_sent}}">
+            <div class="newsletter__bg">
+                <?= /* @noEscape */ $actionBackgroundImageHtml ?>
+            </div>
+            <div class="newsletter__wrap">
+                <p class="newsletter__text">
+                    <?= $block->escapeHtml(__('The confirmation request has been sent.')) ?>
+                </p>
+                <div class="newsletter__social">
+                    <h3 class="newsletter__social-title">
+                        <?= $block->escapeHtml(__('Follow Us on Social Media')) ?>
+                    </h3>
+                    <?= $additionalHtml ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="{{class_already}}">
+            <div class="newsletter__bg newsletter__bg--success">
+                <?= /* @noEscape */ $alreadyBackgroundImageHtml ?>
+            </div>
+            <div class="newsletter__wrap">
+                <p class="newsletter__text">
+                    <?= $block->escapeHtml(__('You are now subscribed to our email newsletter.')) ?>
+                </p>
+                <div class="newsletter__social">
+                    <h3 class="newsletter__social-title">
+                        <?= $block->escapeHtml(__('Follow Us on Social Media')) ?>
+                    </h3>
+                    <?= $additionalHtml ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="{{class_thanks}}">
+            <div class="newsletter__bg newsletter__bg--success">
+                <?= /* @noEscape */ $thanksBackgroundImageHtml ?>
+            </div>
+            <div class="newsletter__wrap">
+                <b class="newsletter__th-title">
+                    <?php if ($block->getCustomerName()) : ?>
+                        <?= $block->escapeHtml(__('Thanks, %1!', $block->getCustomerName())) ?>
+                    <?php else : ?>
+                        <?= $block->escapeHtml(__('Thanks!')) ?>
+                    <?php endif; ?>
+                </b>
+                <p class="newsletter__text">
+                    <?= $block->escapeHtml(__('You are now subscribed to our newsletter!')) ?>
+                </p>
+                <div class="newsletter__social newsletter__social--sm">
+                    <h3 class="newsletter__social-title">
+                        <?= $block->escapeHtml(__('Follow Us on Social Media')) ?>
+                    </h3>
+                    <?= $additionalHtml ?>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="news_subs_error_response_temp" type="amp-mustache">
+            <div class="newsletter__bg">
+                <?= /* @noEscape */ $errorBackgroundImageHtml ?>
+            </div>
+            <div class="error-message newsletter__text">
+            <?= $block->escapeHtml(__('Something went wrong... Please try again later.')) ?>
+            </div>
+    </template>
+</div>

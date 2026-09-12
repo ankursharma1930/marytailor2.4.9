@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/**
+ * YouTube Widget Block Template for AMP
+ *
+ * @var $block \Magefan\YouTubetWidget\Block\Widget\YouTube
+ */
+?>
+<?php if ($embedKey = $block->getVideoEmbedKey()) { ?>
+    <amp-youtube
+        data-videoid="<?= $block->escapeHtml($embedKey) ?>"
+        layout="responsive"
+        width="640" height="480"></amp-youtube>
+<?php } ?>

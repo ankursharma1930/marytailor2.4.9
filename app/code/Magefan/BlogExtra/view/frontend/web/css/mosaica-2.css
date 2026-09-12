@@ -1,0 +1,38 @@
+/* Mosaica 2 ****************************************/
+.mosaica-2 .block-inner {margin-left: -4px;margin-right: -4px;}
+.mosaica-2 .m-block-left .post-top .image-wrap,
+.mosaica-2 .m-block-left .post-bottom .image-wrap {display: block;position: relative;overflow: hidden;padding-bottom: 223px;}
+.mosaica-2 .m-block-center .image-wrap {display: block;position: relative;overflow: hidden;padding-bottom: 450px;}
+/* 1 count */
+.mosaica-2.items-count-1 .m-block-left .post-top {border: none;}
+.mosaica-2.items-count-1 .m-block-left .post-top .image-wrap {padding-bottom: 450px;}
+.mosaica-2.items-count-1 .m-block-left .post-top h3.post-title {font-size: 26px;font-weight: 500;line-height: 35px;}
+.mosaica-2.items-count-1 .m-block-left .post-top .post-data-wrap {display: block !important;}
+/* 2 count */
+.mosaica-2.items-count-2 .m-block-left {display: -ms-flexbox;display: flex;-ms-flex-direction: row;flex-direction: row;border-width: 0;}
+.mosaica-2.items-count-2 .m-block-left .image-wrap {padding-bottom: 450px;}
+.mosaica-2.items-count-2 .m-block-left .post-data-wrap {display: block !important;}
+.mosaica-2.items-count-2 .m-block-left > * {-ms-flex: 0 0 100%;flex: 0 0 100%;}
+.mosaica-2.items-count-2 .m-block-left .post-top {border-width: 0 2px;border-style: solid;border-color: transparent;}
+.mosaica-2.items-count-2 .m-block-left .post-bottom {border-width: 0;border-style: solid;border-color: transparent;}
+.mosaica-2.items-count-2 .m-block-left h3.post-title {font-size: 26px;font-weight: 500;line-height: 35px;}
+/* 3 count */
+.mosaica-2.items-count-3 .m-block-center h3.post-title {font-size: 26px;font-weight: 500;line-height: 35px;}
+/* 4 count */
+.mosaica-2.items-count-4 .m-block-right .post-top {border-width: 0;}
+.mosaica-2.items-count-4 .m-block-right .post-top .image-wrap {padding-bottom: 450px;border-width: 0;}
+.mosaica-2.items-count-4 .m-block-right .post-top .post-title-wrap {margin-bottom: 1rem !important;}
+.mosaica-2.items-count-4 .m-block-right .post-top .post-data-wrap {display: block;}
+
+@media (max-width: 767px) {
+    /* Mosaica 2 **************************************/
+    .mosaica-2.items-count-2 .m-block-left .post-bottom {border: none;}
+    .mosaica-2 .block-inner .post-block .image-container .image-wrap {padding-bottom: 60%;}
+    /* count 3 */
+    .mosaica-2.items-count-3 .m-block-center .post-block {border: none;}
+    /* count 4 */
+    .mosaica-2.items-count-4 .m-block-right .post-top {border: none;}
+    /* count 5 */
+    .mosaica-2.items-count-5 .m-block-right .post-bottom {border: none;}
+}
+/* END Widgets Templates Mosaica **************************************************************************************/

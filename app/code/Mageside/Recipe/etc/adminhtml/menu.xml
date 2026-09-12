@@ -1,0 +1,43 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+    <menu>
+        <add id="Mageside_Recipe::recipe"
+             title="Recipes"
+             translate="title"
+             module="Mageside_Recipe"
+             sortOrder="50"
+             parent="Magento_Backend::content"
+             dependsOnModule="Mageside_Recipe"
+             resource="Mageside_Recipe::mageside_recipe_manage"/>
+        <add id="Mageside_Recipe::recipe_menu"
+             title="Manage Recipes"
+             translate="title"
+             module="Mageside_Recipe"
+             sortOrder="55"
+             resource="Mageside_Recipe::mageside_recipe_manage"
+             parent="Mageside_Recipe::recipe"
+             action="recipe/recipe/manage"/>
+        <add id="Mageside_Recipe::recipe_menu_filter"
+             title="Recipe Filters"
+             translate="title"
+             module="Mageside_Recipe"
+             sortOrder="60"
+             resource="Mageside_Recipe::mageside_recipe_manage"
+             parent="Mageside_Recipe::recipe"
+             action="recipe/recipe/filter"/>
+        <add id="Mageside_Recipe::recipe_menu_reviews"
+             title="Recipe Reviews"
+             translate="title"
+             module="Mageside_Recipe"
+             sortOrder="70"
+             resource="Mageside_Recipe::mageside_recipe_manage"
+             parent="Mageside_Recipe::recipe"
+             action="recipe/reviews/manage"/>
+    </menu>
+</config>

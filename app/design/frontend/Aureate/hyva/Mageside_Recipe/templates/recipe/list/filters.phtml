@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/** @var Mageside\Recipe\Block\Frontend\Recipe\Filters\RecipeFilterType $block */
+$filterType = $block->getFilterType();
+?>
+<div class="recipe-filters text-center" x-data="recipeFilters()" x-init="initFiltersSelected()">
+    <div id="filters" class="control">
+        <?php foreach ($filterType->getItems() as $type) : ?>
+            <select class="w-full md:w-auto mt-3" name="<?= $block->escapeHtml($type->getCode()); ?>" id="<?= $block->escapeHtml($type->getCode()); ?>" @change="filterRecipes">
+                <?php $dataOption = $block->getFilterOption($type->getId()); ?>
+                <optgroup label="<?= $block->escapeHtml($type->getType()); ?>">
+                    <option value="" selected><?= $block->escapeHtml('All '.$type->getType()); ?></option>
+                    <?php foreach ($dataOption->getData('options') as $option) : ?>
+                        <option value="<?= $block->escapeHtml($option['slug']); ?>"><?= $block->escapeHtml($option['label']); ?></option>
+                    <?php endforeach; ?>
+                </optgroup>
+            </select>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+    function recipeFilters() {
+        return {
+            initFiltersSelected() {
+                const urlParams = new URLSearchParams(window.location.search);
+                document.querySelectorAll('#filters select').forEach(select => {
+                    const paramValue = urlParams.get(select.name);
+                    if (paramValue) {
+                        select.value = paramValue;
+                    }
+                });
+            },
+            filterRecipes() {
+                let filters = {};
+                document.querySelectorAll('#filters select').forEach(select => {
+                    if (select.value) {
+                        filters[select.name] = select.value;
+                    }
+                });
+                this.updateUrl(filters);
+            },
+            updateUrl(filters) {
+                const baseUrl = window.location.pathname;
+                const urlParams = new URLSearchParams(filters).toString();
+                const newUrl = `${baseUrl}?${urlParams}`;
+                window.history.replaceState({}, '', newUrl);
+                // Reload the page to apply the filters and make the dropdown preselected
+                window.location.href = newUrl;
+            }
+        };
+    }
+</script>

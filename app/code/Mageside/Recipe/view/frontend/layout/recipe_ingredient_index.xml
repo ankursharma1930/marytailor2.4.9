@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageside_Recipe::css/font-awesome.min.css"/>
+        <css src="mage/gallery/gallery.css"/>
+    </head>
+<body>
+    <attribute name="class" value="page-ingredients"/>
+    <referenceContainer name="content">
+        <block class="Mageside\Recipe\Block\Frontend\Ingredient\AllRecipeProducts"
+               name="recipe_ingredients" template="recipe/byingredients.phtml">
+        </block>
+        <referenceBlock name="page.main.title" remove="true"/>
+    </referenceContainer>
+    <referenceContainer name="after.body.start">
+        <block class="Mageside\Recipe\Block\Frontend\Recipe\GoogleRichSnippets"
+               name="google_rich_snippets"
+               as="google_rich_snippets"
+               template="recipe/view/google-rich-snippets.phtml"/>
+    </referenceContainer>
+</body>
+</page>

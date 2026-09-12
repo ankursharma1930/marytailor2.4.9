@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copyright © Mageside, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /** @var $block \Mageside\Recipe\Block\Frontend\Recipe\Recipe */ ?>
+    <div class="recipe-share">
+        <a class="action primary print" href="<?= /* @escapeNotVerified */ $block->escapeHtml($block->getPrintUrl()) ?>" target="_blank" ><span><?= /* @escapeNotVerified */ __('Print recipe')  ?></span></a>
+    </div>
+<?= $block->getChildHtml() ?>
+

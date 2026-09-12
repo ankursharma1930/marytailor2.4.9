@@ -1,0 +1,180 @@
+<?php /** @var $block Dolphin\Productfaq\Block\Productfaq */ ?>
+
+<?php /* @noEscape */ $button_disable = ''; ?>
+<?php /* @noEscape */ $currentProduct = $block->getCurrentProduct(); ?>
+<?php /* @noEscape */ $customerSession = $block->isCustomerLoggedIn(); ?>
+<?php $customerEmail = '';
+$customerName = '';
+$customerId = '';
+?>
+<?php if ($customerSession) {
+    $customer = $block->getCustomer();
+    $customerId = $customer->getEntityId();
+    $customerEmail = $customer->getEmail();
+    $customerName = $customer->getFirstname();
+} ?>
+<?php
+$helper = $block->getFaqHelper();
+$queCollapsible = $helper->getQueCollapsible();
+$pageFilter = $helper->getPageFilter();
+$ques_faq = '';
+$show_data = $block->getDataAfterError();
+if ($show_data) {
+    $ques_faq = $show_data['question_faq'];
+} else {
+    $ques_faq = '';
+}
+?>
+<?php /* @noEscape */ $askQuestions = $helper->getAskQuestions(); ?>
+<?php $faqCollect = $block->getFaqQuery();
+$productCollection = $block->getProductCollection();
+$faqCollection = $block->getProductfaq();
+$customer = $block->getCustomer();
+$id = $customer->getEntityId();
+$productFaqCollection = $block->getProductCount();
+if ($productFaqCollection && ($productFaqCollection->getSize() == 0) && ($askQuestions == 0)) { ?>
+    <div class="message info">
+        <span>No questions available.</span>
+    </div>
+<?php } ?>
+<?php /* @noEscape */ $customerLoginRequired = $helper->getCustomerLoginRequired();
+?>
+
+<?php if (($customerLoginRequired == 1 && (!$customerSession) && ($askQuestions == 1) )) { ?>
+    <p><a href="<?= /* @noEscape */  $block->getRefferalUrl(); ?>">Click here</a> to login and submit your question.</p>
+<?php } ?>
+<?php if ((($customerLoginRequired == 0) && ($askQuestions == 1)) || (($customerSession) && ($askQuestions == 1))) { ?>
+    <div class="question">
+        <div class="ask-que">
+            <button class="action submit primary" id="askquebtn">Ask Question</button>
+        </div>
+        <form action="<?= /* @noEscape */ $block->getBaseUrl().'productfaq/index/save'; ?>"
+              id="question_form"
+              class="form"
+              method="post"
+              enctype='multipart/form-data'
+              data-hasrequired="<?= /* @noEscape */ __('* Required Fields') ?>"
+              data-mage-init='{"validation":{}}'>
+            <?= /* @noEscape */  $block->getBlockHtml('formkey')?>
+            <input type="hidden" name="customer_id"
+                   value="<?php /* @noEscape */ if ($customerId != '') { echo $customerId;}?>"/>
+            <input type="hidden" name="product_id"
+                   value="<?= /* @noEscape */  $currentProduct->getId(); ?>"/>
+            <input type="hidden" name="product_sku"
+                   value="<?= /* @noEscape */  $currentProduct->getSku(); ?>"/>
+            <input type="hidden" name="product_name"
+                   value="<?= /* @noEscape */  $currentProduct->getName(); ?>"/>
+            <input type="hidden" name="store_faq"
+                   value="<?= /* @noEscape */  $block->getStoreId(); ?>"/>
+            <input type="hidden" name="visibility_faq" value="1" />
+            <input type="hidden" name="group_faq" value="0" />
+
+            <div class="field comment required">
+                <div class="control">
+                    <?php //@codingStandardsIgnoreStart ?>
+                    <textarea name="question_faq" id="question_faq" title="<?= $escaper->escapeHtml('Question') ?>" rows="4" cols="50" class="input-text"data-validate="{required:true}" placeholder="Have a question? Ask here."><?php  /* @noEscape */ echo $ques_faq;?></textarea>
+                    <?php //@codingStandardsIgnoreEnd ?>
+                </div>
+            </div>
+            <div class="field required">
+                <div class="control">
+                    <input type="text" name="name_faq" id="name_faq"
+                           title="<?= /* @noEscape */ $escaper->escapeHtml('Name') ?>"
+                           class="input-text" data-validate="{required:true}"
+                           placeholder="Name"
+                           value="<?php if /* @noEscape */ ($customerName != '') { echo $customerName;}?>" />
+                </div>
+            </div>
+            <div class="field required">
+                <div class="control">
+                    <input type="email" name="email_faq" id="email_faq"
+                           title="<?= /* @noEscape */ $escaper->escapeHtml('Email Address') ?>"
+                           class="input-text" data-validate="{required:true, 'validate-email':true}"
+                           placeholder="Email Address"
+                           value="<?php /* @noEscape */ if ($customerEmail != '') { echo $customerEmail;}?>" />
+                </div>
+            </div>
+            <?php
+            $captcha_reCaptcha_status = $helper->getReCaptchaStatus();
+            if ($captcha_reCaptcha_status == 1) {
+                ?>
+                <?= $block->getChildHtml('form.additional.info.product.faq') ?>
+                <?php
+            }
+            ?>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="submit" id="que_submit"
+                            class="action submit primary"
+                            title="<?= $escaper->escapeHtml('Ask Question') ?>"
+                        <?= /* @noEscape */ $escaper->escapeHtml($button_disable) ?> >
+                        <span><?= $escaper->escapeHtml('Ask Question') ?></span>
+                    </button>
+                </div>
+                <div class="close_form">
+                    <a id="closeform" class="closeform_btn">Close</a>
+                </div>
+            </div>
+        </form>
+    </div>
+<?php } ?>
+<?php
+if (!empty($productFaqCollection) && $productFaqCollection->getSize()) { ?>
+    <div class="sort-by-section">
+        <div class="drp_sort" style="float: right;">
+                <p style="display: none;"><?= /* @noEscape */  $block->getValueSortOption(); ?></p>
+                <?= $block->getBlockHtml('formkey')?>
+                <label>Sort By:
+                    <select name="select_id" id="mySelect">
+                        <option <?php if ($block->getDirection() == 'desc') {echo 'selected';} ?>
+                                value="<?= /* @noEscape */ $block->getFormUrl('desc') ?>">Newest</option>
+                        <option <?php if ($block->getDirection() == 'asc') { echo 'selected';} ?>
+                                value="<?= /* @noEscape */ $block->getFormUrl('asc') ?>">Oldest</option>
+                    </select>
+                </label>
+        </div>
+    </div>
+    <div class="container">
+        <?php foreach ($productFaqCollection as $value): ?>
+            <?php if (($value->getAnswerFaq() != '')): ?>
+                <div class="section">
+                    <div class="question-section">
+                        <div class="que_icon"></div>
+                        <div class="que_content"><?= /* @noEscape */  $value->getQuestionFaq();?></div>
+                    </div>
+                    <div class="answer-section"><?= /* @noEscape */  $value->getAnswerFaq(); ?></div>
+                </div>
+            <?php endif;
+        endforeach; ?>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="toolbar bottom custom-pager">
+            <?= $block->getPagerHtml(); ?>
+        </div>
+    <?php endif ?>
+<?php } ?>
+
+<?php $faqCollForSchema = $block->getFaqCollectionForSchema(); ?>
+<?php if ($faqCollForSchema && $faqCollForSchema->getSize() > 0) {
+    //@codingStandardsIgnoreStart
+    ?>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [ <?php $i=0; foreach ($faqCollForSchema as $faqData){$i++; if (($faqData->getAnswerFaq() !='')){?>{"@type": "Question", "name": "<?=/* @noEscape */ $faqData->getQuestionFaq();?>", "acceptedAnswer":{"@type": "Answer", "text": "<?=/* @noEscape */ $pageFilter->filter(htmlspecialchars($faqData->getAnswerFaq())); ?>" } } <?php if($faqCollForSchema->getSize() !=$i) { echo ','; } ?> <?php } }?>]}</script>
+    <?php
+//@codingStandardsIgnoreEnd
+} ?>
+
+<script>
+    require(['jquery', 'Dolphin_Productfaq/js/tab-active'],  function($) {
+        <?php if ($productFaqCollection && $productFaqCollection->getSize() > 0) { ?>
+        $("#question_form").hide();
+        <?php } else { ?>
+        $("#question_form").show();
+        $("#askquebtn").hide();
+        <?php }?>
+        <?php if ($queCollapsible == 1) { ?>
+        $(".answer-section").show();
+        <?php } else { ?>
+        $(".answer-section").hide();
+        <?php } ?>
+    });
+</script>

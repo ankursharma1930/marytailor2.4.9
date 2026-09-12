@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2022 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="plumrocket_amp_email_sender" resource="default" engine="innodb"
+           comment="Plumrocket AMP Email verified Senders">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="email"/>
+        </constraint>
+        <index referenceId="PLUMROCKET_AMP_EMAIL_SENDER_EMAIL" indexType="btree">
+            <column name="email"/>
+        </index>
+        <column xsi:type="varchar" length="255" name="email" nullable="false" comment="Sender Email"/>
+    </table>
+    <table name="email_template">
+        <column xsi:type="smallint" name="pramp_email_enable" padding="6" unsigned="false" nullable="true" identity="false" default="0" comment="AMP Email Enable"/>
+        <column xsi:type="text" name="pramp_email_content" nullable="true" comment="AMP Email Content"/>
+        <column xsi:type="text" name="pramp_email_styles" nullable="true" comment="AMP Email Styles"/>
+        <column xsi:type="varchar" name="pramp_email_mode" nullable="true" length="50" comment="AMP Email Mode"/>
+        <column xsi:type="varchar" name="pramp_email_testing_method" nullable="true" length="50" comment="AMP Email Testing Method"/>
+        <column xsi:type="text" name="pramp_email_automatic_emails" nullable="true" comment="AMP Email Automatic Emails"/>
+        <column xsi:type="varchar" name="pramp_email_manual_email" nullable="true" length="255" comment="AMP Email Testing Customer Email"/>
+        <column xsi:type="int" name="pramp_email_manual_order" nullable="true" default="null" padding="11" comment="AMP Email Testing Customer Order"/>
+        <column xsi:type="text" name="pramp_email_manual_send" nullable="true" comment="AMP Email Test Recipient"/>
+    </table>
+</schema>

@@ -1,0 +1,99 @@
+<div
+        class="admin__action-multiselect-wrap action-select-wrap"
+        tabindex="0"
+        data-bind="
+        attr: {
+            id: 'wrap' + uid
+        },
+        css: {
+            _active: colorMenuActive
+        },
+        event: {
+            focusin: onFocusIn
+        },
+        outerClick: outerClick.bind($data)
+">
+    <input class="admin__control-text" type="text"
+           data-bind="
+        event: {change: userChanges},
+        value: value,
+        hasFocus: focused,
+        valueUpdate: valueUpdate,
+        attr: {
+            name: inputName,
+            placeholder: placeholder,
+            'aria-describedby': noticeId,
+            id: uid,
+            disabled: disabled
+    }"/>
+    <div class="action-menu color-chooser-component"
+         data-bind="css: { _active: colorMenuActive }
+    ">
+        <div class="farbtastic">
+            <div class="color"></div>
+            <div class="wheel" data-bind="event: {mousedown: function(data, event) {mousedown(event)}}"></div>
+            <div class="overlay" data-bind="event: {mousedown: function(data, event) {mousedown(event)}}"></div>
+            <div class="h-marker marker"></div>
+            <div class="sl-marker marker"></div>
+        </div>
+        <div class="admin__fieldset">
+            <div class="admin__field">
+                <div class="admin__field-label">
+                    <span translate="'Red'" />
+                </div>
+                <div class="admin__field-control">
+                    <input class="admin__control-text rgb" type="text" name="red"
+                           data-bind="value: red, event: {change: setRGB}">
+                </div>
+            </div>
+            <div class="admin__field">
+                <div class="admin__field-label">
+                    <span translate="'Green'" />
+                </div>
+                <div class="admin__field-control">
+                    <input class="admin__control-text rgb" type="text" name="green"
+                           data-bind="value: green, event: {change: setRGB}">
+                </div>
+            </div>
+            <div class="admin__field">
+                <div class="admin__field-label">
+                    <span translate="'Blue'" />
+                </div>
+                <div class="admin__field-control">
+                    <input class="admin__control-text rgb" type="text" name="blue"
+                           data-bind="value: blue, event: {change: setRGB}">
+                </div>
+            </div>
+            <div class="admin__field transparent">
+                <div class="admin__field-label">
+                    <span translate="'Transparent'" />
+                </div>
+                <div class="admin__field-control">
+                    <div class="admin__actions-switch">
+                        <input type="checkbox"
+                               class="admin__actions-switch-checkbox"
+                               name="transparent"
+                               ko-checked="isTransparent"
+                               data-bind="attr: {id: 'transparent' + uid}"
+                               value="on">
+                        <label class="admin__actions-switch-label" data-bind="attr: { for: 'transparent' + uid }">
+                        <span class="admin__actions-switch-text"
+                              data-bind="attr: {
+                                   'data-text-on': $t('Yes'),
+                                   'data-text-off': $t('No')
+                              }"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin__action-multiselect-actions-wrap">
+            <button class="action-default"
+                    data-action="close-advanced-select"
+                    type="button"
+                    data-bind="click: outerClick">
+                <span translate="closeBtnLabel"></span>
+            </button>
+        </div>
+    </div>
+</div>

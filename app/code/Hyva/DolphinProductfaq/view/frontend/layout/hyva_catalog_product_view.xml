@@ -1,0 +1,12 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="hyva_form_validation"/>
+    <referenceBlock name="productfaq">
+        <arguments>
+            <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
+        </arguments>
+    </referenceBlock>
+    <referenceBlock name="page.recaptcha.loader.form_ids">
+        <block name="recaptcha.productfaq_recaptcha_frontend" as="productfaq_recaptcha_frontend" ifconfig="recaptcha_frontend/type_for/productfaq_recaptcha_frontend"/>
+    </referenceBlock>
+</page>

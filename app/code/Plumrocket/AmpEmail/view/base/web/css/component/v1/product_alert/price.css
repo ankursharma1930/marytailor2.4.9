@@ -1,0 +1,27 @@
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+.price-compare-list .table {
+  display: flex;
+  text-align:left;
+  margin:20px 0;
+}
+
+.price-compare-list .price-compare {padding-right:30px;}
+.price-compare-list .price-compare strong{ display: block; padding-bottom:8px;}
+
+.pr-subsciption-options {
+  display: flex;
+  margin:28px auto;
+  justify-content: center;
+  padding:5px;
+  border-bottom:1px solid #ccc;
+  font-size: 12px;
+}
+
+.price-unsubscribe-form-container form.amp-form-submit-success > .btn-link {
+  display: none
+}

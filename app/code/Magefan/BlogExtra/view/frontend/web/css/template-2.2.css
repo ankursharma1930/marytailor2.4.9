@@ -1,0 +1,8 @@
+/* Widget Template 2-2 ************************************************************************************************/
+.template-2-2 .block-post {width: 50%;float: left;padding: 0 15px 15px;margin-bottom: 15px;}
+.template-2-2 .block-post:nth-child(2n+1) {clear: both;}
+@media (max-width: 767px) {
+    .template-2-2 .block-post-grid {margin: 0;}
+    .template-2-2 .block-post {width: 100%;padding: 0;margin-bottom: 25px;}
+}
+/* END Widget Template 2-2 ********************************************************************************************/

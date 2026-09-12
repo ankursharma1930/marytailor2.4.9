@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license/  End-user License Agreement
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="prampemail" translate="label" type="text" sortOrder="275308" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>AMP Email</label>
+            <tab>plumrocket</tab>
+            <resource>Plumrocket_AmpEmail::config_prampemail</resource>
+            <group id="toolbox" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <frontend_model>Plumrocket\Base\Block\Adminhtml\System\Config\Form\ToolbarFieldset</frontend_model>
+                <field id="version" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Plumrocket\Base\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                    <attribute type="pr_extension_name">AmpEmail</attribute>
+                </field>
+            </group>
+            <group id="general" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <attribute type="expanded">1</attribute>
+                <field id="enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="serial" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Plumrocket\Base\Block\Adminhtml\System\Config\Form\Serial</frontend_model>
+                    <label>Serial Key</label>
+                    <attribute type="pr_extension_name">AmpEmail</attribute>
+                </field>
+            </group>
+            <group id="test_email" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Send Test AMP Email</label>
+
+                <field id="to" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Email Address</label>
+                    <comment>Send "Hello World" AMP Email to your Gmail account or another AMP-compatible email service provider (ESP)</comment>
+                </field>
+                <field id="send" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Plumrocket\AmpEmail\Block\Adminhtml\System\Config\Form\SendTestEmailButton</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

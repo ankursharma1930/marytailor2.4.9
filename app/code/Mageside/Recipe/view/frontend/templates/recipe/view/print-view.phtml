@@ -1,0 +1,106 @@
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+/**
+ * @var Mageside\Recipe\Block\Frontend\Recipe\Recipe $block
+ */
+$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
+$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+$recipe = $block->getRecipe();
+$writer = $block->getWriter();
+?>
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+
+    <div class="page-main">
+        <div id="recipe-print" class="columns">
+                <div class="product-info-main">
+                    <div id="product-image" class="page-title-wrapper product">
+                        <div>
+                            <img src="<?= /* @escapeNotVerified */ $block->escapeHtml($block->getImageUrl().'/'.$block->getRecipe()->getMediaTypeImage(),'') ?>"
+                                 alt="<?= /* @escapeNotVerified */ __('Loading...') ?>">
+                        </div>
+                    </div>
+                    <div class="short-description print-text">
+                        <div class="recipe-short-description">
+                            <div class="container-recipe-cooking">
+                                <div class="cooking prep-time">
+                                    <strong><?php echo $block->escapeHtml(__('Prep Time')) ?> : <?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getPrepTime())); ?></strong>
+                                </div>
+                                <div class="cooking cooking-time">
+                                    <strong><?php echo $block->escapeHtml(__('Cooking Time')) ?> : <?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getCookTime())); ?></strong>
+                                </div>
+                                <div class="cooking recipe-servings-number">
+                                    <?php $servingsNumber = $block->getFormatServingsNumber($recipe->getServingsNumber()); ?>
+                                    <strong><?php echo $block->escapeHtml(__('Servings Number')) ?> : <?php echo $servingsNumber . ' ' . (($servingsNumber == '1') ? $block->escapeHtml(__('person')) : $block->escapeHtml(__('people'))); ?></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="onPrintContent description print-text" id="description">
+                    <p class="recipe-block-title description">
+                        <?php if (!empty($recipe->getShortDescription())) : ?>
+                            <?php echo $recipe->getShortDescriptionHtml(); ?>
+                        <?php endif; ?>
+                    </p>
+                </div>
+
+                <div class="recipe__column-media">
+                    <div class="product media">
+                        <?php echo $block->getChildHtml('recipe_image'); ?>
+                        <?php if ($recipe->getMediaType() == 'video') : ?>
+                            <?php echo $block->getChildHtml('recipe_video'); ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="block-content">
+                    <div class="table-wrapper ingredients-method">
+                        <div class="recipe-extended-description">
+                            <div class="recipe-ingredients">
+                                <div class="recipe-block-title">
+                                    <h3 class="recipe-block-title print-text">
+                                        <span class="base"><?php echo $block->escapeHtml(__('Ingredients')) ?></span>
+                                    </h3>
+                                </div>
+                                <ul class="print-text">
+                                    <?php foreach ($recipe->getIngredients() as $ingredientData) : ?>
+                                        <li>
+                                            <?php echo $block->escapeHtml($ingredientData['measure']); ?>
+                                            <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
+                                            <a href="<?php echo $block->escapeHtml($ingredientData['url']); ?>" target="_blank" >
+                                                <?php endif; ?>
+                                                <?php echo $block->escapeHtml($ingredientData['ingredient']); ?>
+                                                <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
+                                            </a>
+                                        <?php endif; ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                            <div class="recipe-method">
+                                <div class="recipe-block-title">
+                                    <h3 class="recipe-block-title print-text">
+                                        <span class="base"><?php echo $block->escapeHtml(__('Method')) ?></span>
+                                    </h3>
+                                </div>
+                                <ol class="print-text">
+                                    <?php foreach ($recipe->getMethod() as $methodData) : ?>
+                                        <?php if (isset($methodData['step'])) : ?>
+                                            <li>
+                                                <?php echo $block->escapeHtml($methodData['step']); ?>
+                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>

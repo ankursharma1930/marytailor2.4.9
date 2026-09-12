@@ -1,0 +1,29 @@
+<?php
+/**
+ * @package     Plumrocket_AmpEmail
+ * @copyright   Copyright (c) 2019 Plumrocket Inc. (https://plumrocket.com)
+ * @license     https://plumrocket.com/license   End-user License Agreement
+ */
+
+/** @var \Plumrocket\AmpEmail\Block\Component\State\Wishlist $block */
+?>
+<amp-state id="<?= $block->escapeHtmlAttr($block->getStateId()) ?>">
+    <script type="application/json">
+        {
+            "status" : <?= $block->escapeJsQuote($block->getProductsWishlistStatus()) ?>,
+            "id" : "<?= $block->escapeHtml($block->getIdPrefix()) ?>0"
+        }
+    </script>
+</amp-state>
+
+<form id="atw_form"
+      method="POST"
+      action-xhr="<?= $block->escapeUrl($block->getAddToWishListUrl()) ?>"
+      on="submit-success: AMP.setState({<?= $block->escapeHtml($block->getStateId()) ?>: {status: {[<?= $block->escapeHtml($block->getStateId()) ?>.id]: 1} } });submit-error: AMP.setState({<?= $block->escapeHtml($block->getStateId()) ?>: {status: {[<?= $block->escapeHtml($block->getStateId()) ?>.id]: 0} } })"
+>
+    <input type="hidden"
+           name="product"
+           value="<?= $block->escapeHtmlAttr($block->getIdPrefix()) ?>0"
+           [value]="<?= $block->escapeHtmlAttr($block->getStateId()) ?>.id"
+    />
+</form>

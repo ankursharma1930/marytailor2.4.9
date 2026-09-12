@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mfblog>
+            <post_view>
+                <category_posts>
+                    <enabled>0</enabled>
+                    <number_of_posts>5</number_of_posts>
+                </category_posts>
+                <reading_progress_bar>
+                    <enabled>0</enabled>
+                    <position>top</position>
+                    <width>5px</width>
+                    <highlight_color>28a745</highlight_color>
+                    <highlight_color_opacity>0.9</highlight_color_opacity>
+                </reading_progress_bar>
+            </post_view>
+            <comments>
+                <enabled>0</enabled>
+                <sender_form>general</sender_form>
+                <email_template>mfblog_post_view_comments_email_template</email_template>
+                <admin_enable_comment_notification>0</admin_enable_comment_notification>
+                <admin_send_from>general</admin_send_from>
+                <admin_send_to/>
+                <admin_email_template>mfblog_post_view_comments_admin_email_template</admin_email_template>
+            </comments>
+            <blog_search>
+                <enable_blog_search>0</enable_blog_search>
+            </blog_search>
+            <sidebar>
+                <contents>
+                    <enabled>0</enabled>
+                    <sort_order>15</sort_order>
+                </contents>
+            </sidebar>
+        </mfblog>
+    </default>
+</config>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mfblog>
+            <post_view>
+                <latest_posts_by_author>
+                    <enabled>0</enabled>
+                    <template/>
+                    <number_of_posts>5</number_of_posts>
+                </latest_posts_by_author>
+            </post_view>
+            <author>
+                <author_block_enabled>0</author_block_enabled>
+            </author>
+        </mfblog>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <media_gallery_image_folders>
+                        <magefan_blogauthor>magefan_blogauthor</magefan_blogauthor>
+                    </media_gallery_image_folders>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+    </default>
+</config>

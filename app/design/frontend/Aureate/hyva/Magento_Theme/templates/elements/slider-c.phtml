@@ -1,0 +1,97 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Slider;
+use Magento\Framework\View\Element\Template;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Slider $sliderViewModel */
+/** @var Template $block */
+
+$sliderViewModel = $viewModels->require(Slider::class);
+/**
+ * These items are examples. You could query products, categories, etc..
+ * Change the slider-item.phtml accordingly to display the correct properties.
+ */
+$items = [
+    [
+        // All options
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/01-dish-soap-banner-mary-tylor-naturals.png',
+        'image_width' => 1280,
+        'image_height' => 853,
+        'image_alt' => __('New Arrivals'),
+//        'text_small' => __('New Arrivals'),
+//        'text_large' => __('(Track)Suit Up!'),
+        'url' => $block->getUrl('home'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/01-laundry-soap-banner-mary-tylor-naturals.png',
+        'image_alt' => __('Summer Collection'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/03-baby-soap-sensitive-skin-pet-soap-banner-mary-tylor-naturals.png',
+//        'text_small' => __('Winter Collection'),
+//        'text_large' => __('Show Your Style'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/04-all-purpose-cleaner-banner-mary-tylor-naturals.png',
+//        'text_small' => __('Sale'),
+//        'text_large' => __('10% Off, Only This Weekend'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/05-handsoap-banner-mary-tylor-naturals.png',
+//        'text_small' => __('Sale'),
+//        'text_large' => __('10% Off, Only This Weekend'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/06-the-healthy-candle-collection-banner-mary-tylor-naturals.png',
+//        'text_small' => __('Sale'),
+//        'text_large' => __('10% Off, Only This Weekend'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/07-castile-soap-banner-mary-tylor-naturals.png',
+//        'text_small' => __('Sale'),
+//        'text_large' => __('10% Off, Only This Weekend'),
+    ],
+    [
+        'image_url' => 'https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/08-bodysoap-banner-mary-tylor-naturals.png',
+//        'text_small' => __('Sale'),
+//        'text_large' => __('10% Off, Only This Weekend'),
+    ],
+];
+
+$sliderStyle = (string) $block->getSliderStyle();
+$sliderShowArrows = $block->getShowArrows() !== null ? $block->getShowArrows() : "end";
+$sliderShowDots = $block->getShowDots() !== null ? (bool) $block->getShowDots() : true;
+$sliderLoop = $block->getLoop() !== null ? (bool) $block->getLoop() : false;
+$sliderAutoplay = $block->getAutoplay() !== null ? (bool) $block->getAutoplay() : false;
+$sliderSpeed = (int) $block->getSpeed();
+$loadFirstEager = (bool) $block->getLoadFirstEager();
+
+?>
+<div class="w-full">
+    <?=
+        $sliderViewModel
+            ->getSliderForItems(
+                'Magento_Theme::elements/ui-slider/slider-item.phtml',
+                $items,
+                'Magento_Theme::elements/ui-slider/slider-php.phtml'
+            )
+            ->setSliderStyle($sliderStyle)
+            ->setShowArrows($sliderShowArrows)
+            ->setShowDots($sliderShowDots)
+            ->setLoop($sliderLoop)
+            ->setAutoplay($sliderAutoplay)
+            ->setSpeed($sliderSpeed)
+            ->setLoadFirstEager($loadFirstEager)
+            ->toHtml()
+    ?>
+</div>
