@@ -368,6 +368,54 @@ is upstream: `head.additional` needs to be a container, or Hyvä needs to
 attach to it with `referenceBlock`. Worth raising with Hyvä support, since the
 licence is paid.
 
+### 3h. Header icons rendered as empty white boxes
+
+**Symptom.** The search, account and cart buttons showed as blank white
+squares with a drop shadow. The cart count badge still showed.
+
+**Cause.** 1.5.2 swapped the header's Heroicons for Lucide icons and gave the
+buttons `class="btn bg-transparent border-transparent p-1"`. The SVGs rendered
+correctly (`stroke="currentColor"`), but this child theme's `.btn`
+(`web/tailwind/components/button.css`) is still the 1.3.9 solid button:
+`text-white shadow-md`. `bg-transparent` removed the fill, not the white text,
+so the icons were drawn white on the white header. 1.5.2's own `.btn` is a
+Tailwind v4 component with inherited dark text, which this v3 build does not
+use.
+
+The same markup is used by the compare, wishlist and mobile-menu toggles and
+by the close buttons in the cart drawer and login popup.
+
+**Fix.** Two child-theme changes, then a CSS rebuild:
+
+- `web/tailwind/theme/components/header.css` restores the 1.3.9 icon-button
+  look (inherited colour, no shadow, `rounded`, `hover:bg-primary/10`, and a
+  `focus-visible` ring instead of the old ring on every click). It matches
+  `[class~="btn"][class~="bg-transparent"][class~="border-transparent"]`. It
+  uses attribute selectors rather than `.btn` because Tailwind v3 copies any
+  rule containing `.btn` into each `@apply btn` (see the note in
+  `product-list.css`). Requiring `border-transparent` keeps the rule off the
+  cart drawer's own `btn bg-transparent text-slate-900` buttons.
+- `tailwind.config.js` adds `textColor['on-primary']` (white). 1.5.2's header
+  badges use `text-on-primary`, which this config never generated. The badge
+  number only looked white because it inherited `.btn`'s white text, so without
+  this it would have turned dark once the button colour was fixed.
+
+`.btn` itself was not changed; a site-wide change would restyle every other
+button.
+
+```bash
+cd app/design/frontend/Aureate/hyva/web/tailwind && npm run build
+cd -   # back to the project root
+rm -rf var/view_preprocessed/* pub/static/frontend/Aureate/hyva
+php bin/magento setup:static-content:deploy -f --theme Aureate/hyva en_US
+rm -rf var/cache/* var/page_cache/*     # not cache:flush — see 3f
+```
+
+**Verified.** A rule-by-rule diff of `styles.css` before and after shows 5 rules
+added, 0 removed (the 4 header rules plus `.text-on-primary`). No copies were
+cloned into `@apply btn` consumers. The deployed file is byte-identical to the
+build.
+
 ## Still outstanding
 
 - **`catalog/search/engine` is unset**, so Magento defaults to

@@ -1,1 +1,38 @@
 /* .page-header {} */
+
+/*
+ * Icon buttons for Hyva 1.5.2's header: search, account, cart, compare,
+ * wishlist, the mobile menu toggles, and the cart drawer / login popup close
+ * buttons.
+ *
+ * 1.5.2 marks these `btn bg-transparent border-transparent`, expecting its own
+ * .btn (a Tailwind v4 component) with a light tint and inherited dark text.
+ * This child theme's .btn is still the old solid button: white text and a
+ * shadow. bg-transparent removed the fill but not the white, so the Lucide
+ * icons (stroke="currentColor") drew white on the white header, leaving empty
+ * shadowed boxes. This restores the 1.3.9 header icon look, for these buttons
+ * only.
+ *
+ * Attribute selectors rather than .btn on purpose: other components in this
+ * theme `@apply btn`, and Tailwind v3 copies every rule that contains .btn into
+ * each of them (see product-list.css). Requiring border-transparent as well
+ * leaves the cart drawer's own `btn bg-transparent text-slate-900` buttons
+ * alone.
+ */
+[class~="btn"][class~="bg-transparent"][class~="border-transparent"] {
+    @apply rounded shadow-none;
+    color: inherit;
+
+    &:hover {
+        @apply bg-primary/10;
+    }
+
+    /* the old .btn:focus draws a thick ring on every click */
+    &:focus {
+        box-shadow: none;
+    }
+
+    &:focus-visible {
+        @apply ring-2 ring-primary;
+    }
+}

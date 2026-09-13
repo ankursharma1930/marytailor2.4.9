@@ -67,7 +67,11 @@ module.exports = hyvaModules.mergeTailwindConfig({
           lighter: colors.gray['400'],
           "DEFAULT": colors.gray['600'],
           darker: colors.gray['800']
-        }
+        },
+        // Hyva 1.5.2 header/compare/wishlist badges use `text-on-primary`, a
+        // Tailwind v4 theme token this v3 config never had. Their counts only
+        // looked white because they inherited the old .btn's white text.
+        'on-primary': colors.white
       },
       backgroundColor: {
         primary: {
