@@ -9,6 +9,15 @@ const hyvaModules = require('@hyva-themes/hyva-modules');
 module.exports = hyvaModules.mergeTailwindConfig({
   theme: {
     extend: {
+      // Hyva 1.5.2's Magento_Theme/templates/html/header.phtml (lines 102, 109)
+      // uses `lg:order-0`, but Tailwind v3 ships no `order-0` utility (its zero
+      // is `order-none`) and Hyva's own reference config does not define one
+      // either - so the class could never be generated and the logo wrapper and
+      // header icon group kept their `order-1` at desktop width, misordering the
+      // header. Defining it here restores the intended layout.
+      order: {
+        '0': '0',
+      },
       screens: {
         'sm': '640px',
         // => @media (min-width: 640px) { ... }

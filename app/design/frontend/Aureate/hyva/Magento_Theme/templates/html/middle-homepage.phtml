@@ -1,5 +1,15 @@
+<?php
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Media;
+use Magento\Framework\Escaper;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+
+$mediaUrl = $viewModels->require(Media::class)->getMediaUrl();
+?>
 <div class="pb-4 md:pb-0 bg-white mt-7 relative">
-    <img class="w-full" src="https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/05-handsoap-banner-mary-tylor-naturals.png" />
+    <img class="w-full" src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/05-handsoap-banner-mary-tylor-naturals.png') ?>" />
     <div class="w-full absolute top-0 md:top-24">
         <div class="w-full md:w-1/2 lg:w-1/3 pt-5 float-right">
             <div>
@@ -7,7 +17,7 @@
                     <h5 class="text-neutral-700 font-light md:text-3xl text-2xl m-0">Organic<span class="text-lime-600"> products</span></h5>
                     <h1 class="md:text-4xl lg:text-6xl text-2xl font-bold text-zinc-800 my-4">Strawberry</h1>
                     <h2 class="items-center gap-x-3 my-6 hidden lg:flex">
-                        <img src="https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/before_h2.png" class="relative left-0">
+                        <img src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/before_h2.png') ?>" class="relative left-0">
                         <span class="relative text-lg md:text-4xl text-lime-600 uppercase">Buy 1 get 1 free</span>
                     </h2>
 

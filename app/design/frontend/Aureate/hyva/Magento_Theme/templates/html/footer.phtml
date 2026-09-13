@@ -8,13 +8,18 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Media;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$mediaUrl = $viewModels->require(Media::class)->getMediaUrl();
 ?>
-<div class="text-gray-700 bg-[url('https://marytylor.com/cdn-cgi/image/quality=50/media/wysiwyg/bg-footer.jpg')] bg-cover mt-7" >
+<div class="text-gray-700 bg-cover mt-7" style="background-image: url('<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/bg-footer.jpg') ?>')">
     <div class="container py-8 mx-auto">
         <div class="flex flex-wrap order-first gap-y-16">
             <?php foreach ($block->getChildNames() as $childName): ?>
@@ -30,7 +35,7 @@ use Magento\Framework\Escaper;
             </p>
             </div>
             <div class="w-full text-center md:w-1/2 md:text-right">
-                <img src="https://marytylor.com/media/wysiwyg/payment22.png" alt="accept payment" width="197" height="20" style="display: inline-block;">
+                <img src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/payment22.png') ?>" alt="accept payment" width="197" height="20" style="display: inline-block;">
             </div>
         </div>
 </div>

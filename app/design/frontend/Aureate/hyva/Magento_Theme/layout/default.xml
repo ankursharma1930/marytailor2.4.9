@@ -3,6 +3,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
 >
+    <head>
+        <!--
+            Font Awesome was previously injected by
+            vendor/mirasvit/module-core/.../templates/font_awesome.phtml, a one-line
+            template registered by that module's own frontend layout/default.xml.
+            The 2.4.9 composer upgrade moved mirasvit/module-core to 1.7.20, which
+            dropped that template - so every Font Awesome icon on the site silently
+            disappeared. Declared here in the child theme (never in vendor/, which
+            composer overwrites) so it survives future updates.
+
+            maxcdn.bootstrapcdn.com is already allowed by the CSP font-src and
+            style-src directives, so this needs no csp_whitelist change.
+        -->
+        <css src="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"
+             src_type="url" media="all"/>
+    </head>
     <body>
         <referenceBlock name="cart-drawer">
             <arguments>

@@ -1,0 +1,45 @@
+/*
+ * Star ratings for Hyva 1.5.2's review templates.
+ *
+ * Hyva 1.5.2 renders stars inside <div class="rating-summary"> and defines that
+ * class in its own Tailwind v4 components
+ * (vendor/hyva-themes/magento2-default-theme/web/tailwind/components/rating-summary.css).
+ * This child theme still builds with Tailwind v3 from its own component copies,
+ * so the class had no rule: the star SVGs fell back to block layout and stacked
+ * vertically in the default text colour.
+ *
+ * Colours and 24px star pitch match the pre-upgrade (1.3.9) templates:
+ * #f6e05e filled, #cbd5e0 empty. --color-rating keeps 1.5.2's override hook.
+ */
+@layer components {
+    .rating-summary {
+        display: flex;
+        gap: 0.25rem;
+        color: var(--color-rating, #f6e05e);
+    }
+
+    /* Empty stars, grey and solid as in 1.3.9. Direct children, or one <div> deep
+       for the account review list (customer/list.phtml). The partial star sits in
+       a <span> and fills from currentColor through a gradient, so it keeps the
+       rating colour. */
+    .rating-summary > svg:not(.fill-current),
+    .rating-summary > div > svg:not(.fill-current) {
+        color: #cbd5e0;
+        fill: currentColor;
+    }
+}
+
+/*
+ * Luma-style rating markup reuses the class name: a "Rating:" label and a
+ * .rating-result bar, no SVGs. Mageside Recipe renders it inside
+ * .product-reviews-summary (recipe/view/summary.phtml, print-summary.phtml).
+ * Put it back exactly as it rendered before this file existed.
+ *
+ * Deliberately outside @layer: Tailwind v3 drops layered rules whose classes it
+ * does not find in its content paths, and app/code templates are not scanned.
+ */
+.product-reviews-summary .rating-summary {
+    display: block;
+    gap: normal;
+    color: inherit;
+}

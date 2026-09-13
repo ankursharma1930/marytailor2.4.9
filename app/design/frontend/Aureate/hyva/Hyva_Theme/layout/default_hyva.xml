@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+    FIX: restore Hyvä's JS helper object.
+
+    Hyvä declares head.additional as a *block* in
+    magento2-default-theme/Magento_Theme/layout/default.xml, but attaches
+    children to it with <referenceContainer>. After the 2.4.9 + Hyvä 1.5.2
+    upgrade that block no longer resolves, so head.additional rendered empty:
+    the 13 KB hyva JS helper disappeared and every Alpine component died with
+    "hyva.str is not a function" / "hyva.createBooleanObject is not a
+    function" / "hyva.alpineInitialized is not a function". The same breakage
+    silently dropped the Open Graph / Twitter meta tags (20 meta tags -> 7),
+    which are attached to head.additional by Mageside_Recipe.
+
+    Re-attaching to before.body.end, which does resolve (alpine, cookies and
+    private-content all render from it). `before="-"` puts the helper first in
+    that container, so `hyva` is defined before Alpine boots and before
+    cookies.phtml / private-content.phtml call hyva.alpineInitialized().
+-->
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <referenceContainer name="before.body.end">
+            <block name="head.js" class="Magento\Framework\View\Element\Template"
+                   template="Hyva_Theme::page/js/variables.phtml" before="-"/>
+            <block name="head.hyva-scripts" template="Hyva_Theme::page/js/hyva.phtml"
+                   after="head.js"/>
+        </referenceContainer>
+    </body>
+</page>

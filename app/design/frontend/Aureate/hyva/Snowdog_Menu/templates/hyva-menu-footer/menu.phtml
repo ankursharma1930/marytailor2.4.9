@@ -7,6 +7,7 @@ $menu = $block->getMenu();
 $uniqueId = '_' . uniqid();
 
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+$mediaUrl = $viewModels->require(\Hyva\Theme\ViewModel\Media::class)->getMediaUrl();
 ?>
 
 <?php if ($menu): ?>
@@ -47,7 +48,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <div class="w-full md:w-2/5 pt-0 ps-0 md:ps-36 py-4">
             <div class="title mb-6">
                 <a class="logo" href="/">
-                    <img src="http://local.marytylor.com/media/logo/stores/1/Logo---Mary-Tylor_Naturals_200x89_PNG_1.png" alt="logo" class="mx-auto md:mx-0">
+                    <img src="<?= $escaper->escapeUrl($mediaUrl . 'logo/stores/1/Logo---Mary-Tylor_Naturals_200x89_PNG_1.png') ?>" alt="logo" class="mx-auto md:mx-0">
                 </a>
             </div>
             <div class="content">

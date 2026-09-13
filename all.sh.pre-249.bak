@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Upgrade Magento setup
+php bin/magento setup:upgrade
+
+# Compile Magento dependency injection
+php bin/magento setup:di:compile
+
+# Deploy static content for en_US locale
+php bin/magento setup:static-content:deploy en_US -f
+
+# Change permissions of var and pub directories
+chmod 777 -R var/ pub/
+
+# Output completion message
+echo "Magento setup upgrade and deployment complete."

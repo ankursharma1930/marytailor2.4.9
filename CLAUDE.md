@@ -70,6 +70,7 @@ Currently in progress. **Read `doc/` before doing anything upgrade-related.**
 |---|---|
 | `doc/01-pre-upgrade-assessment.md` | full environment audit + dependency resolution test results |
 | `doc/02-upgrade-plan.md` | staged plan, decisions taken, rollback strategy |
+| `doc/04-security-patches.md` | Adobe security patches on 2.4.9 — what exists, what was checked, what is outstanding |
 
 Scripts live in `shell/`, numbered in execution order. Every one is
 **idempotent and safe to re-run**:
@@ -82,9 +83,16 @@ Scripts live in `shell/`, numbered in execution order. Every one is
 | `shell/03-backup.sh` | DB + code + git branch safety net | maybe |
 | `shell/04-vhost-switch.sh` | activate PHP 8.3 — **breaks 2.4.6, do not run early** | **yes** |
 | `shell/04-vhost-rollback.sh` | return to PHP 8.1 | **yes** |
+| `shell/08-security-patches.sh` | Adobe isolated security patches for 2.4.9 + rebuild (`--check`, `--revert`) | no |
 
 Each script covers **one concern** and is run and verified individually — do not
 combine them. `04-vhost-switch.sh` hard-refuses unless a backup exists.
+
+**Composer silently removes the security patches.** Adobe ships 2.4.9 security
+fixes as patch files, not Composer versions, and `vendor/` is no longer tracked
+in git. After any `composer install` / `update`, run
+`bash shell/08-security-patches.sh --check` — exit 0 means patched. Never apply
+QPT `MCLOUD-15066` / `MCLOUD-15306`; they duplicate the July/August files.
 
 **Magento 2.4.6 requires PHP `~8.1||~8.2` and cannot run on 8.3.** Installing
 8.3 is safe; activating it takes the site down until the 2.4.9 Composer upgrade
