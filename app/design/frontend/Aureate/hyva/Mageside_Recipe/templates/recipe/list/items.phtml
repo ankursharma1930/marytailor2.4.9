@@ -1,75 +1,105 @@
 <?php
-
 /**
  * Copyright © Mageside. All rights reserved.
  * See MS-LICENSE.txt for license details.
  */
-/**
- * @var Mageside\Recipe\Block\Frontend\Recipe\RecipeList $block
- * @var Mageside\Recipe\Helper\Config $config
- */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Mageside\Recipe\Block\Frontend\Recipe\RecipeList;
+use Mageside\Recipe\Helper\Config;
+use Mageside\Recipe\Helper\Image;
+
+/** @var RecipeList $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Config $config */
+$config = $this->helper(Config::class);
+/** @var Image $imageHelper */
+$imageHelper = $this->helper(Image::class);
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
 $recipeCollection = $block->getAvailableRecipeCollection();
-$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
-$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+// Swapped in client-side when a recipe's image file is missing from pub/media
+$placeholderUrl = $block->getViewFileUrl('Mageside_Recipe::images/recipe-image-coming-soon.png');
 ?>
-<?php if (count($recipeCollection) == 0) : ?>
-    <div class="page-title-wrapper">
-        <h1 class="page-title">
-            <span class="base">
-                <?php echo $block->escapeHtml(__("Recipes not found")); ?>
-            </span>
-        </h1>
-    </div>
-<?php else : ?>
-    <?php foreach ($recipeCollection as $recipe) : ?>
-        <?php $recipeUrl = $block->getUrl($config->getSeoRoute()) . $recipe->getUrlKey() . $config->getSeoPostfix(); ?>
+<?php if (!count($recipeCollection)): ?>
+    <li class="col-span-full rounded-xl border border-dashed border-gray-300 px-6 py-16 text-center">
+        <p class="text-lg font-semibold text-gray-900"><?= $escaper->escapeHtml(__('No recipes found')) ?></p>
+        <p class="mt-1 text-sm text-gray-600">
+            <?= $escaper->escapeHtml(__('Try a different search term or clear the filters.')) ?>
+        </p>
+    </li>
+<?php else: ?>
+    <?php foreach ($recipeCollection as $recipe): ?>
+        <?php
+        $recipeUrl = $config->getRecipeUrl($recipe);
+        $imageFile = $recipe->getThumbnail()
+            ? $block->getRecipeThumbnail($recipe->getThumbnail())
+            : $block->getImageStub();
+        $imageUrl = $imageHelper->getResizedImage($imageFile, 'recipe_listing_image_thumbnail') ?: $placeholderUrl;
+        $prepTime = $block->getFormattedDuration($recipe->getPrepTime());
+        $cookTime = $block->getFormattedDuration($recipe->getCookTime());
+        $servings = $block->getServings($recipe->getServingsNumber());
+        ?>
         <li>
-            <div class="max-w-2xl mx-4 sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto mt-16 bg-white shadow-xl rounded-lg text-gray-900">
-                <div class="rounded-t-lg h-50 overflow-hidden">
-                    <a class="recipe-item-photo" href="<?php echo $block->escapeHtml($recipeUrl) ?>">
-                        <?php if ($recipe->getThumbnail()) : ?>
-                            <img class="object-cover object-top w-full " src="<?php echo $block->escapeHtml($imageHelper->getResizedImage(
-                                                                                    $block->getRecipeThumbnail($recipe->getThumbnail()),
-                                                                                    'recipe_listing_image_thumbnail'
-                                                                                )); ?>" alt="<?php echo $block->escapeHtml($recipe->getTitle()) ?>" title="<?php echo $block->escapeHtml($recipe->getTitle()) ?>">
-                        <?php else : ?>
-                            <img class="object-cover object-top w-full " src="<?php echo $block->escapeHtml($imageHelper->getResizedImage(
-                                                                                    $block->getImageStub(),
-                                                                                    'recipe_listing_image_thumbnail'
-                                                                                )); ?>" alt="<?php $block->escapeHtml(__('Recipe Image')); ?>">
-                        <?php endif; ?>
-                    </a>
+            <article class="group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg focus-within:ring-2 focus-within:ring-lime-600">
+                <div class="aspect-[3/2] overflow-hidden bg-white">
+                    <img src="<?= $escaper->escapeUrl($imageUrl) ?>"
+                         onerror="this.onerror=null;this.src='<?= $escaper->escapeJs($placeholderUrl) ?>';this.classList.replace('object-cover','object-contain');this.classList.add('p-6')"
+                         alt=""
+                         width="480"
+                         height="320"
+                         loading="lazy"
+                         class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
                 </div>
-                <div class="text-center mt-2">
-                    <h2 class="font-semibold p-2">
-                        <a class="line-clamp-1" href="<?php echo $block->escapeHtml($recipeUrl) ?>" title="<?php echo $block->escapeHtml($recipe->getTitle()); ?>">
-                            <?php echo $block->escapeHtml($recipe->getTitle()); ?>
+                <div class="flex flex-1 flex-col p-3 sm:p-4">
+                    <h2 class="line-clamp-2 text-sm font-semibold leading-snug text-gray-900 sm:text-base">
+                        <a href="<?= $escaper->escapeUrl($recipeUrl) ?>"
+                           class="after:absolute after:inset-0 focus:outline-none group-hover:text-lime-700">
+                            <?= $escaper->escapeHtml($recipe->getTitle()) ?>
                         </a>
                     </h2>
+                    <?php if ($prepTime || $cookTime || $servings): ?>
+                        <dl class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
+                            <?php if ($prepTime): ?>
+                                <div class="inline-flex items-center gap-1">
+                                    <dt class="inline-flex items-center gap-1">
+                                        <?= $heroicons->clockHtml('text-gray-400', 14, 14, ['aria-hidden' => 'true']) ?>
+                                        <?= $escaper->escapeHtml(__('Prep')) ?>
+                                    </dt>
+                                    <dd><?= $escaper->escapeHtml($prepTime) ?></dd>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($cookTime): ?>
+                                <div class="inline-flex items-center gap-1">
+                                    <dt class="inline-flex items-center gap-1">
+                                        <?= $heroicons->fireHtml('text-gray-400', 14, 14, ['aria-hidden' => 'true']) ?>
+                                        <?= $escaper->escapeHtml(__('Cook')) ?>
+                                    </dt>
+                                    <dd><?= $escaper->escapeHtml($cookTime) ?></dd>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($servings): ?>
+                                <div class="inline-flex items-center gap-1">
+                                    <dt class="inline-flex items-center gap-1">
+                                        <?= $heroicons->usersHtml('text-gray-400', 14, 14, ['aria-hidden' => 'true']) ?>
+                                        <?= $escaper->escapeHtml(__('Serves')) ?>
+                                    </dt>
+                                    <dd><?= $escaper->escapeHtml($servings) ?></dd>
+                                </div>
+                            <?php endif; ?>
+                        </dl>
+                    <?php endif; ?>
+                    <span class="mt-auto inline-flex items-center gap-1 pt-3 text-sm font-medium text-lime-700" aria-hidden="true">
+                        <?= $escaper->escapeHtml(__('View recipe')) ?>
+                        <?= $heroicons->arrowRightHtml('transition group-hover:translate-x-0.5', 16, 16) ?>
+                    </span>
                 </div>
-                <ul class="py-4 mt-2 text-gray-700 flex items-center justify-around">
-                    <li class="flex flex-col items-center justify-around">
-                        <img class="w-10 fill-current text-blue-900" src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/serving.png')); ?>" title="<?php echo $block->escapeHtml(__('Servings Number')) ?>" width="35" height="35">
-                        <?php $servingsNumber = $block->getFormatServingsNumber($recipe->getServingsNumber()); ?>
-
-                        <div><?php echo $block->escapeHtml($servingsNumber . ' ' . (($servingsNumber == '1')
-                                    ? __('person') : __('people'))); ?></div>
-                    </li>
-                    <li class="flex flex-col items-center justify-between">
-                        <img class="w-10 fill-current text-blue-900" src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/prep-time.png')); ?>" title="<?php echo $block->escapeHtml(__('Prep Time')) ?>" width="35" height="35">
-
-                        <div><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getPrepTime())); ?></div>
-                    </li>
-                    <li class="flex flex-col items-center justify-around">
-                        <img class="w-10 fill-current text-blue-900" src="<?php echo $block->escapeHtml($block->getViewFileUrl('Mageside_Recipe::images/recipe/cooking-time.png')); ?>" title="<?php echo $block->escapeHtml(__('Cooking Time')) ?>" width="35" height="35">
-
-                        <div><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getCookTime())); ?></div>
-                    </li>
-                </ul>
-                <div class="p-4 border-t mx-8 mt-2">
-                    <a href="<?php echo $block->escapeHtml($recipeUrl) ?>" class="w-full lg:w-1/2  text-center block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-6 py-2">Follow</a>
-                </div>
-            </div>
+            </article>
         </li>
-    <?php endforeach ?>
+    <?php endforeach; ?>
 <?php endif; ?>

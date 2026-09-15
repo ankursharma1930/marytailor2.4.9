@@ -1,0 +1,11 @@
+<?php
+/**
+ * Blog sidebar tag cloud when mfblog/sidebar/tag_claud/animated is enabled.
+ *
+ * The animated cloud piles 50 tags on top of each other, so this theme renders
+ * the same chip list as tag_claud.phtml. Delete this file to restore the animation.
+ *
+ * @var \Magefan\Blog\Block\Sidebar\TagClaud $block
+ */
+?>
+<?= /* @noEscape */ $block->fetchView($block->getTemplateFile('Magefan_Blog::sidebar/tag_claud.phtml')) ?>

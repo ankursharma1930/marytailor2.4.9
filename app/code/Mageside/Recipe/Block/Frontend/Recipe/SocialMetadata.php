@@ -53,7 +53,8 @@ class SocialMetadata extends \Mageside\Recipe\Block\Frontend\AbstractBlock
         $recipe = $this->getRecipe();
 
         if ($recipe) {
-            $url = urlencode($this->getUrl($this->helper->getSeoRoute()) . $recipe->getUrlKey() . $this->helper->getSeoPostfix());
+            // og:url / twitter:url must be the plain absolute URL, not urlencoded
+            $url = $this->helper->getRecipeUrl($recipe);
 
             return $result = [
                 "recipe_url" => $url,

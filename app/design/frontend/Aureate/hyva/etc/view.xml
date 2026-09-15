@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+    Overrides for Hyva/default's etc/view.xml. Magento merges this file over the
+    parent theme's (Magento\Framework\Config\FileResolver walks the theme chain),
+    so only values that differ belong here.
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <media>
+        <images module="Mageside_Recipe">
+            <!-- Recipe cards. The module default (237x145) is blurry at card size. The
+                 resizer always pads to the exact frame in white, so the card image box
+                 uses the same 3:2 ratio (Mageside_Recipe/templates/recipe/list/items.phtml). -->
+            <image id="recipe_listing_image_thumbnail" type="thumbnail">
+                <width>480</width>
+                <height>320</height>
+            </image>
+        </images>
+    </media>
+    <vars module="Magento_Catalog">
+        <var name="gallery">
+            <!-- Hyva 1.5.2 overlays each image's label on the product photo. Labels in
+                 this catalog are full SEO titles with the SKU appended, so they covered
+                 the photo. Off, the template uses the label as the image alt text. -->
+            <var name="caption">0</var>
+        </var>
+    </vars>
+</view>

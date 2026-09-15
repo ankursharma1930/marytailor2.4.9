@@ -1,0 +1,108 @@
+/*
+ * Product page gallery: Hyva 1.5.2's Magento_Catalog/templates/product/view/gallery.phtml.
+ *
+ * The template relies on Tailwind v4 utilities and on 1.5.2's .snap-pager and
+ * .snap-marker components. This child theme builds with Tailwind v3, which cannot
+ * generate scrollbar-none, stack, max-w-2/3, aspect-(--gallery-ratio),
+ * lg:aspect-(--thumb-ratio), lg:aria-current:inset-ring or
+ * backdrop:backdrop-blur-xs, and slider.css only ports the pager for .snap-track
+ * sliders. So the slide track showed a native horizontal scrollbar, the image
+ * lost its square frame, and the phone pager rendered as empty links.
+ *
+ * Ported to v3 syntax against the template's own class names, scoped to #gallery
+ * so nothing else on the site picks them up. Outside @layer (see
+ * rating-summary.css).
+ */
+#gallery {
+    .scrollbar-none {
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    /* One grid cell for every child, so the video play icon sits on the image */
+    .stack,
+    .open\:stack[open] {
+        display: grid;
+
+        > *,
+        > ::before,
+        > ::after {
+            grid-area: 1 / 1;
+        }
+    }
+
+    .aspect-\(--gallery-ratio\) {
+        aspect-ratio: var(--gallery-ratio);
+    }
+
+    .max-w-2\/3 {
+        max-width: 66.666667%;
+    }
+
+    .backdrop\:backdrop-blur-xs::backdrop {
+        backdrop-filter: blur(4px);
+    }
+
+    /* Phones and tablets: the pager is a row of dots. Kept below lg because at lg
+       the markers become thumbnails, sized by the template's lg: utilities, which
+       these id-scoped rules would otherwise outrank. */
+    @media (max-width: 1023px) {
+        .snap-pager {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: theme('spacing.3');
+            min-height: theme('spacing.11');
+            padding-top: theme('spacing.2');
+            padding-bottom: theme('spacing.2');
+        }
+
+        .snap-marker {
+            flex-shrink: 0;
+            width: theme('spacing.4');
+            height: theme('spacing.4');
+            border: 1px solid theme('colors.gray.400');
+            border-radius: 9999px;
+            transition: background-color 300ms, border-color 300ms;
+
+            &[aria-current="true"] {
+                width: theme('spacing.7');
+                border-color: theme('colors.gray.900');
+                background-color: theme('colors.gray.900');
+            }
+
+            @media (prefers-reduced-motion: no-preference) {
+                transition-property: width, background-color, border-color;
+            }
+        }
+    }
+
+    @screen lg {
+        .lg\:stack {
+            display: grid;
+
+            > *,
+            > ::before,
+            > ::after {
+                grid-area: 1 / 1;
+            }
+        }
+
+        .lg\:aspect-\(--thumb-ratio\) {
+            aspect-ratio: var(--thumb-ratio);
+        }
+
+        /* Current thumbnail: a thin inset outline, matching the slider pagers */
+        .lg\:aria-current\:bg-transparent[aria-current="true"] {
+            background-color: transparent;
+        }
+
+        .lg\:aria-current\:inset-ring[aria-current="true"] {
+            box-shadow: inset 0 0 0 1px theme('colors.gray.900');
+        }
+    }
+}

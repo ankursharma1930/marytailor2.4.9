@@ -71,14 +71,16 @@ class View extends Action
                 ->forward('noroute');
         }
 
+        // Meta fields are NULL for recipes saved without them; trim(null) is deprecated
+        // on PHP 8.1+ and Magento's error handler turns that into a 500
         $resultPage = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
-        if (trim($recipe->getMetaTitle())) {
-            $resultPage->getConfig()->getTitle()->set(__(trim($recipe->getMetaTitle())));
+        if (trim((string) $recipe->getMetaTitle())) {
+            $resultPage->getConfig()->getTitle()->set(__(trim((string) $recipe->getMetaTitle())));
         } else {
-            $resultPage->getConfig()->getTitle()->set(__(trim($recipe->getTitle())));
+            $resultPage->getConfig()->getTitle()->set(__(trim((string) $recipe->getTitle())));
         }
-        $resultPage->getConfig()->setDescription(__(trim($recipe->getMetaDescription())));
-        $resultPage->getConfig()->setKeywords(__(trim($recipe->getMetaKeywords())));
+        $resultPage->getConfig()->setDescription(__(trim((string) $recipe->getMetaDescription())));
+        $resultPage->getConfig()->setKeywords(__(trim((string) $recipe->getMetaKeywords())));
 
         return $resultPage;
     }

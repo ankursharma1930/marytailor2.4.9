@@ -1,22 +1,46 @@
-<?php /** @var \Mageside\Recipe\Block\Frontend\Recipe\Review $block */ ?>
-<div id="reviews" class="block block-dashboard-reviews">
-    <div class="page-main">
-        <div class="block-title-reviews">
-            <?php if ($count = $block->getReviewsSize()) : ?>
-                <strong><?= $block->escapeHtml(__('Reviews (%1)', $count)) ?></strong>
-            <?php else : ?>
-                <strong><?= $block->escapeHtml(__('Reviews')) ?></strong>
+<?php
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Mageside\Recipe\Block\Frontend\Recipe\Review;
+
+/** @var Review $block */
+/** @var Escaper $escaper */
+
+$reviewCount = (int) $block->getReviewsSize();
+$reviews = $reviewCount ? $block->getReviewsCollection()->setPageSize(20)->setCurPage(1) : [];
+?>
+<section id="reviews" class="mt-16 scroll-mt-24" aria-labelledby="recipe-reviews-title">
+    <h2 id="recipe-reviews-title" class="border-b border-gray-200 pb-3 text-2xl font-bold text-gray-900">
+        <?= $escaper->escapeHtml($reviewCount ? __('Reviews (%1)', $reviewCount) : __('Reviews')) ?>
+    </h2>
+    <div class="mt-6 grid items-start gap-8 lg:grid-cols-5">
+        <div class="space-y-4 lg:col-span-3">
+            <?php if ($reviewCount): ?>
+                <?php foreach ($reviews as $review): ?>
+                    <article class="rounded-xl border border-gray-200 bg-white p-5">
+                        <h3 class="font-semibold text-gray-900"><?= $escaper->escapeHtml($review->getTitle()) ?></h3>
+                        <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-700"><?= $escaper->escapeHtml(trim((string) $review->getDetail())) ?></p>
+                        <p class="mt-3 text-xs text-gray-500">
+                            <?= $escaper->escapeHtml(__(
+                                'By %1 on %2',
+                                $review->getNickname(),
+                                $block->formatDate($review->getCreatedAt(), \IntlDateFormatter::MEDIUM)
+                            )) ?>
+                        </p>
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="rounded-xl border border-dashed border-gray-300 p-6 text-center text-gray-600">
+                    <?= $escaper->escapeHtml(__('No reviews yet. Tried this recipe? Tell others how it turned out.')) ?>
+                </p>
             <?php endif; ?>
         </div>
-        <div class="block-content review-content">
-            <div class="table-wrapper reviews">
-                <div id="recipe-review-container"
-                     data-role="recipe-review"
-                     data-mage-init='{"Mageside_Recipe/js/process-reviews": {}}'>
-                    <?= $block->getChildHtml('recipe_review_container') ?>
-                </div>
-                <?= $block->getChildHtml('recipe_review_form') ?>
-            </div>
+        <div class="lg:col-span-2">
+            <?= $block->getChildHtml('recipe_review_form') ?>
         </div>
     </div>
-</div>
+</section>

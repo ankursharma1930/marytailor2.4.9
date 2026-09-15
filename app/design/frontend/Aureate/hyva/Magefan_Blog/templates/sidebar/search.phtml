@@ -1,0 +1,47 @@
+<?php
+/**
+ * Blog sidebar search form
+ *
+ * @var \Magefan\Blog\Block\Sidebar\Search $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+<div class="blog-sidebar-block blog-search">
+    <form class="form blog-search relative" id="blog_search_mini_form"
+          action="<?= $escaper->escapeUrl($block->getFormUrl()) ?>"
+          method="get"
+          role="search"
+          onsubmit="goBlogSearch(event);">
+        <label for="blog_search" class="sr-only"><?= $escaper->escapeHtml(__('Search posts')) ?></label>
+        <input id="blog_search"
+               type="search"
+               name="q"
+               value="<?= $escaper->escapeHtmlAttr($block->getQuery()) ?>"
+               placeholder="<?= $escaper->escapeHtmlAttr(__('Search articles…')) ?>"
+               class="form-input w-full rounded-full border-gray-300 bg-white py-2.5 pl-11 pr-4 text-sm focus:border-lime-600 focus:ring-lime-600"
+               maxlength="128"
+               autocomplete="off">
+        <button type="submit"
+                class="absolute inset-y-0 left-0 flex w-11 items-center justify-center text-gray-400 transition-colors hover:text-lime-700"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>">
+            <?= $heroicons->searchHtml('h-5 w-5', 20, 20, ['aria-hidden' => 'true']) ?>
+        </button>
+    </form>
+</div>
+<script>
+    function goBlogSearch(event)
+    {
+        var value = document.getElementById('blog_search').value;
+        if (value) {
+            var a = document.getElementById('blog_search_mini_form').action;
+            window.location = a + ( ('/' != a.charAt(a.length - 1)) ? '/' : '' ) + encodeURI(value) + '/';
+        }
+        event.preventDefault();
+    }
+</script>

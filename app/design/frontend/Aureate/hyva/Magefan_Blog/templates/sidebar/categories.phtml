@@ -1,0 +1,96 @@
+<?php
+/**
+ * Blog sidebar categories
+ *
+ * The store has 40+ categories, so only the first few top-level ones are shown
+ * and the rest sit behind a native <details> toggle (no JS needed).
+ *
+ * @var \Magefan\Blog\Block\Sidebar\Categories $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$visibleCount = 10;
+$showCount = $block->showPostsCount();
+
+// getGroupedChilds() is a flat, pre-ordered list; nest everything below level 0 under its top-level parent
+$tree = [];
+foreach ($block->getGroupedChilds() as $item) {
+    if ((int)$item->getLevel() === 0 || !$tree) {
+        $tree[] = ['category' => $item, 'children' => []];
+    } else {
+        $tree[count($tree) - 1]['children'][] = $item;
+    }
+}
+
+$renderCategory = static function (array $node) use ($escaper, $heroicons, $showCount): void {
+    $category = $node['category'];
+    ?>
+    <li>
+        <a href="<?= $escaper->escapeUrl($category->getCategoryUrl()) ?>"
+           class="group flex items-center justify-between gap-3 rounded-lg px-2.5 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-lime-50 hover:text-lime-800">
+            <span class="flex min-w-0 items-center gap-2">
+                <?= $heroicons->chevronRightHtml('h-3.5 w-3.5 shrink-0 text-gray-400 transition-colors group-hover:text-lime-700', 14, 14, ['aria-hidden' => 'true']) ?>
+                <span class="truncate"><?= $escaper->escapeHtml($category->getTitle()) ?></span>
+            </span>
+            <?php if ($showCount): ?>
+                <span class="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500 transition-colors group-hover:bg-white group-hover:text-lime-800">
+                    <?= (int)$category->getPostsCount() ?>
+                </span>
+            <?php endif; ?>
+        </a>
+        <?php if ($node['children']): ?>
+            <ul class="mb-1 ml-4 border-l border-gray-200 pl-2">
+                <?php foreach ($node['children'] as $child): ?>
+                    <li>
+                        <a href="<?= $escaper->escapeUrl($child->getCategoryUrl()) ?>"
+                           class="group flex items-center justify-between gap-3 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 transition-colors hover:bg-lime-50 hover:text-lime-800">
+                            <span class="truncate"><?= $escaper->escapeHtml($child->getTitle()) ?></span>
+                            <?php if ($showCount): ?>
+                                <span class="shrink-0 text-xs text-gray-400 group-hover:text-lime-800">
+                                    <?= (int)$child->getPostsCount() ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </li>
+    <?php
+};
+?>
+<?php if ($tree): ?>
+    <section class="blog-sidebar-block block-categories">
+        <h2 class="blog-sidebar-title">
+            <?= $heroicons->folderHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+            <span><?= $escaper->escapeHtml(__('Categories')) ?></span>
+        </h2>
+
+        <ul class="space-y-0.5">
+            <?php foreach (array_slice($tree, 0, $visibleCount) as $node) {
+                $renderCategory($node);
+            } ?>
+        </ul>
+
+        <?php if (count($tree) > $visibleCount): ?>
+            <details class="group/more">
+                <summary class="blog-sidebar-more">
+                    <span class="group-open/more:hidden"><?= $escaper->escapeHtml(__('Show all categories (%1)', count($tree))) ?></span>
+                    <span class="hidden group-open/more:inline"><?= $escaper->escapeHtml(__('Show fewer')) ?></span>
+                    <?= $heroicons->chevronDownHtml('h-4 w-4 transition-transform group-open/more:rotate-180', 16, 16, ['aria-hidden' => 'true']) ?>
+                </summary>
+                <ul class="mt-1 space-y-0.5">
+                    <?php foreach (array_slice($tree, $visibleCount) as $node) {
+                        $renderCategory($node);
+                    } ?>
+                </ul>
+            </details>
+        <?php endif; ?>
+    </section>
+<?php endif; ?>

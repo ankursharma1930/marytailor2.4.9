@@ -6,6 +6,6 @@
     }
 }
 
-body.cms-index-index, body.recipe-recipe-view, body.recipe-recipe-listview{
+body.cms-index-index, body.recipe-recipe-view, body.recipe-recipe-listview, body.checkout-cart-index{
     @apply bg-white
 }

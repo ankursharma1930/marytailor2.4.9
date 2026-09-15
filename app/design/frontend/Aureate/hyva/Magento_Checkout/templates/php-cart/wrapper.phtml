@@ -1,0 +1,28 @@
+<?php
+/**
+ * Override of hyva-themes/magento2-default-theme 1.5.2
+ * Magento_Checkout::php-cart/wrapper.phtml
+ * Changes: "Order Summary" heading; bordered summary panel for the white page
+ * background; wider summary column on desktop.
+ */
+
+declare(strict_types=1);
+
+use Magento\Checkout\Block\Cart;
+use Magento\Framework\Escaper;
+
+/** @var Cart $block */
+/** @var Escaper $escaper */
+?>
+
+<div class="flex flex-col lg:flex-row-reverse lg:items-start gap-8 xl:gap-12">
+    <div class="cart-summary-panel lg:w-96 lg:sticky lg:top-4 rounded-lg border border-gray-200 bg-gray-50 p-5 md:p-6">
+        <h2 class="text-xl font-bold"><?= $escaper->escapeHtml(__('Order Summary')) ?></h2>
+        <?= $block->getChildHtml('cart.summary') ?>
+    </div>
+    <div class="lg:flex-1 min-w-0">
+        <?= $block->getChildHtml('form_before') ?>
+        <?= $block->getChildHtml('cart-items') ?>
+        <?= $block->getChildHtml('checkout_cart_widget') ?>
+    </div>
+</div>

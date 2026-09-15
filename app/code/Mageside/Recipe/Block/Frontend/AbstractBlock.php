@@ -92,6 +92,42 @@ class AbstractBlock extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Human readable duration for an "HH:mm" value, e.g. "1 hr 30 min"
+     *
+     * @param string $time
+     * @return string empty when the time is not set or is zero
+     */
+    public function getFormattedDuration($time)
+    {
+        if (!preg_match('/^(\d+):(\d+)$/', trim((string) $time), $matches)) {
+            return '';
+        }
+
+        $parts = [];
+        if ($hours = (int) $matches[1]) {
+            $parts[] = __('%1 hr', $hours);
+        }
+        if ($minutes = (int) $matches[2]) {
+            $parts[] = __('%1 min', $minutes);
+        }
+
+        return implode(' ', $parts);
+    }
+
+    /**
+     * Servings for display, e.g. "4" or "2 - 4"
+     *
+     * @param string $servings stored as "min - max"
+     * @return string empty when servings were never entered ("0 - 0")
+     */
+    public function getServings($servings)
+    {
+        return preg_match('/[1-9]/', (string) $servings)
+            ? (string) $this->getFormatServingsNumber($servings)
+            : '';
+    }
+
+    /**
      * @return string
      */
     public function getImageStub()

@@ -1,0 +1,71 @@
+<?php
+/**
+ * Blog sidebar archive, with months grouped under their year.
+ *
+ * @var \Magefan\Blog\Block\Sidebar\Archive $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magefan\Blog\Helper\Data as BlogHelper;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+// getMonths() is keyed "Y-m", or "Y" when the archive is configured to group by year
+$months = $block->getMonths();
+$groupedByYear = strlen((string)array_key_first($months)) === 4;
+
+$years = [];
+foreach ($months as $time) {
+    $years[date('Y', $time)][] = $time;
+}
+?>
+<?php if ($months): ?>
+    <section class="blog-sidebar-block block-archive">
+        <h2 class="blog-sidebar-title">
+            <?= $heroicons->archiveHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+            <span><?= $escaper->escapeHtml(__('Archive')) ?></span>
+        </h2>
+
+        <?php if ($groupedByYear): ?>
+            <ul class="flex flex-wrap gap-2">
+                <?php foreach ($months as $time): ?>
+                    <li>
+                        <a href="<?= $escaper->escapeUrl($block->getTimeUrl($time)) ?>" class="blog-chip">
+                            <?= $escaper->escapeHtml($block->getTranslatedDate($time)) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <div class="divide-y divide-gray-100">
+                <?php $isFirstYear = true; ?>
+                <?php foreach ($years as $year => $yearMonths): ?>
+                    <details class="group/year py-1"<?= $isFirstYear ? ' open' : '' ?>>
+                        <summary class="flex cursor-pointer items-center justify-between rounded-lg px-2.5 py-2 text-sm font-semibold text-gray-800 transition-colors hover:bg-lime-50 hover:text-lime-800">
+                            <span><?= $escaper->escapeHtml($year) ?></span>
+                            <span class="flex items-center gap-2 text-xs font-medium text-gray-500">
+                                <?= $escaper->escapeHtml(__('%1 months', count($yearMonths))) ?>
+                                <?= $heroicons->chevronDownHtml('h-4 w-4 transition-transform group-open/year:rotate-180', 16, 16, ['aria-hidden' => 'true']) ?>
+                            </span>
+                        </summary>
+                        <ul class="flex flex-wrap gap-2 px-2.5 pb-3 pt-2">
+                            <?php foreach ($yearMonths as $time): ?>
+                                <li>
+                                    <a href="<?= $escaper->escapeUrl($block->getTimeUrl($time)) ?>"
+                                       class="blog-chip"
+                                       title="<?= $escaper->escapeHtmlAttr(__('Archive %1', $block->getTranslatedDate($time))) ?>">
+                                        <?= $escaper->escapeHtml(BlogHelper::getTranslatedDate('M', $time)) ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </details>
+                    <?php $isFirstYear = false; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </section>
+<?php endif; ?>

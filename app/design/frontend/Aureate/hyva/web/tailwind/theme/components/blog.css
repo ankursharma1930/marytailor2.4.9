@@ -1,0 +1,47 @@
+/* Magefan blog pages (/blog, categories, tags, posts) */
+
+/* typography.css gives body a stone background; the blog reads better on white */
+body.blog-page {
+    @apply bg-white;
+}
+
+.blog-sidebar-block {
+    @apply mb-10;
+}
+
+.blog-sidebar-title {
+    @apply mb-4 flex items-center gap-2 border-b border-gray-200 pb-3 text-lg font-semibold text-gray-900;
+}
+
+.blog-sidebar-title svg {
+    @apply h-5 w-5 shrink-0 text-lime-700;
+}
+
+.blog-sidebar-more {
+    @apply mt-2 flex cursor-pointer items-center gap-1 px-2.5 py-1 text-sm font-semibold text-lime-700;
+}
+
+.blog-sidebar-more:hover {
+    @apply text-lime-900;
+}
+
+.blog-sidebar-block summary {
+    list-style: none;
+}
+
+.blog-sidebar-block summary::-webkit-details-marker {
+    display: none;
+}
+
+.blog-chip {
+    @apply inline-block rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-600 transition-colors;
+}
+
+.blog-chip:hover {
+    @apply border-lime-600 bg-lime-50 text-lime-800;
+}
+
+.blog-chip[data-weight="large"],
+.blog-chip[data-weight="largest"] {
+    @apply font-semibold text-gray-900;
+}

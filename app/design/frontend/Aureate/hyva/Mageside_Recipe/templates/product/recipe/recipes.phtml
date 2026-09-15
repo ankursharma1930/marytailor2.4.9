@@ -1,20 +1,24 @@
 <?php
-
 /**
  * Copyright © Mageside. All rights reserved.
  * See MS-LICENSE.txt for license details.
  */
-/**
- * @var $block \Mageside\Recipe\Block\Frontend\Recipe\RecipeList
- */
-$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
-?>
-<?php if ($config->getShowOnProductPage() && $block->getCollectionSize()) : ?>
-    <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
-                    border-gray-300 md:flex-row" bis_skin_checked="1">
-        <h2 class="text-2xl font-medium text-gray-900 title-font">
-            <?= $config->getProductBlockTitle(); ?> </h2>
-    </div>
 
-    <?= $block->getChildHtml('recipe_list'); ?>
+use Magento\Framework\Escaper;
+use Mageside\Recipe\Block\Frontend\Recipe\RecipeList;
+use Mageside\Recipe\Helper\Config;
+
+/** @var RecipeList $block */
+/** @var Escaper $escaper */
+
+/** @var Config $config */
+$config = $this->helper(Config::class);
+?>
+<?php if ($config->getShowOnProductPage() && $block->getCollectionSize()): ?>
+    <section class="my-12" aria-labelledby="product-recipes-title">
+        <h2 id="product-recipes-title" class="mb-6 border-b border-gray-200 pb-3 text-2xl font-semibold text-gray-900">
+            <?= $escaper->escapeHtml(__($config->getProductBlockTitle())) ?>
+        </h2>
+        <?= $block->getChildHtml('recipe_list') ?>
+    </section>
 <?php endif; ?>

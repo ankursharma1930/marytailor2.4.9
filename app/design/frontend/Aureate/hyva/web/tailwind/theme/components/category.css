@@ -1,1 +1,326 @@
-/* .category-view .sidebar .block.filter {} */
+/*
+ * Product listing pages: category and search results (both carry .page-products).
+ *
+ * White page ground, bordered cards with a hover lift, a solid green Add to Cart
+ * and outline icon buttons. Everything is scoped to .page-products so the
+ * home page sliders and other .product-item cards keep their current look.
+ *
+ * The accent is lime-700, not the site-wide .btn-primary lime-600 gradient:
+ * white text on lime-600 is ~3:1 contrast, below WCAG AA for button labels.
+ */
+body.page-products {
+    @apply bg-white;
+}
+
+.page-products {
+    /* Category image and description */
+    #category-view-container {
+        .category-image img {
+            @apply rounded-2xl;
+        }
+
+        .category-description {
+            @apply text-gray-700 leading-relaxed;
+
+            a {
+                @apply text-lime-800 underline underline-offset-2;
+            }
+        }
+    }
+
+    /* Sidebar filters. [role] and [class~=card] instead of .block and .card, for the
+       same Tailwind @apply cloning described at Add to Cart below. */
+    .sidebar-main > [role="region"] {
+        @apply rounded-2xl border-gray-200 bg-white;
+
+        /* Undo the mobile panel frame; the template's md: utilities lose to this selector */
+        @screen md {
+            @apply rounded-none border-0 bg-transparent p-0;
+        }
+    }
+
+    #filters-heading button > span:first-child {
+        @apply text-base font-semibold tracking-wider text-gray-900;
+
+        @screen md {
+            @apply text-lg;
+        }
+    }
+
+    #filters-heading button > span:last-child {
+        @apply rounded-full border-gray-200;
+    }
+
+    /* Filter panels and the "Active filtering" panel share one frame */
+    .filter-option[class~="card"],
+    .filter-current[class~="card"] {
+        @apply my-3 overflow-hidden rounded-2xl border border-gray-200 bg-white p-0 shadow-none;
+
+        .filter-options-title {
+            @apply px-4 py-3.5 transition-colors;
+
+            &:hover {
+                @apply bg-gray-50;
+            }
+
+            h3 {
+                @apply text-base font-semibold text-gray-900;
+            }
+
+            > span {
+                @apply rounded-full border-gray-200 bg-white transition-colors;
+            }
+        }
+
+        &[open] .filter-options-title > span {
+            @apply bg-gray-100;
+        }
+
+        > div {
+            @apply border-gray-100 px-4 py-3;
+        }
+    }
+
+    .filter-option .items a {
+        @apply -mx-2 items-center rounded-lg px-2 py-2 text-sm text-gray-700 transition-colors;
+
+        &:hover {
+            @apply bg-gray-50 text-gray-900;
+        }
+
+        .count {
+            @apply text-xs text-gray-500;
+        }
+    }
+
+    .filter-current {
+        .filter-label {
+            @apply text-xs font-medium uppercase tracking-wide text-gray-500;
+        }
+
+        .filter-value {
+            @apply font-semibold text-gray-900;
+        }
+
+        /* Remove-filter and Clear All: this theme's .btn is a filled grey block and
+           .btn-secondary a blue 2px outline; both become light outlines here */
+        [class~="btn"] {
+            @apply justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-none transition-colors;
+
+            &:hover {
+                @apply border-gray-300 bg-gray-50 text-gray-900 shadow-none;
+            }
+
+            &:focus {
+                @apply border-gray-200 ring-0;
+            }
+
+            &:focus-visible {
+                @apply ring-2 ring-lime-600 ring-offset-2;
+            }
+        }
+
+        .items [class~="btn"] {
+            @apply h-8 w-8 shrink-0 p-0;
+
+            svg {
+                @apply h-4 w-4;
+            }
+
+            &:hover {
+                @apply border-red-200 bg-red-50 text-red-600;
+            }
+        }
+
+        .filter-actions [class~="btn"] {
+            @apply h-10 text-sm font-semibold;
+        }
+    }
+
+    /* Toolbar: view mode, sorter, limiter */
+    .toolbar-products {
+        /* A grid item: without justify-self it stretches across its column span */
+        .modes {
+            @apply w-auto justify-self-start gap-1 rounded-full border-gray-200 p-1;
+        }
+
+        /* The icons are data-URI SVGs, so currentColor cannot recolour them;
+           the active mode is marked with a tinted background instead. */
+        .modes-mode {
+            @apply h-8 w-8 rounded-full transition;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 1.125rem;
+
+            &.active {
+                @apply bg-gray-100;
+            }
+        }
+
+        .sorter-options,
+        .limiter-options {
+            @apply h-10 rounded-full border-gray-200 py-0 pl-4 pr-10 text-sm font-medium text-gray-800 shadow-none;
+            background-position: right 0.875rem center;
+
+            &:focus {
+                @apply border-lime-600 ring-2 ring-lime-600/30;
+            }
+        }
+
+        .sorter-action {
+            @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 transition-colors;
+
+            svg {
+                @apply h-5 w-5;
+            }
+
+            &:hover {
+                @apply bg-gray-50 text-gray-900;
+            }
+        }
+    }
+
+    .products-grid > ul {
+        @screen lg {
+            @apply gap-6;
+        }
+    }
+
+    /* Product card */
+    .product-item[class~="card"] {
+        @apply rounded-2xl border border-gray-200 bg-white p-3 shadow-none transition duration-200;
+
+        @screen sm {
+            @apply p-4;
+        }
+
+        &:focus-within {
+            @apply border-transparent shadow-lg;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                @apply border-transparent bg-white shadow-lg;
+            }
+
+            &:hover .product-image-photo {
+                transform: scale(1.04);
+            }
+        }
+    }
+
+    .product-item {
+        .product-item-photo {
+            @apply overflow-hidden rounded-xl bg-stone-50;
+        }
+
+        .product-image-photo {
+            @apply h-auto w-full object-contain transition-transform duration-500;
+            aspect-ratio: 1 / 1;
+        }
+
+        .product-item-link {
+            @apply block text-[0.9375rem] font-semibold leading-snug text-gray-900 transition-colors;
+
+            &:hover {
+                @apply text-lime-800;
+            }
+        }
+
+        .rating-summary {
+            gap: 0.125rem;
+
+            svg {
+                @apply h-4 w-4;
+            }
+        }
+
+        .price-box .price {
+            @apply text-lg font-bold text-gray-900;
+        }
+
+        .stock.unavailable {
+            @apply gap-x-1.5 rounded-full bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 before:h-2 before:w-2;
+        }
+
+        /*
+         * Add to Cart. bg-none clears .btn-primary's gradient background-image.
+         *
+         * Button selectors use [class~=...] rather than .btn / .btn-primary: other
+         * components `@apply btn`, and Tailwind v3 copies every rule containing
+         * those classes into each of them (see product-list.css).
+         */
+        [class~="btn-primary"] {
+            @apply h-10 justify-center gap-2 rounded-full bg-lime-700 bg-none px-4 text-sm font-semibold text-white shadow-none transition-colors;
+
+            svg {
+                @apply h-[1.125rem] w-[1.125rem];
+            }
+
+            &:hover {
+                @apply bg-lime-800 bg-none shadow-none;
+            }
+        }
+
+        /* Wishlist and compare: outline icon buttons */
+        [data-addto="wishlist"],
+        [data-addto="compare"] {
+            @apply h-10 w-10 border border-gray-200 bg-white text-gray-600 transition-colors;
+
+            svg {
+                @apply h-[1.125rem] w-[1.125rem];
+            }
+        }
+
+        /* product-list.css draws a solid heart; here it stays an outline until hover */
+        [data-addto="wishlist"] svg {
+            fill: none;
+        }
+
+        @media (hover: hover) {
+            [data-addto="wishlist"]:hover {
+                @apply border-red-200 bg-red-50 text-red-600;
+
+                svg {
+                    fill: currentColor;
+                }
+            }
+
+            [data-addto="compare"]:hover {
+                @apply border-lime-200 bg-lime-50 text-lime-800;
+            }
+        }
+
+        /* .btn:focus swaps the border for a wide blue ring; keep the border and
+           show a green ring for keyboard focus only */
+        [class~="btn"]:focus {
+            @apply ring-0;
+        }
+
+        [data-addto="wishlist"]:focus,
+        [data-addto="compare"]:focus {
+            @apply border-gray-200;
+        }
+
+        [class~="btn"]:focus-visible {
+            @apply ring-2 ring-lime-600 ring-offset-2;
+        }
+    }
+
+    /* Grid view: left-align the card text, reserve three title lines so prices
+       and buttons line up across a row, and let Add to Cart fill its row */
+    .products-grid .product-item {
+        .product-info > div {
+            @apply mx-0 text-left;
+        }
+
+        [class~="btn-primary"] {
+            @apply grow;
+        }
+
+        .product-item-link {
+            @apply line-clamp-3;
+            min-height: calc(1.375em * 3);
+        }
+    }
+}

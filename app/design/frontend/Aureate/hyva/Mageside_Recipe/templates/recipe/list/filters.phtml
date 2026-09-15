@@ -3,54 +3,46 @@
  * Copyright © Mageside. All rights reserved.
  * See MS-LICENSE.txt for license details.
  */
-/** @var Mageside\Recipe\Block\Frontend\Recipe\Filters\RecipeFilterType $block */
-$filterType = $block->getFilterType();
-?>
-<div class="recipe-filters text-center" x-data="recipeFilters()" x-init="initFiltersSelected()">
-    <div id="filters" class="control">
-        <?php foreach ($filterType->getItems() as $type) : ?>
-            <select class="w-full md:w-auto mt-3" name="<?= $block->escapeHtml($type->getCode()); ?>" id="<?= $block->escapeHtml($type->getCode()); ?>" @change="filterRecipes">
-                <?php $dataOption = $block->getFilterOption($type->getId()); ?>
-                <optgroup label="<?= $block->escapeHtml($type->getType()); ?>">
-                    <option value="" selected><?= $block->escapeHtml('All '.$type->getType()); ?></option>
-                    <?php foreach ($dataOption->getData('options') as $option) : ?>
-                        <option value="<?= $block->escapeHtml($option['slug']); ?>"><?= $block->escapeHtml($option['label']); ?></option>
-                    <?php endforeach; ?>
-                </optgroup>
-            </select>
-        <?php endforeach; ?>
-    </div>
-</div>
 
-<script>
-    function recipeFilters() {
-        return {
-            initFiltersSelected() {
-                const urlParams = new URLSearchParams(window.location.search);
-                document.querySelectorAll('#filters select').forEach(select => {
-                    const paramValue = urlParams.get(select.name);
-                    if (paramValue) {
-                        select.value = paramValue;
-                    }
-                });
-            },
-            filterRecipes() {
-                let filters = {};
-                document.querySelectorAll('#filters select').forEach(select => {
-                    if (select.value) {
-                        filters[select.name] = select.value;
-                    }
-                });
-                this.updateUrl(filters);
-            },
-            updateUrl(filters) {
-                const baseUrl = window.location.pathname;
-                const urlParams = new URLSearchParams(filters).toString();
-                const newUrl = `${baseUrl}?${urlParams}`;
-                window.history.replaceState({}, '', newUrl);
-                // Reload the page to apply the filters and make the dropdown preselected
-                window.location.href = newUrl;
-            }
-        };
-    }
-</script>
+use Magento\Framework\Escaper;
+use Mageside\Recipe\Block\Frontend\Recipe\Filters\RecipeFilterType;
+
+/**
+ * Filter selects, rendered inside the search form in recipe/recipes.phtml
+ *
+ * @var RecipeFilterType $block
+ * @var Escaper $escaper
+ */
+
+$filterTypes = $block->getFilterType()->getItems();
+if (!$filterTypes) {
+    return;
+}
+?>
+<div class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <?php foreach ($filterTypes as $type): ?>
+        <?php
+        $code = (string) $type->getCode();
+        $selected = $block->getRequest()->getParam($code);
+        $selected = is_string($selected) ? $selected : '';
+        $options = $block->getFilterOption($type->getId())->getData('options') ?: [];
+        ?>
+        <div>
+            <label for="recipe-filter-<?= $escaper->escapeHtmlAttr($code) ?>"
+                   class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <?= $escaper->escapeHtml($type->getType()) ?>
+            </label>
+            <select id="recipe-filter-<?= $escaper->escapeHtmlAttr($code) ?>"
+                    name="<?= $escaper->escapeHtmlAttr($code) ?>"
+                    class="form-select w-full rounded-lg text-sm">
+                <option value=""><?= $escaper->escapeHtml(__('All')) ?></option>
+                <?php foreach ($options as $option): ?>
+                    <option value="<?= $escaper->escapeHtmlAttr($option['slug']) ?>"
+                        <?= $selected === (string) $option['slug'] ? 'selected' : '' ?>>
+                        <?= $escaper->escapeHtml($option['label']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    <?php endforeach; ?>
+</div>

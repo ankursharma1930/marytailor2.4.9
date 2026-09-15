@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Mageside. All rights reserved.
+ * See MS-LICENSE.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!-- Luma-era assets added by the module layout; the Hyvä templates don't use them -->
+        <remove src="Mageside_Recipe::css/jquery.bxslider.css"/>
+        <remove src="Mageside_Recipe::css/font-awesome.min.css"/>
+        <remove src="Mageside_Recipe::css/style.css"/>
+    </head>
+</page>

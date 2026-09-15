@@ -3,10 +3,23 @@
  * Copyright © Mageside, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php /** @var $block \Mageside\Recipe\Block\Frontend\Recipe\Recipe */ ?>
-    <div class="text-center md:w-1/3 w-full mx-auto my-3">
-        <a class="btn btn-primary block font-bold" href="<?= /* @escapeNotVerified */ $block->escapeHtml($block->getPrintUrl()) ?>" target="_blank" ><span><?= /* @escapeNotVerified */ __('Print recipe')  ?></span></a>
-    </div>
-<?= $block->getChildHtml() ?>
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+
+/** @var \Mageside\Recipe\Block\Frontend\Recipe\Recipe $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+<a href="<?= $escaper->escapeUrl($block->getPrintUrl()) ?>"
+   target="_blank"
+   rel="noopener"
+   class="btn gap-2 border border-gray-300 bg-white text-gray-800 shadow-sm hover:bg-gray-50">
+    <?= $heroicons->printerHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+    <span><?= $escaper->escapeHtml(__('Print recipe')) ?></span>
+</a>
+<?= $block->getChildHtml() ?>

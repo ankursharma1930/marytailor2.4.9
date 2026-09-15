@@ -1,0 +1,32 @@
+<?php
+/**
+ * Blog sidebar RSS feed link
+ *
+ * @var \Magefan\Blog\Block\Sidebar\Rss $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+<div class="blog-sidebar-block block-rss">
+    <a href="<?= $escaper->escapeUrl($block->getUrl('blog/rss/feed')) ?>"
+       target="_blank"
+       rel="noopener"
+       class="group flex items-center gap-3 rounded-xl border border-gray-200 px-4 py-3 transition-colors hover:border-orange-300 hover:bg-orange-50">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+            <?= $heroicons->rssHtml('h-5 w-5', 20, 20, ['aria-hidden' => 'true']) ?>
+        </span>
+        <span class="min-w-0">
+            <span class="block text-sm font-semibold text-gray-800 group-hover:text-orange-700">
+                <?= $escaper->escapeHtml(__('RSS Feed')) ?>
+            </span>
+            <span class="block text-xs text-gray-500">
+                <?= $escaper->escapeHtml(__('Get new articles in your feed reader')) ?>
+            </span>
+        </span>
+    </a>
+</div>

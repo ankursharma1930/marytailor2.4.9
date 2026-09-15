@@ -1,0 +1,54 @@
+<?php
+/**
+ * Blog post list "load more" pager.
+ *
+ * Magefan's lazyload JS toggles display:block on .mfblog-hide-onload and
+ * .mfblog-show-onload, so those classes sit on wrappers rather than on the
+ * button itself, which would otherwise stretch full width.
+ *
+ * @var \Magefan\Blog\Block\Post\PostList\Toolbar\Pager $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+<?php if ($block->useLazyload()): ?>
+    <?php
+    $config = $block->getLazyloadConfig([
+        'trigger_element' => '.mbblog-lazyload-trigger'
+    ]);
+    ?>
+    <div class="mfblog-autoloader mt-10 flex justify-center">
+        <div class="mfblog-hide-onload">
+            <button type="button" class="mbblog-lazyload-trigger btn btn-primary gap-2 rounded-full px-7">
+                <span><?= $escaper->escapeHtml(__('Load more articles')) ?></span>
+                <?= $heroicons->arrowDownHtml('h-4 w-4', 16, 16, ['aria-hidden' => 'true']) ?>
+            </button>
+        </div>
+        <div class="mfblog-show-onload" style="display: none;" role="status">
+            <svg class="h-8 w-8 animate-spin text-lime-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <span class="sr-only"><?= $escaper->escapeHtml(__('Loading posts…')) ?></span>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            function initMfPostLazyLoad() {
+                const script = document.createElement('script')
+                script.src = '<?= $escaper->escapeUrl($block->getViewFileUrl($block->getLazyloadJs() . '.js')) ?>';
+                script.addEventListener('load', () => window.mfPostLazyLoad(<?= /*@noEscape*/ $config ?>));
+                document.head.append(script);
+            }
+
+            document.body.addEventListener('touchstart', initMfPostLazyLoad, {once: true});
+            document.body.addEventListener('mouseover', initMfPostLazyLoad, {once: true});
+        })();
+    </script>
+<?php endif; ?>

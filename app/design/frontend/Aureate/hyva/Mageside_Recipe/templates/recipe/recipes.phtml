@@ -4,83 +4,161 @@
  * See MS-LICENSE.txt for license details.
  */
 
-
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
 use Mageside\Recipe\Block\Frontend\Index;
+use Mageside\Recipe\Block\Frontend\Recipe\RecipeList;
 use Mageside\Recipe\Helper\Config;
 
-/**
- * @var Index $block
- * @var Config $config
- */
+/** @var Index $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
-$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
-$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
-$writers = $block->getWritersCollection();
+/** @var Config $config */
+$config = $this->helper(Config::class);
+if (!$config->isEnabled()) {
+    return;
+}
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var RecipeList|false $listBlock */
+$listBlock = $block->getChildBlock('recipe_list');
+$recipeCount = $listBlock ? (int) $listBlock->getCollectionSize() : 0;
+$pageCount = $listBlock ? $listBlock->getCountPage() : 0;
+
+$request = $block->getRequest();
+$listUrl = $config->getRecipeListUrl();
+$search = $request->getParam('search');
+$search = is_string($search) ? trim($search) : '';
+
+// Search + filter params, carried through the pager links
+$activeParams = array_filter(
+    (array) $request->getQueryValue(),
+    static fn ($value) => is_string($value) && trim($value) !== ''
+);
+unset($activeParams['page']);
+$currentPage = max(1, (int) $request->getParam('page', 1));
+$pageUrl = static function (int $page) use ($listUrl, $activeParams): string {
+    $params = $page > 1 ? $activeParams + ['page' => $page] : $activeParams;
+    return $params ? $listUrl . '?' . http_build_query($params) : $listUrl;
+};
+$pagerLinkClasses = 'inline-flex h-10 min-w-[2.5rem] items-center justify-center gap-1 rounded-lg border '
+    . 'border-gray-300 bg-white px-3 text-sm font-medium text-gray-700 hover:bg-gray-50';
 ?>
-<?php if ($config->isEnabled()) : ?>
-    <div class="recipe-search">
-        <div class="recipe-search_content max-w-lg mx-auto">
-            <form class="form max-w-lg mx-auto" id="form-search" x-data="recipeSearch()" @submit.prevent="submitSearch">
-                <div class="flex">
-                    <div class="relative w-full">
-                        <input x-model="query"
-                               name="search" type="text"
-                               class="focus:outline-none focus:shadow-current focus:border-transparent focus-visible:outline-none block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 border input-text"
-                               autocomplete="off"
-                               placeholder="<?php /* @escapeNotVerified */
-                               echo $block->escapeHtml(__('Search recipes')); ?>"/>
-                        <button type="submit"
-                                class="action right-0 search absolute top-0 end-0 p-2.5 mr-1 text-sm font-medium h-full text-grey bg-transparent rounded-e-lg">
-                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                      stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                            </svg>
-                            <span class="sr-only">Search</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
+<section class="recipe-listing pb-12">
+    <header class="relative my-6 overflow-hidden rounded-2xl bg-gray-900">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageside_Recipe::images/gurus_bg.png')) ?>"
+             alt=""
+             class="absolute inset-0 h-full w-full object-cover"
+             fetchpriority="high">
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/60 to-gray-900/10"></div>
+        <div class="relative px-6 py-10 md:px-12 md:py-16">
+            <h1 class="text-3xl font-bold text-white md:text-5xl">
+                <?= $escaper->escapeHtml(__($config->getSeoTitle() ?: 'Recipes')) ?>
+            </h1>
+            <p class="mt-3 max-w-xl text-base text-white/90 md:text-lg">
+                <?= $escaper->escapeHtml(__('Natural DIY recipes for skin care, hair care and the home.')) ?>
+            </p>
         </div>
+    </header>
 
-        <div class="relative my-5">
-            <img class="w-full" src="<?php echo $this->getViewFileUrl('Mageside_Recipe::images/gurus_bg.png'); ?>"
-                 alt="banner">
+    <form method="get"
+          action="<?= $escaper->escapeUrl($listUrl) ?>"
+          role="search"
+          class="mb-8 rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:p-6"
+          x-data="initRecipeFilterForm()"
+          @submit.prevent="submit"
+          @change="onChange">
+        <div class="flex gap-2">
+            <label for="recipe-search" class="sr-only"><?= $escaper->escapeHtml(__('Search recipes')) ?></label>
+            <div class="relative flex-1">
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <?= $heroicons->searchHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                </span>
+                <input id="recipe-search"
+                       type="search"
+                       name="search"
+                       value="<?= $escaper->escapeHtmlAttr($search) ?>"
+                       placeholder="<?= $escaper->escapeHtmlAttr(__('Search recipes')) ?>"
+                       autocomplete="off"
+                       class="form-input w-full rounded-lg pl-10">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <?= $escaper->escapeHtml(__('Search')) ?>
+            </button>
         </div>
+        <?= $block->getChildHtml('recipe_filters') ?>
+    </form>
 
+    <div class="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+        <p class="text-sm text-gray-600" role="status">
+            <?php if ($search !== ''): ?>
+                <?= $escaper->escapeHtml(__('%1 result(s) for "%2"', $recipeCount, $search)) ?>
+            <?php else: ?>
+                <?= $escaper->escapeHtml($recipeCount === 1 ? __('1 recipe') : __('%1 recipes', $recipeCount)) ?>
+            <?php endif; ?>
+        </p>
+        <?php if ($activeParams): ?>
+            <a href="<?= $escaper->escapeUrl($listUrl) ?>"
+               class="text-sm font-medium text-lime-700 underline underline-offset-2 hover:text-lime-800">
+                <?= $escaper->escapeHtml(__('Clear search and filters')) ?>
+            </a>
+        <?php endif; ?>
     </div>
 
-    <?= $block->getChildHtml('recipe_filters'); ?>
-    <?= $block->getChildHtml('recipe_list'); ?>
-<?php endif; ?>
+    <?= $block->getChildHtml('recipe_list') ?>
+
+    <?php if ($pageCount > 1): ?>
+        <nav class="mt-10 flex flex-wrap items-center justify-center gap-2"
+             aria-label="<?= $escaper->escapeHtmlAttr(__('Recipe pages')) ?>">
+            <?php if ($currentPage > 1): ?>
+                <a href="<?= $escaper->escapeUrl($pageUrl($currentPage - 1)) ?>" class="<?= /* @noEscape */ $pagerLinkClasses ?>">
+                    <?= $heroicons->chevronLeftHtml('', 16, 16, ['aria-hidden' => 'true']) ?>
+                    <?= $escaper->escapeHtml(__('Previous')) ?>
+                </a>
+            <?php endif; ?>
+            <?php for ($page = 1; $page <= $pageCount; $page++): ?>
+                <?php if ($page === $currentPage): ?>
+                    <span aria-current="page"
+                          class="inline-flex h-10 min-w-[2.5rem] items-center justify-center rounded-lg bg-gray-900 px-3 text-sm font-semibold text-white">
+                        <?= (int) $page ?>
+                    </span>
+                <?php else: ?>
+                    <a href="<?= $escaper->escapeUrl($pageUrl($page)) ?>" class="<?= /* @noEscape */ $pagerLinkClasses ?>">
+                        <?= (int) $page ?>
+                    </a>
+                <?php endif; ?>
+            <?php endfor; ?>
+            <?php if ($currentPage < $pageCount): ?>
+                <a href="<?= $escaper->escapeUrl($pageUrl($currentPage + 1)) ?>" class="<?= /* @noEscape */ $pagerLinkClasses ?>">
+                    <?= $escaper->escapeHtml(__('Next')) ?>
+                    <?= $heroicons->chevronRightHtml('', 16, 16, ['aria-hidden' => 'true']) ?>
+                </a>
+            <?php endif; ?>
+        </nav>
+    <?php endif; ?>
+</section>
 <script>
-    function recipeSearch() {
+    function initRecipeFilterForm() {
         return {
-            query: '',
-            currentQuery: '',
-
-            init() {
-                this.initSearch();
-            },
-
-            initSearch() {
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.has('search')) {
-                    this.currentQuery = urlParams.get('search');
-                    this.query = this.currentQuery;
+            onChange(event) {
+                if (event.target.tagName === 'SELECT') {
+                    this.submit();
                 }
             },
-
-            submitSearch() {
-                console.log(this.query)
-                if (this.query || this.currentQuery) {
-                    this.currentQuery = this.query;
-                    this.triggerSearchEvent(this.query);
-                }
-            },
-
-            triggerSearchEvent(searchQuery) {
-                window.location.href = `/recipe/recipe/listView/?search=${encodeURIComponent(searchQuery)}`;
+            // Build the URL by hand so empty search/filter fields stay out of it
+            submit() {
+                const params = new URLSearchParams();
+                new FormData(this.$root).forEach((value, name) => {
+                    if (value.trim() !== '') {
+                        params.set(name, value.trim());
+                    }
+                });
+                const query = params.toString();
+                window.location.href = this.$root.action + (query ? '?' + query : '');
             }
         };
     }

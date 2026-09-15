@@ -50,7 +50,7 @@ $writers = $block->getWritersCollection();
                         <?php endif; ?>
                     </div>
                     <div class="writer-name"><h3><?php echo $block->escapeHtml($writer->getName()); ?></h3></div>
-                    <a href="<?php echo $block->escapeHtml($block->getUrl($config->getSeoRoute()) . $writer->getWriterUrlKey()) ?>" class="show-writer-recipes">
+                    <a href="<?php echo $block->escapeHtml($config->getWriterUrl($writer)) ?>" class="show-writer-recipes">
                         <?php echo $block->escapeHtml(__('View Recipes')); ?></a>
                 </li>
             <?php endforeach; ?>

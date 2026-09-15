@@ -21,7 +21,7 @@ $imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
     </div>
 <?php else : ?>
     <?php foreach ($recipeCollection as $recipe) : ?>
-        <?php $recipeUrl = $block->getUrl($config->getSeoRoute()) . $recipe->getUrlKey() . $config->getSeoPostfix(); ?>
+        <?php $recipeUrl = $config->getRecipeUrl($recipe); ?>
         <li class="recipe-item item">
             <div class="recipe-item-info">
                 <div class="recipe-item-details">

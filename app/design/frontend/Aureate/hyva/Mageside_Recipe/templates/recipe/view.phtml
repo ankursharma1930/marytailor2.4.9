@@ -3,90 +3,184 @@
  * Copyright © Mageside. All rights reserved.
  * See MS-LICENSE.txt for license details.
  */
-/**
- * @var Mageside\Recipe\Block\Frontend\Recipe\Recipe $block
- * @var Mageside\Recipe\Helper\Config $config
- */
-$config = $this->helper(\Mageside\Recipe\Helper\Config::class);
-$imageHelper = $this->helper(\Mageside\Recipe\Helper\Image::class);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Mageside\Recipe\Block\Frontend\Recipe\Recipe;
+use Mageside\Recipe\Block\Frontend\Recipe\Review;
+use Mageside\Recipe\Helper\Config;
+
+/** @var Recipe $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Config $config */
+$config = $this->helper(Config::class);
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
 $recipe = $block->getRecipe();
-$writer = $block->getWriter();
+
+$ingredients = array_filter(
+    (array) $recipe->getIngredients(),
+    static fn ($item) => trim(($item['measure'] ?? '') . ($item['ingredient'] ?? '')) !== ''
+);
+$steps = array_filter(
+    (array) $recipe->getMethod(),
+    static fn ($item) => trim($item['step'] ?? '') !== ''
+);
+
+$facts = array_filter([
+    ['icon' => 'clock', 'label' => __('Prep time'), 'value' => $block->getFormattedDuration($recipe->getPrepTime())],
+    ['icon' => 'fire', 'label' => __('Cook time'), 'value' => $block->getFormattedDuration($recipe->getCookTime())],
+    ['icon' => 'users', 'label' => __('Serves'), 'value' => $block->getServings($recipe->getServingsNumber())],
+], static fn ($fact) => (string) $fact['value'] !== '');
+
+/** @var Review|false $reviewBlock */
+$reviewBlock = $config->getReviewEnabled() ? $block->getChildBlock('recipe_review') : false;
+$reviewCount = $reviewBlock ? (int) $reviewBlock->getReviewsSize() : 0;
+
+$videoId = '';
+if ($recipe->getMediaType() === 'video'
+    && preg_match('~(?:youtu\.be/|[?&]v=|/embed/)([\w-]{11})~', (string) $recipe->getMediaTypeVideoUrl(), $matches)
+) {
+    $videoId = $matches[1];
+}
 ?>
-<h1 class="text-3xl font-bold mb-4 text-center"><?php echo $block->escapeHtml($recipe->getTitle()) ?></h1>
-    <div class="mx-auto p-6 mt-10">
-        <!-- Recipe Image -->
-        <div class="mb-6">
-            <?php echo $block->getChildHtml('recipe_image'); ?>
-            <?php if ($recipe->getMediaType() == 'video') : ?>
-                <?php echo $block->getChildHtml('recipe_video'); ?>
+<article class="recipe-view pb-16">
+    <div class="grid items-start gap-8 pt-6 lg:grid-cols-2 lg:gap-12 lg:pt-10">
+        <div class="space-y-4">
+            <?= $block->getChildHtml('recipe_image') ?>
+            <?php if ($videoId): ?>
+                <div class="aspect-video overflow-hidden rounded-2xl bg-gray-900">
+                    <iframe src="https://www.youtube-nocookie.com/embed/<?= $escaper->escapeHtmlAttr($videoId) ?>"
+                            title="<?= $escaper->escapeHtmlAttr(__('%1 video', $recipe->getTitle())) ?>"
+                            class="h-full w-full"
+                            loading="lazy"
+                            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
             <?php endif; ?>
         </div>
-        <div class="flex justify-between mb-6 text-gray-600">
-            <div class="flex items-center">
-                <svg title="<?php echo $block->escapeHtml(__('Servings Number')) ?>" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 10.5l.25-2.5a2 2 0 011.11-1.76l1.14-.57a2 2 0 012.12 0l1.14.57a2 2 0 011.11 1.76l.25 2.5m3.75 0h-1a2 2 0 00-2-2h-3.5a2 2 0 00-2 2h-1m3 8a4 4 0 10-8 0 4 4 0 008 0z"></path></svg>
-                <?php $servingsNumber = $block->getFormatServingsNumber($recipe->getServingsNumber()); ?>
-                <span><?php echo $servingsNumber . ' ' . (($servingsNumber == '1') ? $block->escapeHtml(__('person')) : $block->escapeHtml(__('people'))); ?></span>
-            </div>
-            <div class="flex items-center">
-                <svg title="<?php echo $block->escapeHtml(__('Preparation Time')) ?>" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0 8c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm0-4a4 4 0 100-8 4 4 0 000 8zm0 4a4 4 0 100-8 4 4 0 000 8z"></path></svg>
-                <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getPrepTime())); ?></span>
-            </div>
-            <div class="flex items-center">
-                <svg title="<?php echo $block->escapeHtml(__('Cooking Time')) ?>" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3 3v-6m4-1a9 9 0 11-8 0 9 9 0 018 0zm-8 6a9 9 0 110-8 9 9 0 010 8z"></path></svg>
-                <span><?php echo $block->escapeHtml($block->getFormatCookTime($recipe->getCookTime())); ?></span>
+
+        <div>
+            <h1 class="text-3xl font-bold leading-tight text-gray-900 md:text-4xl">
+                <?= $escaper->escapeHtml($recipe->getTitle()) ?>
+            </h1>
+
+            <?php if ($reviewBlock): ?>
+                <a href="#reviews" class="mt-3 inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-lime-700">
+                    <?= $heroicons->chatAltHtml('', 18, 18, ['aria-hidden' => 'true']) ?>
+                    <?php if ($reviewCount): ?>
+                        <?= $escaper->escapeHtml($reviewCount === 1 ? __('1 review') : __('%1 reviews', $reviewCount)) ?>
+                    <?php else: ?>
+                        <?= $escaper->escapeHtml(__('Be the first to review this recipe')) ?>
+                    <?php endif; ?>
+                </a>
+            <?php endif; ?>
+
+            <?php if (!empty($recipe->getShortDescription())): ?>
+                <div class="prose mt-4 max-w-none text-gray-700">
+                    <?= /* @noEscape */ $recipe->getShortDescriptionHtml() ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($facts): ?>
+                <dl class="mt-6 flex divide-x divide-gray-200 rounded-xl border border-gray-200 bg-gray-50">
+                    <?php foreach ($facts as $fact): ?>
+                        <div class="flex flex-1 flex-col items-center gap-1 px-2 py-4 text-center">
+                            <dt class="flex flex-col items-center gap-1 text-xs font-medium uppercase tracking-wide text-gray-500">
+                                <?= $heroicons->renderHtml($fact['icon'], 'text-lime-700', 24, 24, ['aria-hidden' => 'true']) ?>
+                                <?= $escaper->escapeHtml($fact['label']) ?>
+                            </dt>
+                            <dd class="text-base font-semibold text-gray-900"><?= $escaper->escapeHtml($fact['value']) ?></dd>
+                        </div>
+                    <?php endforeach; ?>
+                </dl>
+            <?php endif; ?>
+
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+                <?php if ($ingredients || $steps): ?>
+                    <a href="<?= $ingredients ? '#recipe-ingredients' : '#recipe-method' ?>" class="btn btn-primary">
+                        <?= $escaper->escapeHtml(__('Jump to recipe')) ?>
+                    </a>
+                <?php endif; ?>
+                <?= $block->getChildHtml('recipe.view.print.button') ?>
             </div>
 
+            <?= $block->getChildHtml('social_sharing') ?>
         </div>
-        <!-- Social Share Buttons -->
-        <?php echo $block->getChildHtml('social_sharing'); ?>
-        <?php echo $block->getChildHtml('recipe.view.print.button'); ?>
-        <div class="description">
-            <?php if (!empty($recipe->getShortDescription())) : ?>
-                <?php echo $recipe->getShortDescriptionHtml(); ?>
+    </div>
+
+    <?php if ($ingredients || $steps): ?>
+        <div class="mt-12 grid items-start gap-8 lg:mt-16 lg:grid-cols-3 lg:gap-12">
+            <?php if ($ingredients): ?>
+                <section id="recipe-ingredients"
+                         class="scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:sticky lg:top-6"
+                         aria-labelledby="recipe-ingredients-title">
+                    <h2 id="recipe-ingredients-title" class="flex items-baseline justify-between gap-2 text-xl font-bold text-gray-900">
+                        <?= $escaper->escapeHtml(__('Ingredients')) ?>
+                        <span class="text-sm font-normal text-gray-500">
+                            <?= $escaper->escapeHtml(count($ingredients) === 1 ? __('1 item') : __('%1 items', count($ingredients))) ?>
+                        </span>
+                    </h2>
+                    <ul role="list" class="mt-4 divide-y divide-gray-100">
+                        <?php foreach ($ingredients as $item): ?>
+                            <li class="flex gap-3 py-2.5 text-sm">
+                                <span class="w-24 shrink-0 font-semibold text-gray-900">
+                                    <?= $escaper->escapeHtml(trim($item['measure'] ?? '')) ?>
+                                </span>
+                                <span class="text-gray-700">
+                                    <?php if (!empty($item['url'])): ?>
+                                        <a href="<?= $escaper->escapeUrl($item['url']) ?>"
+                                           target="_blank"
+                                           rel="noopener"
+                                           class="text-lime-700 underline decoration-lime-300 underline-offset-2 hover:text-lime-800">
+                                            <?= $escaper->escapeHtml($item['ingredient'] ?? '') ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <?= $escaper->escapeHtml($item['ingredient'] ?? '') ?>
+                                    <?php endif; ?>
+                                </span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+            <?php endif; ?>
+
+            <?php if ($steps): ?>
+                <section id="recipe-method"
+                         class="scroll-mt-24 <?= $ingredients ? 'lg:col-span-2' : 'lg:col-span-3' ?>"
+                         aria-labelledby="recipe-method-title">
+                    <h2 id="recipe-method-title" class="text-xl font-bold text-gray-900">
+                        <?= $escaper->escapeHtml(__('Method')) ?>
+                    </h2>
+                    <ol role="list" class="mt-4 space-y-3">
+                        <?php $stepNumber = 0; ?>
+                        <?php foreach ($steps as $item): ?>
+                            <li class="flex gap-4 rounded-xl bg-gray-50 p-4">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime-700 text-sm font-bold text-white"
+                                      aria-hidden="true"><?= ++$stepNumber ?></span>
+                                <p class="whitespace-pre-line pt-1 leading-relaxed text-gray-800"><?= $escaper->escapeHtml(trim($item['step'])) ?></p>
+                            </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </section>
             <?php endif; ?>
         </div>
-        <!-- Ingredients List -->
-        <h3 class="text-3xl font-bold mb-4 text-left border-b-2 py-3">Ingredients and Method</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-            <div>
-                <h2 class="text-2xl font-semibold mb-4">Ingredients</h2>
-                <ul class="list-disc list-inside">
-                    <?php foreach ($recipe->getIngredients() as $ingredientData) : ?>
-                        <li>
-                            <?php echo $block->escapeHtml($ingredientData['measure']); ?>
-                            <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
-                            <a
-                                href="<?php echo $block->escapeHtml($ingredientData['url']); ?>"
-                                target="_blank"
-                            >
-                                <?php endif; ?>
-                                <?php echo $block->escapeHtml($ingredientData['ingredient']); ?>
-                                <?php if(isset($ingredientData['url']) && $block->escapeHtml($ingredientData['url'])): ?>
-                            </a>
-                        <?php endif; ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <div>
-                <h2 class="text-2xl font-semibold mb-4">Methods</h2>
-                <ul class="list-disc list-inside">
-                    <?php foreach ($recipe->getMethod() as $methodData) : ?>
-                        <?php if (isset($methodData['step'])) : ?>
-                            <li>
-                                <?php echo $block->escapeHtml($methodData['step']); ?>
-                            </li>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-        <!-- Related Products -->
-        <?php if (!empty($recipe->getAssignedProductIds())) : ?>
-        <h3 class="text-3xl font-bold mb-4 text-left border-b-2 py-3">Products you will need</h3>
-        <?php echo $block->getChildHtml('ingredients_list') ?>
-        <?php endif; ?>
-        <?php if ($config->getReviewEnabled()) : ?>
-            <?php echo $block->getChildHtml('recipe_review') ?>
-        <?php endif; ?>
-    </div>
+    <?php endif; ?>
+
+    <?php if (!empty($recipe->getAssignedProductIds())): ?>
+        <section class="mt-16" aria-labelledby="recipe-products-title">
+            <h2 id="recipe-products-title" class="border-b border-gray-200 pb-3 text-2xl font-bold text-gray-900">
+                <?= $escaper->escapeHtml(__('Products you will need')) ?>
+            </h2>
+            <?= $block->getChildHtml('ingredients_list') ?>
+        </section>
+    <?php endif; ?>
+
+    <?php if ($reviewBlock): ?>
+        <?= $block->getChildHtml('recipe_review') ?>
+    <?php endif; ?>
+</article>

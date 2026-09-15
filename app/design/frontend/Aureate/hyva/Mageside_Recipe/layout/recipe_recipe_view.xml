@@ -8,8 +8,9 @@
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="Mageside_Recipe::css/font-awesome.min.css"/>
-        <css src="mage/gallery/gallery.css"/>
+        <!-- Luma-era assets added by the module layout; the Hyvä templates don't use them -->
+        <remove src="Mageside_Recipe::css/font-awesome.min.css"/>
+        <remove src="mage/gallery/gallery.css"/>
     </head>
 <body>
     <referenceContainer name="content">

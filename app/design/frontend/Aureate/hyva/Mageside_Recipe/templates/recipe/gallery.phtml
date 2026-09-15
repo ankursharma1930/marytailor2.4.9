@@ -4,18 +4,27 @@
  * See MS-LICENSE.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+use Magento\Framework\Escaper;
+use Mageside\Recipe\Block\Frontend\Recipe\GalleryImages;
 
 /**
- * Product media data template
+ * Main recipe image on the recipe page
  *
- * @var $block \Magento\Catalog\Block\Product\View\Gallery
+ * @var GalleryImages $block
+ * @var Escaper $escaper
  */
+
+$imageUrl = $block->returnImageUrl();
+if (!$imageUrl) {
+    return;
+}
+
+$parentBlock = $block->getParentBlock();
+$title = $parentBlock ? (string) $parentBlock->getRecipe()->getTitle() : '';
+$placeholderUrl = $block->getViewFileUrl('Mageside_Recipe::images/recipe-image-coming-soon.png');
 ?>
-<div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
-    <img alt="<?= /* @escapeNotVerified */ __('Loading...') ?>"
-         class="w-full h-auto rounded-lg"
-         src="<?= /* @noEscape */ $block->returnImageUrl() ? $block->returnImageUrl() : $block->getViewFileUrl('images/loader-1.gif') ?>"
-         style="top: calc(50% - <?= /* @escapeNotVerified */ ($block->getImageAttribute('product_page_image_small', 'height'))/2 ?>px);"
-    />
-</div>
+<img src="<?= $escaper->escapeUrl($imageUrl) ?>"
+     onerror="this.onerror=null;this.src='<?= $escaper->escapeJs($placeholderUrl) ?>'"
+     alt="<?= $escaper->escapeHtmlAttr($title) ?>"
+     class="w-full rounded-2xl bg-gray-100 shadow-sm"
+     fetchpriority="high">

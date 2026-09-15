@@ -1,0 +1,58 @@
+/*
+ * Shopping cart page (checkout/cart/index).
+ *
+ * Hyvä 1.5.2's cart templates use `text-fg-secondary`, a Tailwind v4 token
+ * this theme's v3 config never generates, so it is mapped here for the cart.
+ * The child theme's `.btn` is a filled grey button, which turns the item edit /
+ * remove icon buttons into grey blocks; they get an outline style instead.
+ */
+.checkout-cart-index {
+    .text-fg-secondary {
+        @apply text-gray-600;
+    }
+
+    /* Mirasvit reward points notice: stack its two lines on narrow screens */
+    .reward-message .message {
+        @apply flex-col items-start gap-1 mb-6;
+
+        @screen md {
+            @apply flex-row items-center;
+        }
+
+        .limit {
+            @apply text-sm font-normal text-gray-700;
+        }
+    }
+
+    .item-actions .btn,
+    #empty_cart_button {
+        @apply bg-white text-gray-700 border border-gray-300 shadow-none;
+
+        &:hover {
+            @apply bg-gray-50 text-black border-gray-400;
+        }
+    }
+
+    /*
+     * customer.css styles every .actions-toolbar as flex-row-reverse with a top
+     * border; on the cart that would swap "Continue Shopping" and the buttons
+     * and double the divider under the last item. Child combinator so the
+     * clear-cart dialog's own toolbar keeps the default.
+     */
+    .form-cart > .actions-toolbar {
+        @apply flex-row flex-wrap gap-4 border-t-0 pt-0;
+    }
+
+    #checkout-link-button {
+        @apply justify-center py-3 text-lg font-semibold;
+    }
+
+    /*
+     * The summary column is narrow; Hyvä's 50/50 md:grid-cols-2 total rows
+     * wrap "Grand Total Incl. Tax". Let the amount take only the width it needs.
+     */
+    #cart-totals .text-xl {
+        @apply text-lg;
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+}

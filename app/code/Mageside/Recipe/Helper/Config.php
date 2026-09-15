@@ -98,6 +98,51 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Recipe listing page URL, e.g. https://example.com/recipe
+     *
+     * @return string
+     */
+    public function getRecipeListUrl()
+    {
+        return $this->_urlBuilder->getDirectUrl($this->getSeoRoute());
+    }
+
+    /**
+     * Single recipe page URL, e.g. https://example.com/recipe/beeswax-lip-balm
+     *
+     * Controller\Router only matches "<route>/<url_key>", and getUrl($route) has no
+     * trailing slash, so the two must be joined explicitly.
+     *
+     * @param \Mageside\Recipe\Model\Recipe $recipe
+     * @return string
+     */
+    public function getRecipeUrl($recipe)
+    {
+        return $this->_urlBuilder->getDirectUrl(
+            $this->getSeoRoute() . '/' . $recipe->getUrlKey() . $this->getSeoPostfix()
+        );
+    }
+
+    /**
+     * Writer page URL, or an empty string when the writer has no routable page
+     *
+     * Controller\Router redirects non-writers away, and it cannot match a url key
+     * containing slashes (some writers have a full URL stored as their key).
+     *
+     * @param \Mageside\Recipe\Model\Writer $writer
+     * @return string
+     */
+    public function getWriterUrl($writer)
+    {
+        $urlKey = (string) $writer->getWriterUrlKey();
+        if (!$writer->getIsWriter() || !preg_match('/^[a-z0-9_-]+$/i', $urlKey)) {
+            return '';
+        }
+
+        return $this->_urlBuilder->getDirectUrl($this->getSeoRoute() . '/' . $urlKey);
+    }
+
+    /**
      * @return mixed
      */
     public function getProductBlockTitle()

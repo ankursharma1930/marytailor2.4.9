@@ -1,0 +1,74 @@
+<?php
+/**
+ * Blog sidebar post list: shared by the Recent, Featured and Popular blocks
+ * (see Magefan_Blog blog_default.xml).
+ *
+ * @var \Magefan\Blog\Block\Post\PostList\AbstractList $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$imageHelper = $this->helper(\Magefan\Blog\Helper\Image::class);
+// 300x200 matches the existing resize cache (media/blog/cache/300x200)
+$width = (int)$block->getBlockImageWidth() ?: 300;
+$height = (int)$block->getBlockImageheight() ?: 200;
+$placeholderUrl = $block->getViewFileUrl('images/blog-placeholder.svg');
+
+$widgetKey = (string)$block->getWidgetKey();
+$titleIcon = [
+    'featured_posts' => 'star',
+    'popular_posts' => 'fire',
+][$widgetKey] ?? 'clock';
+
+$postCollection = $block->getPostCollection();
+?>
+<?php if ($postCollection->count()): ?>
+    <section class="blog-sidebar-block block-<?= $escaper->escapeHtmlAttr(str_replace('_', '-', $widgetKey)) ?> block-list-posts">
+        <h2 class="blog-sidebar-title">
+            <?= $heroicons->renderHtml($titleIcon, '', 20, 20, ['aria-hidden' => 'true']) ?>
+            <span><?= $escaper->escapeHtml(__($block->getBlockTitle() ?: 'Recent Posts')) ?></span>
+        </h2>
+
+        <ul class="space-y-4">
+            <?php foreach ($postCollection as $post): ?>
+                <?php
+                $postTitle = (string)$post->getTitle();
+                ?>
+                <li>
+                    <a href="<?= $escaper->escapeUrl($post->getPostUrl()) ?>" class="group flex items-start gap-3">
+                        <?php if ($block->getDisplayImage()): ?>
+                            <?php
+                            // The helper returns '' when the file is missing from media, not only when unset
+                            $imageFile = $post->getFeaturedListImg() ?: $post->getFeaturedImg();
+                            $imageUrl = $imageFile ? (string)$imageHelper->init($imageFile)->resize($width, $height) : '';
+                            ?>
+                            <span class="block aspect-[3/2] w-24 shrink-0 overflow-hidden rounded-lg bg-stone-100">
+                                <img src="<?= $escaper->escapeUrl($imageUrl ?: $placeholderUrl) ?>"
+                                     alt=""
+                                     loading="lazy"
+                                     width="96"
+                                     height="64"
+                                     class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                            </span>
+                        <?php endif; ?>
+                        <span class="min-w-0 flex-1">
+                            <span class="line-clamp-2 text-sm font-medium leading-snug text-gray-800 transition-colors group-hover:text-lime-700">
+                                <?= $escaper->escapeHtml($postTitle) ?>
+                            </span>
+                            <?php if ($post->isPublishDateEnabled()): ?>
+                                <span class="mt-1 flex items-center gap-1 text-xs text-gray-500">
+                                    <?= $heroicons->calendarHtml('h-3.5 w-3.5 shrink-0', 14, 14, ['aria-hidden' => 'true']) ?>
+                                    <?= $escaper->escapeHtml($post->getPublishDate()) ?>
+                                </span>
+                            <?php endif; ?>
+                        </span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+<?php endif; ?>

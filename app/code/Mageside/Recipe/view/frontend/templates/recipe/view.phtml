@@ -55,7 +55,7 @@ $writer = $block->getWriter();
                                         <ul>
                                             <li>
                                                 <?php echo $block->escapeHtml(__('Recipe by: ')) ?>
-                                                <a href="<?php echo $block->escapeHtml($block->getUrl($config->getSeoRoute()) . $writer->getWriterUrlKey()) ?>">
+                                                <a href="<?php echo $block->escapeHtml($config->getWriterUrl($writer)) ?>">
                                                     <strong><?php echo $block->escapeHtml($writer->getNickname()) ?></strong>
                                                 </a>
                                             </li>

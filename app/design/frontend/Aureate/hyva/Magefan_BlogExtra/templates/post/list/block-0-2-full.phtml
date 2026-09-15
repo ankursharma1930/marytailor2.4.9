@@ -1,0 +1,151 @@
+<?php
+/**
+ * Blog index post list, rendered as a card grid.
+ *
+ * Replaces Magefan BlogExtra's "block-0-2-full" mosaic, which /blog uses via
+ * mfblog/index_page/template. The mosaic laid titles over background images, so
+ * posts whose image is missing became blank grey tiles; these cards fall back to
+ * a placeholder image instead.
+ *
+ * The outer .mosaica-holder must stay a direct child of .column: the lazyload
+ * pager (list_wrapper in Magefan_Blog blog_post_list.xml) appends the next page's
+ * holder into it.
+ *
+ * @var \Magefan\Blog\Block\Post\PostList $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$imageHelper = $this->helper(\Magefan\Blog\Helper\Image::class);
+// 1000px wide matches the resize cache the mosaic already generated (media/blog/cache/1000x_0)
+$imageWidth = (int)$block->getBackgroundImageWidth() ?: 1000;
+$placeholderUrl = $block->getViewFileUrl('images/blog-placeholder.svg');
+
+$postCollection = $block->getPostCollection();
+?>
+<?php if (!$postCollection->count()): ?>
+    <div class="message info empty">
+        <?= $escaper->escapeHtml(__('We can\'t find posts matching the selection.')) ?>
+    </div>
+<?php else: ?>
+    <div class="mosaica-holder space-y-6 lg:space-y-8">
+        <div class="grid gap-6 sm:grid-cols-2 lg:gap-8">
+            <?php foreach ($postCollection as $post): ?>
+                <?php
+                $postUrl = $post->getPostUrl();
+                $postTitle = (string)$post->getTitle();
+
+                // The helper returns '' when the file is missing from media, not only when unset
+                $imageFile = $post->getFeaturedListImg() ?: $post->getFeaturedImg();
+                $imageUrl = $imageFile ? (string)$imageHelper->init($imageFile)->resize($imageWidth, null, false) : '';
+                $imageAlt = $post->getData('featured_list_img_alt') ?: $post->getData('featured_img_alt') ?: $postTitle;
+
+                $categories = [];
+                if ($post->getCategoriesCount()) {
+                    foreach ($post->getParentCategories() as $category) {
+                        $categories[] = $category;
+                    }
+                }
+                $primaryCategory = $categories[0] ?? null;
+                $otherCategoryTitles = array_map(static fn($category) => $category->getTitle(), array_slice($categories, 1));
+
+                $excerpt = preg_replace('#<(style|script)\b[^>]*>.*?</\1>#is', '', (string)$post->getShortFilteredContent());
+                $excerpt = html_entity_decode(strip_tags($excerpt), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $excerpt = trim(preg_replace('/\s+/u', ' ', $excerpt));
+                if (mb_strlen($excerpt) > 180) {
+                    $cut = mb_substr($excerpt, 0, 180);
+                    $excerpt = rtrim(mb_substr($cut, 0, mb_strrpos($cut, ' ') ?: 180), ' ,.;:!?-') . '…';
+                }
+
+                $author = $block->authorEnabled() ? $post->getAuthor() : null;
+                ?>
+                <article class="blog-card group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                    <div class="relative">
+                        <a href="<?= $escaper->escapeUrl($postUrl) ?>"
+                           class="block aspect-[16/10] overflow-hidden bg-stone-100"
+                           tabindex="-1"
+                           aria-hidden="true">
+                            <?php if ($imageUrl !== ''): ?>
+                                <img src="<?= $escaper->escapeUrl($imageUrl) ?>"
+                                     alt="<?= $escaper->escapeHtmlAttr($imageAlt) ?>"
+                                     loading="lazy"
+                                     class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                            <?php else: ?>
+                                <img src="<?= $escaper->escapeUrl($placeholderUrl) ?>"
+                                     alt=""
+                                     loading="lazy"
+                                     class="h-full w-full object-cover">
+                            <?php endif; ?>
+                        </a>
+
+                        <?php if ($primaryCategory): ?>
+                            <div class="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+                                <a href="<?= $escaper->escapeUrl($primaryCategory->getCategoryUrl()) ?>"
+                                   class="rounded-full bg-white/95 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-lime-800 shadow-sm transition-colors hover:bg-lime-700 hover:text-white">
+                                    <?= $escaper->escapeHtml($primaryCategory->getTitle()) ?>
+                                </a>
+                                <?php if ($otherCategoryTitles): ?>
+                                    <span class="rounded-full bg-white/95 px-2 py-1 text-xs font-semibold text-gray-600 shadow-sm"
+                                          title="<?= $escaper->escapeHtmlAttr(implode(', ', $otherCategoryTitles)) ?>">
+                                        +<?= count($otherCategoryTitles) ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="flex flex-1 flex-col p-5 sm:p-6">
+                        <?php if ($post->isPublishDateEnabled() || $author): ?>
+                            <div class="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+                                <?php if ($post->isPublishDateEnabled()): ?>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <?= $heroicons->calendarHtml('h-4 w-4 shrink-0 text-lime-700', 16, 16, ['aria-hidden' => 'true']) ?>
+                                        <time datetime="<?= $escaper->escapeHtmlAttr(date('Y-m-d', strtotime((string)$post->getData('publish_time')))) ?>">
+                                            <?= $escaper->escapeHtml($post->getPublishDate()) ?>
+                                        </time>
+                                    </span>
+                                <?php endif; ?>
+                                <?php if ($author): ?>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <?= $heroicons->userHtml('h-4 w-4 shrink-0 text-lime-700', 16, 16, ['aria-hidden' => 'true']) ?>
+                                        <?php if ($block->authorPageEnabled()): ?>
+                                            <a href="<?= $escaper->escapeUrl($author->getAuthorUrl()) ?>" class="hover:text-lime-700 hover:underline">
+                                                <?= $escaper->escapeHtml($author->getTitle()) ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <?= $escaper->escapeHtml($author->getTitle()) ?>
+                                        <?php endif; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <h2 class="mb-3 text-lg font-semibold leading-snug text-gray-900 sm:text-xl">
+                            <a href="<?= $escaper->escapeUrl($postUrl) ?>" class="line-clamp-2 transition-colors hover:text-lime-700">
+                                <?= $escaper->escapeHtml($postTitle) ?>
+                            </a>
+                        </h2>
+
+                        <?php if ($excerpt !== ''): ?>
+                            <p class="mb-5 line-clamp-3 text-sm leading-relaxed text-gray-600">
+                                <?= $escaper->escapeHtml($excerpt) ?>
+                            </p>
+                        <?php endif; ?>
+
+                        <a href="<?= $escaper->escapeUrl($postUrl) ?>"
+                           class="mt-auto inline-flex items-center gap-1.5 self-start text-sm font-semibold text-lime-700 transition-colors hover:text-lime-900"
+                           aria-label="<?= $escaper->escapeHtmlAttr(__('Read more: %1', $postTitle)) ?>">
+                            <?= $escaper->escapeHtml(__('Read article')) ?>
+                            <?= $heroicons->arrowRightHtml('h-4 w-4 transition-transform duration-300 group-hover:translate-x-1', 16, 16, ['aria-hidden' => 'true']) ?>
+                        </a>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?= $block->getToolbarHtml() ?>
+<?php endif; ?>

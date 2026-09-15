@@ -9,7 +9,7 @@
  */
     $config = $this->helper(\Mageside\Recipe\Helper\Config::class);
     $recipe = $block->getRecipe();
-    $url = urlencode($block->getUrl($config->getSeoRoute()) . $recipe->getUrlKey() . $config->getSeoPostfix());
+    $url = urlencode($config->getRecipeUrl($recipe));
     $twitterShare = $config->getTwitterShare();
     $facebookShare = $config->getFacebookShare();
     $googleShare = $config->getGoogleShare();

@@ -92,12 +92,12 @@ class Recipe extends \Mageside\Recipe\Block\Frontend\AbstractBlock
                 ]
             )->addCrumb(
                 'recipe_list',
-                ['label' => __($this->helper->getSeoTitle()), 'link' => $this->getUrl($this->helper->getSeoRoute())]
+                ['label' => __($this->helper->getSeoTitle()), 'link' => $this->helper->getRecipeListUrl()]
             )->addCrumb(
                 'recipe_writer',
                 [
                     'label' => __($this->getWriterName()),
-                    'link' => $this->getUrl($this->helper->getSeoRoute()) . $this->getWriter()->getWriterUrlKey()
+                    'link' => $this->helper->getWriterUrl($this->getWriter())
                 ]
             )->addCrumb(
                 'recipe',

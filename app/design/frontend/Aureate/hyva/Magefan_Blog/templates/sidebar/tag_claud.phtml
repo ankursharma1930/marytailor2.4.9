@@ -1,0 +1,59 @@
+<?php
+/**
+ * Blog sidebar tag cloud, as chips; popular tags are emphasised via data-weight.
+ *
+ * @var \Magefan\Blog\Block\Sidebar\TagClaud $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\Model\ViewModelRegistry $viewModels
+ */
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$visibleCount = 20;
+$tags = [];
+foreach ($block->getTags() as $tag) {
+    $tags[] = $tag;
+}
+
+$renderTags = static function (array $tags) use ($block, $escaper): void {
+    foreach ($tags as $tag) {
+        ?>
+        <li>
+            <a href="<?= $escaper->escapeUrl($tag->getTagUrl()) ?>"
+               class="blog-chip"
+               data-weight="<?= $escaper->escapeHtmlAttr($block->getTagClass($tag)) ?>">
+                <?= $escaper->escapeHtml($tag->getTitle()) ?>
+            </a>
+        </li>
+        <?php
+    }
+};
+?>
+<?php if ($tags): ?>
+    <section class="blog-sidebar-block block-tagclaud">
+        <h2 class="blog-sidebar-title">
+            <?= $heroicons->tagHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+            <span><?= $escaper->escapeHtml(__('Tags')) ?></span>
+        </h2>
+
+        <ul class="flex flex-wrap gap-2">
+            <?php $renderTags(array_slice($tags, 0, $visibleCount)); ?>
+        </ul>
+
+        <?php if (count($tags) > $visibleCount): ?>
+            <details class="group/more">
+                <summary class="blog-sidebar-more">
+                    <span class="group-open/more:hidden"><?= $escaper->escapeHtml(__('Show all tags (%1)', count($tags))) ?></span>
+                    <span class="hidden group-open/more:inline"><?= $escaper->escapeHtml(__('Show fewer')) ?></span>
+                    <?= $heroicons->chevronDownHtml('h-4 w-4 transition-transform group-open/more:rotate-180', 16, 16, ['aria-hidden' => 'true']) ?>
+                </summary>
+                <ul class="mt-2 flex flex-wrap gap-2">
+                    <?php $renderTags(array_slice($tags, $visibleCount)); ?>
+                </ul>
+            </details>
+        <?php endif; ?>
+    </section>
+<?php endif; ?>

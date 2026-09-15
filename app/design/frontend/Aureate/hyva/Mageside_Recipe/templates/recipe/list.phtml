@@ -1,15 +1,15 @@
 <?php
-
 /**
  * Copyright © Mageside. All rights reserved.
  * See MS-LICENSE.txt for license details.
  */
+
 /**
+ * Recipe card grid, used on the recipe listing page and on product pages
+ *
  * @var \Mageside\Recipe\Block\Frontend\Recipe\RecipeList $block
  */
 ?>
-<div>
-    <ul class="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <?= $block->getChildHtml('recipe_items'); ?>
-    </ul>
-</div>
+<ul role="list" class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+    <?= $block->getChildHtml('recipe_items') ?>
+</ul>
