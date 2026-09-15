@@ -11,3 +11,88 @@
         scroll-snap-align: start;
     }
 }
+
+/*
+ * Hyva 1.5.2 snap-slider: product/slider/product-slider.phtml (related,
+ * upsell) and product/widget/viewed/list.phtml (recently viewed).
+ *
+ * 1.5.2 defines these in its own Tailwind v4 components
+ * (vendor/hyva-themes/magento2-default-theme/web/tailwind/components/slider.css).
+ * This child theme builds with Tailwind v3 and never had them, so .snap-track
+ * fell back to block layout: every slide stacked as a full-width card with a
+ * full-width image, and the pager rendered as a column of empty links.
+ *
+ * Ported to v3 syntax, outside @layer (see rating-summary.css). The breakpoint
+ * column counts the templates emit (sm:[--snap-cols:2] ...) are utilities,
+ * which load after this file, so they still override the 1-column default.
+ */
+.snap-track {
+    --snap-cols: 1;
+    --snap-gap: theme('spacing.4');
+    --snap-size: calc((100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols));
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--snap-size);
+    gap: var(--snap-gap);
+    padding-top: theme('spacing.6');
+    padding-bottom: theme('spacing.6');
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        scroll-behavior: smooth;
+    }
+
+    & > * {
+        scroll-snap-align: start;
+    }
+}
+
+/*
+ * Scoped to pagers that follow a .snap-track. The product gallery also uses
+ * .snap-pager/.snap-marker for its thumbnail strip, with its own track and
+ * utility classes; unscoped, the dot sizing below would shrink its thumbnails.
+ */
+.snap-track ~ .snap-pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: theme('spacing.1');
+    min-height: theme('spacing.11');
+    padding-top: theme('spacing.2');
+    padding-bottom: theme('spacing.2');
+
+    .snap-marker {
+        display: block;
+        flex-shrink: 0;
+        box-sizing: content-box;
+        width: 0.5rem;
+        height: 0.5rem;
+        padding: 0.375rem; /* 20px tap target around an 8px dot */
+        border-radius: 9999px;
+        background-color: theme('colors.gray.300');
+        background-clip: content-box;
+        transition: background-color 300ms;
+
+        @media (prefers-reduced-motion: no-preference) {
+            transition-property: width, background-color;
+        }
+
+        &:hover {
+            background-color: theme('colors.gray.500');
+        }
+
+        &[aria-current="true"] {
+            width: 1.5rem;
+            background-color: theme('colors.gray.900');
+        }
+    }
+}

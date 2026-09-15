@@ -1,0 +1,369 @@
+/*
+ * Related products and upsells on the product page.
+ *
+ * Hyva renders both with product/slider/product-slider.phtml and the shared
+ * product/list/item.phtml card, which is also the category page card. The
+ * child layout (Magento_Catalog/layout/catalog_product_view.xml) tags just these
+ * two sections with .pdp-product-slider, so nothing here reaches the category
+ * grid or the recently viewed widget.
+ *
+ * CSS-only, against the card's stable hooks (.product-item-photo,
+ * .product-item-link, .price-box, data-addto), so no Hyva template is copied
+ * into the child theme to drift from upstream. Selectors use data-addto rather
+ * than .btn for the reason given in product-list.css.
+ *
+ * Outside @layer: .pdp-product-slider only appears in layout XML, which
+ * Tailwind does not scan (see rating-summary.css).
+ */
+.pdp-product-slider {
+    margin-top: theme('spacing.12');
+    margin-bottom: theme('spacing.8');
+    padding-top: theme('spacing.10');
+    border-top: 1px solid theme('colors.gray.200');
+
+    .pdp-product-slider__title {
+        font-size: 1.5rem;
+        line-height: 1.25;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+        color: theme('colors.gray.900');
+
+        @screen md {
+            font-size: 1.75rem;
+        }
+    }
+
+    /* Prev/next: quiet outlined circles that fill on hover */
+    [data-prev],
+    [data-next] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        border: 1px solid theme('colors.gray.300');
+        border-radius: 9999px;
+        background: #fff;
+        color: theme('colors.gray.900');
+        box-shadow: none;
+        transition: background-color 200ms, border-color 200ms, color 200ms, opacity 200ms;
+
+        &:focus {
+            outline: none;
+            border-width: 1px;
+            border-color: theme('colors.gray.300');
+            box-shadow: none;
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px theme('colors.gray.900');
+        }
+
+        &:hover:not([disabled]) {
+            border-color: theme('colors.gray.900');
+            background: theme('colors.gray.900');
+            color: #fff;
+        }
+
+        &[disabled] {
+            opacity: 0.35;
+            cursor: default;
+        }
+    }
+
+    /* Phones swipe; the pager dots stay for keyboard and tap navigation */
+    @media (max-width: 639px) {
+        [data-prev],
+        [data-next] {
+            display: none;
+        }
+    }
+
+    .snap-track {
+        --snap-gap: theme('spacing.4');
+        padding-top: theme('spacing.6');
+        padding-bottom: theme('spacing.2');
+
+        @screen md {
+            --snap-gap: theme('spacing.6');
+        }
+
+        /* 1.6 cards on phones: the next card peeks in, so the row reads as swipeable */
+        @media (max-width: 639px) {
+            --snap-cols: 1.6;
+        }
+    }
+
+    .product-item {
+        position: relative;
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+
+        &:hover {
+            background: transparent;
+        }
+
+        /* Image tile */
+        .product-item-photo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin: 0 0 theme('spacing.4');
+            padding: 7%;
+            overflow: hidden;
+            border-radius: theme('borderRadius.lg');
+            background-color: #f5f4f1;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                /* The photos are JPEGs on white. Multiply lets the tile colour show
+                   through that white instead of drawing a white box on the tile. */
+                mix-blend-mode: multiply;
+                transition: transform 500ms cubic-bezier(0.2, 0.6, 0.2, 1);
+            }
+        }
+
+        @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+            &:hover .product-item-photo img {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Text column: left-aligned. Also cancels the rating row's mx-auto, which
+           centres it inside this flex column. */
+        .product-info > * {
+            margin-left: 0;
+            margin-right: 0;
+            text-align: left;
+        }
+
+        .product-info > :first-child {
+            margin-top: 0;
+            margin-bottom: theme('spacing.1');
+        }
+
+        /* Two-line name with two lines reserved, so prices line up across cards */
+        .product-item-link {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            min-height: 2.9em;
+            font-size: 0.9375rem;
+            line-height: 1.45;
+            font-weight: 500;
+            color: theme('colors.gray.900');
+
+            &:hover {
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
+        }
+
+        .rating-summary {
+            gap: 0.125rem;
+
+            /* width="0" is the partial star's gradient-only <svg>; it stays at zero */
+            svg:not([width="0"]) {
+                width: 0.875rem;
+                height: 0.875rem;
+            }
+
+            /* The partial star's <span> holds that gradient <svg> and the star. As a
+               block it stacked them, dropping the star onto a second line. */
+            > span {
+                display: flex;
+            }
+        }
+
+        /* Room for a price and one "As low as" line, so Add to Cart stays level
+           across cards (see the actions row below) */
+        .price-box {
+            min-height: 3rem;
+        }
+
+        .price-container .price {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 600;
+            color: theme('colors.gray.900');
+        }
+
+        .price-container .price-label {
+            margin-right: theme('spacing.1');
+            font-size: 0.75rem;
+            color: theme('colors.gray.500');
+        }
+
+        /* Tier price ("As low as"): secondary to the main price */
+        .minimal-price-link {
+            display: block;
+            line-height: 1.5rem;
+
+            .price {
+                font-size: 0.8125rem;
+                font-weight: 500;
+                color: theme('colors.gray.700');
+            }
+        }
+
+        /* Mirasvit Rewards shows a 24px spinner inside each price container while it
+           fetches the points label. Each one added a line, staggering the buttons,
+           and the card jumped when it went away. The label itself still shows. */
+        .points-loader {
+            display: none;
+        }
+
+        .old-price .price-container .price {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: theme('colors.gray.500');
+        }
+
+        /* Actions row: Add to Cart, or the stock status. The template's mt-auto pins
+           it to the bottom of the tallest card in the whole track, off-screen slides
+           included, which opened a large gap under the price. It follows the price
+           instead; the .price-box min-height above keeps the buttons in line. */
+        .product-info > :last-child {
+            margin-top: 0;
+            flex-wrap: nowrap;
+            gap: theme('spacing.2');
+            min-height: 3.5rem;
+            padding-top: theme('spacing.4');
+        }
+
+        [data-addto="cart"] {
+            flex: 1 1 auto;
+            justify-content: center;
+            gap: theme('spacing.2');
+            height: 2.5rem;
+            padding: 0 theme('spacing.4');
+            border: 1px solid theme('colors.gray.900');
+            border-radius: 9999px;
+            background: transparent;
+            color: theme('colors.gray.900');
+            font-size: 0.75rem;
+            line-height: 1;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: none;
+            transition: background-color 200ms, color 200ms;
+
+            /* The template hides the label between md and lg */
+            span {
+                display: inline;
+            }
+
+            svg {
+                width: 1rem;
+                height: 1rem;
+            }
+
+            &:hover {
+                background: theme('colors.gray.900');
+                color: #fff;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: theme('colors.gray.900');
+                box-shadow: none;
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 2px #fff, 0 0 0 4px theme('colors.gray.900');
+            }
+        }
+
+        .stock {
+            justify-content: flex-start;
+            gap: theme('spacing.2');
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: theme('colors.gray.600');
+
+            &::before {
+                width: 0.5rem;
+                height: 0.5rem;
+            }
+        }
+
+        /* Wishlist and compare float over the image's top-right corner. This is
+           the actions row's last child whether the card shows Add to Cart,
+           Configure or the stock status. */
+        .product-info > :last-child > :last-child {
+            position: absolute;
+            top: theme('spacing.3');
+            right: theme('spacing.3');
+            z-index: 1;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: theme('spacing.2');
+        }
+
+        [data-addto="wishlist"],
+        [data-addto="compare"] {
+            width: 2.25rem;
+            height: 2.25rem;
+            background-color: #fff;
+            color: theme('colors.gray.700');
+            box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 2px 8px rgb(0 0 0 / 0.08);
+            transition: color 200ms, opacity 200ms;
+
+            svg {
+                width: 1.125rem;
+                height: 1.125rem;
+            }
+
+            &:hover {
+                background-color: #fff;
+                color: theme('colors.gray.900');
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 2px 8px rgb(0 0 0 / 0.08);
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 2px theme('colors.gray.900');
+            }
+        }
+
+        /* Outline heart that fills red on hover */
+        [data-addto="wishlist"] {
+            svg {
+                fill: none;
+            }
+
+            &:hover {
+                color: theme('colors.red.600');
+
+                svg {
+                    fill: currentColor;
+                }
+            }
+        }
+
+        /* Compare is secondary: on pointer devices it appears with the card hover
+           or keyboard focus. Touch devices always show it. */
+        @media (hover: hover) {
+            [data-addto="compare"] {
+                opacity: 0;
+            }
+
+            &:hover [data-addto="compare"],
+            &:focus-within [data-addto="compare"] {
+                opacity: 1;
+            }
+        }
+    }
+}

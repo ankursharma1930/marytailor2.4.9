@@ -22,5 +22,22 @@
                 <argument name="title" xsi:type="string" translate="true">Description</argument>
             </arguments>
         </referenceBlock>
+        <!--
+            Related products and upsells. .pdp-product-slider hooks the carousel and
+            card styling in web/tailwind/components/product-slider.css. Replaces the
+            template default "product-slider my-8"; spacing comes from that file.
+        -->
+        <referenceBlock name="related">
+            <arguments>
+                <argument name="css_classes" xsi:type="string">product-slider pdp-product-slider</argument>
+                <argument name="heading_css_classes" xsi:type="string">pdp-product-slider__title</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="upsell">
+            <arguments>
+                <argument name="css_classes" xsi:type="string">product-slider pdp-product-slider</argument>
+                <argument name="heading_css_classes" xsi:type="string">pdp-product-slider__title</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

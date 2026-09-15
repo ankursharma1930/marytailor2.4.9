@@ -416,6 +416,59 @@ added, 0 removed (the 4 header rules plus `.text-on-primary`). No copies were
 cloned into `@apply btn` consumers. The deployed file is byte-identical to the
 build.
 
+### 3i. Related products rendered as a single stacked column
+
+**Symptom.** On the product page, Related Products showed one full-width card
+per row, each with a full-width image, stacked down the page (8 cards on
+`cocoa-butter-1-lb.html`). The prev/next buttons and pager dots did nothing
+visible.
+
+**Cause.** 1.5.2 moved `product/slider/product-slider.phtml` onto Hyvä's
+snap-slider: a `.snap-track` CSS grid scrolled by the `x-snap-slider` Alpine
+plugin. The grid and pager (`.snap-track`, `.snap-pager`, `.snap-marker`) are
+Tailwind v4 components in the parent theme that this v3 build never had, the
+same kind of gap as 3h. With no rule, the track was a plain block. The plugin
+itself worked. Upsells and the Recently Viewed widget use the same markup.
+
+**Fix.** Child theme only. No template was copied and there were no DB changes.
+
+- `web/tailwind/components/slider.css` ports `.snap-track` and the pager to
+  v3, outside `@layer`. The pager rules are scoped to `.snap-track ~ .snap-pager`
+  because the product gallery reuses `.snap-pager`/`.snap-marker` for its
+  thumbnails.
+- `Magento_Catalog/layout/catalog_product_view.xml` gives the `related` and
+  `upsell` blocks `css_classes` `product-slider pdp-product-slider`, replacing
+  the template default `my-8`.
+- New `web/tailwind/components/product-slider.css` restyles only those two
+  sections:
+  - title on the left, round prev/next buttons
+  - 4/3/2 columns, and 1.6 on phones so the next card peeks in
+  - square image tiles, 2-line names
+  - outlined Add to Cart, with wishlist/compare over the image
+
+  It also fixes three faults in the shared card:
+  - The actions row's `mt-auto` pinned Add to Cart to the bottom of the tallest
+    card in the track, off-screen slides included, leaving a large gap under
+    the price. The row now follows the price, and a 3rem `.price-box`
+    min-height keeps the buttons level.
+  - Mirasvit Rewards' `img.points-loader` (24px, `x-show="loading"`) added a
+    line to each price container while points loaded, staggering the buttons.
+    It is hidden in these cards.
+  - A partial star's `<span>` stacked its 0x0 gradient `<svg>` above the star,
+    pushing the star onto a second line. The span is now `display: flex`.
+
+Build and deploy exactly as in 3h.
+
+**Verified.**
+- The rule diff against the pre-change build shows 0 rules removed and 61
+  added. All are `.snap-*` or `.pdp-product-slider`, except `.!hidden`, a
+  utility the rebuild picked up from templates.
+- Tested in headless Chrome over CDP on `cocoa-butter-1-lb.html`:
+  - 4 cards across at 1440px, 2 at 900px, 1.6 at 400px
+  - all 8 cards 484px tall, with Add to Cart at the same offset
+  - prev/next disable at each end, and the pager groups to 2 dots on desktop
+  - on a mouse pointer, compare appears on card hover and the image zooms
+
 ## Still outstanding
 
 - **`catalog/search/engine` is unset**, so Magento defaults to
@@ -428,3 +481,7 @@ build.
 - One blog category link renders with a raw space in the URL
   (`/blog/category/African Black Soap`), so it is not a fetchable URL.
   Pre-existing, unrelated to the upgrade.
+- `SB-0001` Organic Shea Butter (configurable) shows a second price line,
+  **"As low as $0.00"**, in the related-products slider. Tier prices (5% and
+  10%) are set on the configurable parent. This is pricing data, pre-existing,
+  and was not changed.
