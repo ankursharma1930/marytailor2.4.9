@@ -1,0 +1,422 @@
+<?php
+/**
+ * Mirasvit Rewards - shared Alpine factory for the catalog points widget.
+ *
+ * Mirasvit's own pricing/adjustment.phtml emitted this ~21KB function inline for
+ * EVERY price render - 60 copies on a 30-product category page, 1.28MB of the
+ * 1.99MB response. The body is product-independent: each component reads its own
+ * data-product-id off the element, and the points endpoint is the same for all
+ * products. So it is declared once per page from layout instead.
+ *
+ * Rendered from before.body.end, which is the container that reliably resolves on
+ * this install (see Hyva_Theme/layout/default_hyva.xml). Alpine boots on
+ * DOMContentLoaded, after this script has run, so the global is always defined
+ * before any x-data="initPointsBlock()" is evaluated.
+ */
+?>
+    <script>
+        function initPointsBlock() {
+            if (typeof requestUuid == 'undefined') {
+                var activeRequests = 0;
+                var timeoutId      = null;
+                var requestData    = {};
+                var requestUuid    = 0;
+            }
+
+            return {
+                options: {},
+                pointsXhr: [],
+                productData: {},
+                priceBoxEl: null,
+                productId: null,
+                productMainBlock: null,
+                isCategoryPage: false,
+                isRequestFinish: true,
+                loading: false,
+
+                initPoints: function($el) {
+                    if ($el.closest('.old-price')) {
+                        $el.closest('.old-price').remove();
+                        return;
+                    }
+
+                    if (!requestUuid) {
+                        requestData[this.uuid] = {
+                            productData: {},
+                            pointsXhr: {},
+                            isRequestFinish: true
+                        };
+                    }
+
+                    this.element = $el;
+
+                    var self = this;
+                    var propVal = [];
+
+                    this.initData();
+
+                    var recalculatePoints = () => {
+                        const el = $el;
+                        if (!el) return;
+
+                        let optionsData = { prices: {} };
+
+                        document.querySelectorAll('.product-custom-option').forEach(opt => {
+                            if (opt.tagName === 'SELECT') {
+                                Array.from(opt.options).forEach(function(selectOption) {
+                                    if (selectOption.selected && selectOption.dataset.priceAmount) {
+                                        var key = selectOption.dataset.optionId || (opt.name + '_' + selectOption.value);
+                                        optionsData.prices[key] = {
+                                            finalPrice: { amount: parseFloat(selectOption.dataset.priceAmount) || 0 }
+                                        };
+                                    }
+                                });
+                            } else if ((opt.type === 'checkbox' || opt.type === 'radio') && opt.checked) {
+                                optionsData.prices[opt.dataset.optionId] = {
+                                    finalPrice: { amount: parseFloat(opt.dataset.priceAmount) || 0 }
+                                };
+                            } else if ((opt.tagName === 'TEXTAREA' || opt.type === 'text') && opt.value && opt.dataset.priceAmount) {
+                                optionsData.prices[opt.dataset.optionId] = {
+                                    finalPrice: { amount: parseFloat(opt.dataset.priceAmount) || 0 }
+                                };
+                            }
+                        });
+
+                        this.updatePointsAfterPriceChanged(el, optionsData);
+                    };
+
+                    document.querySelectorAll('.product-custom-option').forEach(option => {
+                        option.addEventListener('change', recalculatePoints);
+                        if (option.tagName === 'TEXTAREA' || option.type === 'text') {
+                            option.addEventListener('input', recalculatePoints);
+                        }
+                    });
+
+
+                    //bundle
+                    if (document.querySelector('#product_addtocart_form')) {
+                        document.querySelector('#product_addtocart_form').addEventListener('updateProductSummary', function (e, data) {
+                            if (self.element.closest('.fieldset-bundle-options')) {
+                                var price = self.element.getAttribute('data-rewards-base-price');
+                                self.element.setAttribute('data-rewards-base-price', price);
+                                self.requestPoints(1);
+                                return;
+                            }
+                            var price = 0;
+                            if (data.config.selected.length) {
+                                data.config.selected.forEach(function (values, index) {
+                                    values.forEach(function (i, value) {
+                                        if (!value) {
+                                            return;
+                                        }
+                                        var qty = data.config.options[index]['selections'][value]['qty'];
+                                        price += data.config.options[index]['selections'][value]['rewardsBasePrice']['amount'] * qty;
+                                    })
+                                });
+                            } else {
+                                if (parseFloat(self.element.getAttribute('data-rewards-min-price')) > 0 && self.element.closest('.price-from')) {
+                                    price = self.element.getAttribute('data-rewards-min-price');
+                                }
+                                if (parseFloat(self.element.getAttribute('data-rewards-max-price')) > 0 && self.element.closest('.price-to')) {
+                                    price = self.element.getAttribute('data-rewards-max-price');
+                                }
+                                if (parseFloat(self.element.getAttribute('data-default-selected-rewards-product-price-amount')) > 0 && !self.element.closest('.price-from') && !self.element.closest('.price-to')) {
+                                    price = self.element.getAttribute('data-default-selected-rewards-product-price-amount');
+                                }
+                            }
+                            var currentPrice = self.element.getAttribute('data-rewards-base-price');
+
+                            if (currentPrice != price) {
+                                self.element.setAttribute('data-rewards-base-price', price);
+                                self.requestPoints(1);
+                            }
+                        });
+                    }
+
+                    // Hyva ships no jQuery bundle widget, so the `updateProductSummary` listener above
+                    // can never fire here. Hyva's own bundle component dispatches
+                    // `update-bundle-option-prices` on the window -- {oldPrice, finalPrice} -- once while
+                    // initialising and again on every selection change, which carries the same signal.
+                    // Without it the label stays blank on a bundle page for the price-box labels too.
+                    // Which price THIS label describes. A bundle renders one label per price endpoint
+                    // (.price-from / .price-to) plus one per selection, and the server-rendered
+                    // data-rewards-base-price is 0 on the endpoints -- their real value lives in the
+                    // min/max attributes. Used from both init and the event below so the two agree.
+                    var resolveBundlePrice = function (detail) {
+                        detail = detail || {};
+
+                        if (self.element.closest('.fieldset-bundle-options, .options-list')) {
+                            // A per-selection label: its own base price already describes that selection.
+                            return self.element.getAttribute('data-rewards-base-price');
+                        }
+                        if (self.element.closest('.price-from')
+                            && parseFloat(self.element.getAttribute('data-rewards-min-price')) > 0) {
+                            return self.element.getAttribute('data-rewards-min-price');
+                        }
+                        if (self.element.closest('.price-to')
+                            && parseFloat(self.element.getAttribute('data-rewards-max-price')) > 0) {
+                            return self.element.getAttribute('data-rewards-max-price');
+                        }
+                        if (parseFloat(detail.finalPrice) > 0) {
+                            return detail.finalPrice;
+                        }
+
+                        return self.element.getAttribute('data-default-selected-rewards-product-price-amount');
+                    };
+
+                    var applyBundlePrice = function (detail) {
+                        var price = resolveBundlePrice(detail);
+
+                        if (parseFloat(price) > 0
+                            && price != self.element.getAttribute('data-rewards-base-price')) {
+                            self.element.setAttribute('data-rewards-base-price', price);
+                            self.requestPoints(1);
+
+                            return true;
+                        }
+
+                        return false;
+                    };
+
+                    window.addEventListener('update-bundle-option-prices', function (e) {
+                        applyBundlePrice(e && e.detail);
+                    });
+
+                    if (self.productMainBlock && self.productMainBlock.querySelector('.input-text.qty')) {
+                        self.productMainBlock.querySelector('.input-text.qty').addEventListener('keyup', function () {
+                            if (document.querySelectorAll('.page-product-bundle').length) {
+                                return;
+                            }
+                            var qty = $el.value;
+                            var parent = $el.parents('tr');
+                            if (!parent.length) {
+                                parent = $el.parents('.product-info-main');
+                            }
+                            if (!parent.length) {
+                                return;
+                            }
+
+                            self.requestPoints(qty);
+                        });
+                    }
+
+                    // Unconditional: the `.page-product-bundle` skip this replaces only made sense on
+                    // Luma, where the jQuery bundle event drove the first render instead. That class is
+                    // present on Hyva as well, so honouring it here meant a bundle page never issued the
+                    // initial request at all. Resolve the price first -- Hyva dispatches
+                    // update-bundle-option-prices while IT initialises, which can land before this
+                    // component registered the listener above, so the event cannot be the only trigger.
+                    if (!applyBundlePrice(null)) {
+                        this.requestPoints();
+                    }
+                },
+
+                initData: function() {
+                    var self              = this;
+                    this.priceBoxEl       = this.element.closest('.price-box');
+                    // closest() returns Element|null, never a jQuery collection. A bundle SELECTION
+                    // label renders inside the options fieldset rather than inside a .price-box (true
+                    // on Luma too), so this is null there and the unguarded getAttribute() threw a
+                    // TypeError -- killing the Alpine component and leaving the label blank forever.
+                    // The data-product-id fallback below already covers this case.
+                    this.productId        = this.priceBoxEl ? this.priceBoxEl.getAttribute('data-product-id') : null;
+                    this.productMainBlock = this.element.closest('tr');
+                    if (!this.productId) {
+                        this.productId = this.element.getAttribute('data-product-id');
+                    }
+                    if (!this.productMainBlock) {
+                        this.productMainBlock = this.element.closest('.product-info-main');
+                    }
+                    // bundle summary
+                    if (!this.productMainBlock) {
+                        this.productMainBlock = this.element.closest('.product-details');
+                    }
+                    // category page
+                    if (!this.productMainBlock) {
+                        this.isCategoryPage = true;
+                        this.productMainBlock = this.element.closest('.product.product-item');
+                    }
+
+                    if (document.querySelector('.price-box .rewards_earn .price-label') && !this.isCategoryPage) {
+                        document.querySelector('.price-box .rewards_earn .price-label').style.display = 'none';
+                    }
+                    if (document.querySelector('.price-box .rewards_earn .price-wrapper') && !this.isCategoryPage) {
+                        document.querySelector('.price-box .rewards_earn .price-wrapper').style.display = 'none';
+                    }
+                    if (!timeoutId) {
+                        requestUuid = this.uuid;
+                        timeoutId = setInterval(function() {
+                            if (requestData[requestUuid].isRequestFinish) {
+                                self.requestMultiPoints();
+                            }
+                        }, 1000);
+                    }
+                },
+
+                updatePointsAfterPriceChanged: function ($el, data) {
+                    if (!data || document.querySelectorAll('.page-product-bundle').length) {
+                        return;
+                    }
+
+                    var newPrice = 0;
+
+                    if (data.rewardsBasePrice && data.rewardsBasePrice.amount !== undefined) {
+                        newPrice = parseFloat(data.rewardsBasePrice.amount) || 0;
+                    } else if (data.finalPrice && data.finalPrice.amount !== undefined) {
+                        newPrice = parseFloat(data.finalPrice.amount) || 0;
+                    } else {
+                        var originPrice = parseFloat($el.getAttribute('data-origin-rewards-base-price')) || 0;
+                        var additionalPrice = 0;
+                        var options = data.prices || data;
+
+                        for (var key in options) {
+                            if (!options.hasOwnProperty(key)) continue;
+                            try {
+                                additionalPrice += parseFloat(options[key].finalPrice.amount) || 0;
+                            } catch (e) {
+                                additionalPrice += 0;
+                            }
+                        }
+                        newPrice = originPrice + additionalPrice;
+                    }
+
+                    var currentPrice = parseFloat($el.getAttribute('data-rewards-base-price')) || 0;
+                    if (newPrice !== currentPrice) {
+                        $el.setAttribute('data-rewards-base-price', newPrice);
+                        this.requestPoints();
+                    }
+                },
+
+                requestPoints: function(newQty) {
+                    var self      = this;
+                    var qty       = 0;
+                    var isUpdated = this.element.querySelector('.price').getAttribute('data-points-updated');
+                    var price     = parseFloat(this.element.getAttribute('data-rewards-base-price')) || 0;
+
+                    if ((!this.productMainBlock /*|| !this.productMainBlock.length*/) && isUpdated) {
+                        return;
+                    }
+
+                    if (newQty !== undefined && newQty !== null) {
+                        qty = newQty;
+                    } else {
+                        qty = (this.productMainBlock && this.productMainBlock.querySelector('[name=qty]'))
+                            ? this.productMainBlock.querySelector('[name=qty]').value
+                            : 1;
+                    }
+
+                    qty = parseFloat(qty) || 1;
+
+                    if (this.isCategoryPage) {
+                        if (price <= 0) {
+                            if (parseFloat(self.element.getAttribute('data-rewards-min-price')) > 0 && self.element.closest('.price-from')) {
+                                price = self.element.getAttribute('data-rewards-min-price');
+                            }
+                            if (parseFloat(self.element.getAttribute('data-rewards-max-price')) > 0 && self.element.closest('.price-to')) {
+                                price = self.element.getAttribute('data-rewards-max-price');
+                            }
+                            if (parseFloat(self.element.getAttribute('data-default-selected-rewards-product-price-amount')) > 0 && !self.element.closest('.price-from') && !self.element.closest('.price-to')) {
+                                price = self.element.getAttribute('data-default-selected-rewards-product-price-amount');
+                            }
+                        }
+                    }
+                    if (!qty || !this.productId) {
+                        self.element.querySelector('.price').innerHTML = '';
+                        return;
+                    }
+                    if (
+                        (
+                            this.element.closest('.price-to')
+                            || this.element.closest('.price-from')
+                        ) && isUpdated
+                    ) {
+                        return;
+                    }
+                    self.element.querySelector('.price').setAttribute('data-points-updated', 1);
+
+                    // self.element.querySelector('.price').show();
+                    // self.element.querySelector('.points-loader').show();
+
+                    activeRequests++;
+                    var elemHash = btoa(this.productId+'_'+Math.random().toString(4).slice(2));
+                    self.element.setAttribute('data-points-elem', elemHash);
+                    requestData[requestUuid].productData[elemHash] = {
+                        'product_id': this.productId,
+                        'price': price,
+                        'qty': qty,
+                        'isAjax': true,
+                    };
+                },
+
+                requestMultiPoints: function() {
+                    if (activeRequests == 0) {
+                        return;
+                    }
+                    var self = this;
+                    requestData[requestUuid].isRequestFinish = false;
+
+                    this.loading = true;
+
+                    var preparedProductData = new FormData();
+
+                    for (key in requestData[requestUuid].productData) {
+                        if (typeof requestData[requestUuid].productData[key] == 'object') {
+                            for (innerKey in requestData[requestUuid].productData[key]) {
+                                preparedProductData.append(
+                                    key + '[' + innerKey + ']',
+                                    requestData[requestUuid].productData[key][innerKey]
+                                );
+                            }
+                        } else {
+                            preparedProductData.append(
+                                key,
+                                requestData[requestUuid].productData[key]
+                            );
+                        }
+                    }
+
+                    preparedProductData.append('form_key', hyva.getFormKey());
+
+                    requestData[requestUuid].pointsXhr[this.productId] = fetch(
+                        "<?= $block->escapeUrl($block->getUrl('rewards_catalog/product/points')) ?>",
+                        {
+                            headers: {
+                                contentType: "application/json",
+                            },
+                            body: preparedProductData,
+                            method: "POST",
+                            mode: "cors",
+                            credentials: "include",
+                        }
+                    ).then(function(response) {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        } else if (response.ok) {
+                            return response.json();
+                        } else {
+                            window.dispatchMessages([{type: "warning", text: "Post request failed. " + response.statusText}], 5000);
+                        }
+                    }.bind(this)).then(function (data) {
+                        for (var k in data) {
+                            var element = document.querySelector('[data-points-elem="' + k + '"]');
+
+                            if (data[k].points > 0 && element && element.querySelector('.price')) {
+                                element.querySelector('.price').innerHTML = data[k].label;
+
+                                if (element.querySelector('.mst-rewards-logo')) {
+                                    element.querySelector('.mst-rewards-logo').className += " w-6 h-6 inline";
+                                }
+                            }
+                        }
+                    }.bind(this)).finally(function () {
+                        activeRequests = 0;
+
+                        requestData[requestUuid].isRequestFinish = true;
+                        requestData[requestUuid].productData     = {};
+                        this.loading = false;
+
+                    }.bind(this));
+                }
+            }
+        }
+    </script>

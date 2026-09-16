@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+    Mirasvit Rewards points widget - shared Alpine factory.
+
+    Mirasvit's pricing/adjustment.phtml emitted this ~21KB function inline on every
+    price render: 60 copies / 1.28MB of the 1.99MB /oils response. The override in
+    this theme drops it from the per-product template, so it is declared once here.
+
+    Only on the handles that actually render the widget (measured: home 8, category
+    60, product 15, search 55 components; cart/blog/compare/CMS render none), so
+    those pages don't carry 21KB of JS for a widget they never show.
+
+    before.body.end is the container that reliably resolves on this install - see
+    the note in Hyva_Theme/layout/default_hyva.xml. It renders before Alpine boots
+    on DOMContentLoaded, so the global is always defined when x-data is evaluated.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block name="mirasvit.rewards.points.factory"
+                   template="Mirasvit_RewardsCatalog::pricing/points-factory.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

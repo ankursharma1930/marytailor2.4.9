@@ -1,0 +1,20 @@
+<?php
+/** @var \Mirasvit\RewardsCatalog\Pricing\Render\Adjustment $block */
+?>
+<?php if ($block->isShowPoints() && $block->isFront()): ?>
+    <span class="rewards__product-earn-points rewards__product-points" data-role="rewards__product-earn-points"
+          data-rewards-base-price="<?= $block->getBaseProductPrice() ?>"
+          data-rewards-min-price="<?= $block->getMinProductPrice() ?>"
+          data-rewards-max-price="<?= $block->getMaxProductPrice() ?>"
+          data-origin-rewards-base-price="<?= $block->getBaseProductPrice() ?>"
+          data-default-selected-rewards-product-price-amount="<?= $block->getDefaultSelectedProductPriceAmount()?>"
+          data-product-id="<?= $block->getProductId() ?>"
+          x-data="initPointsBlock()"
+          x-init="initPoints($el)"
+          @update-prices-<?= $block->getProductId() ?>.window="updatePointsAfterPriceChanged($el, $event.detail)"
+          @update-qty-<?= $block->getProductId() ?>.window="requestPoints($event.detail)"
+    >
+        <span class="price block"></span>
+        <img class="points-loader loader w-6 h-6" src="<?= $block->getViewFileUrl('images/loader-1.gif') ?>" x-show="loading">
+    </span>
+<?php endif; ?>
