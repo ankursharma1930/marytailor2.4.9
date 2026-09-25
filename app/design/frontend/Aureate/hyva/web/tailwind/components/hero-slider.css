@@ -1,0 +1,34 @@
+/*
+ * Homepage hero slider (Splide) - Magento_Theme/templates/elements/ui-slider/slider-php.phtml
+ *
+ * Splide's core CSS is inlined at the end of <body> (page/js/plugins/splide-js.phtml),
+ * and the slides only get their width when the JS mounts. So the hero went through
+ * three layouts: all eight banners stacked (no Splide CSS yet), 0px tall and hidden
+ * (CSS parsed, not mounted), then one banner tall (mounted). Each step moved the
+ * whole page below it - a CLS of ~1.0 on desktop.
+ *
+ * These rules give the first paint the mounted geometry: one full-width slide in view,
+ * the rest beside it, clipped. Splide's inline slide width at mount is also 100% for
+ * perPage 1, so mounting changes nothing on screen. Outside @layer so the purge keeps
+ * them; .hero-slider.splide outranks Splide's own `.splide { visibility: hidden }`.
+ */
+.hero-slider.splide {
+    visibility: visible;
+}
+
+.hero-slider .splide__track {
+    overflow: hidden;
+    position: relative;
+}
+
+.hero-slider .splide__list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.hero-slider .splide__slide {
+    flex: 0 0 100%;
+    width: 100%;
+    list-style: none;
+}

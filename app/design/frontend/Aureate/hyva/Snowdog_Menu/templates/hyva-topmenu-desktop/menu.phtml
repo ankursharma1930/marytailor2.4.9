@@ -45,7 +45,10 @@ $uniqueId = '_' . uniqid();
         })
     </script>
 
+    <?php /* Initialised in its own idle task, not inside Alpine's start-up long task. Submenus are x-cloak'ed
+             until then, and the idle callback runs shortly after load. */ ?>
     <div x-data="initTopmenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
+         x-defer="idle"
          class="
             <?= $escaper->escapeHtmlAttr($menu->getCssClass()) ?>
             navigation hidden w-full lg:block

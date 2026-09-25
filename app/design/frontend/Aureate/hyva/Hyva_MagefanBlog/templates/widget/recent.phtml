@@ -45,7 +45,22 @@ $firstItem = false;
                                         <a href="<?= /*@noEscape*/
                                         $_postUrl ?>" title="<?= /*@noEscape*/
                                         $_postName ?>">
-                                            <img class="w-full h-auto" src="<?= $block->escapeHtml($featuredImage) ?>"
+                                            <?php
+                                            // Loads on the first interaction, or at once if on screen:
+                                            // Magento_Theme::page/js/load-on-interaction.phtml. The placeholder
+                                            // takes the image's own ratio when the file can be read, so the
+                                            // card does not jump when the real image arrives.
+                                            $featuredFile = BP . '/pub/media/' . ($_post->getData('featured_list_img') ?: $_post->getData('featured_img'));
+                                            [$featuredW, $featuredH] = (is_file($featuredFile) ? @getimagesize($featuredFile) : false) ?: [1, 1];
+                                            $featuredPlaceholder = 'data:image/svg+xml,' . rawurlencode(
+                                                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 $featuredW $featuredH'/>"
+                                            );
+                                            ?>
+                                            <img class="w-full h-auto"
+                                                 src="<?= $block->escapeHtmlAttr($featuredPlaceholder) ?>"
+                                                 data-interaction-src="<?= $block->escapeHtml($featuredImage) ?>"
+                                                 width="<?= (int) $featuredW ?>" height="<?= (int) $featuredH ?>"
+                                                 loading="lazy"
                                                  alt="<?= $block->escapeHtml($featuredImgAlt) ?>"/>
                                         </a>
                                     </div>

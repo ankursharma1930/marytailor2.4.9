@@ -1,0 +1,22 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+
+/**
+ * Font Awesome without blocking the first paint.
+ *
+ * Magento_Theme/layout/default.xml loads it as a normal <head> stylesheet, which on a
+ * phone held back the first paint for the whole round trip to a third-party CDN. On
+ * pages whose icons are all below the fold, the layout swaps that for this: a
+ * media="print" stylesheet is fetched at low priority without blocking rendering, and
+ * switched to "all" once it has loaded. <noscript> covers visitors without JS.
+ */
+$href = (string) $block->getData('href');
+?>
+<link rel="stylesheet" href="<?= $escaper->escapeUrl($href) ?>" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="<?= $escaper->escapeUrl($href) ?>"></noscript>

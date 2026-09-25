@@ -11,7 +11,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
 >
+    <head>
+        <!-- Re-added below without blocking render: the homepage's only icons are in the footer. -->
+        <remove src="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"/>
+    </head>
     <body>
+        <referenceContainer name="before.body.end">
+            <!-- Featured Products images, hand-soap banner and blog images wait for the first interaction. -->
+            <block name="load-on-interaction" template="Magento_Theme::page/js/load-on-interaction.phtml" after="image-placeholders"/>
+            <block name="font-awesome-async" template="Magento_Theme::page/font-awesome-async.phtml">
+                <arguments>
+                    <argument name="href" xsi:type="string">https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
         <referenceContainer name="columns" htmlClass="columns max-w-fit" />
         <referenceContainer name="content">
             <block name="slider-c" template="Magento_Theme::elements/slider-c.phtml" before="-">

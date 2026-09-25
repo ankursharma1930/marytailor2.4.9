@@ -15,6 +15,9 @@
           @update-qty-<?= $block->getProductId() ?>.window="requestPoints($event.detail)"
     >
         <span class="price block"></span>
-        <img class="points-loader loader w-6 h-6" src="<?= $block->getViewFileUrl('images/loader-1.gif') ?>" x-show="loading">
+        <?php /* Hidden until Alpine shows it, and lazy so the 17 KB gif is only fetched when it does:
+                 before, every price displayed a spinner until its component initialised. */ ?>
+        <img class="points-loader loader w-6 h-6" src="<?= $block->getViewFileUrl('images/loader-1.gif') ?>"
+             alt="" loading="lazy" style="display: none" x-show="loading">
     </span>
 <?php endif; ?>

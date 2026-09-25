@@ -43,6 +43,10 @@ $mediaUrl = $viewModels->require(\Hyva\Theme\ViewModel\Media::class)->getMediaUr
              snowdog-menu-footer w-full flex flex-wrap text-primary-darker text-stone-500
         "
         x-data="initMenuFooter<?= $escaper->escapeHtml($uniqueId) ?>()"
+        <?php /* Initialised when scrolled into view, not with the page: its ~45 nested components were part of
+                 the start-up long task on every page. The x-cloak="tablet"/"desktop" rules already lay it out
+                 correctly for each breakpoint before Alpine runs. */ ?>
+        x-defer="intersect"
     >
 
         <div class="w-full md:w-2/5 pt-0 ps-0 md:ps-36 py-4">

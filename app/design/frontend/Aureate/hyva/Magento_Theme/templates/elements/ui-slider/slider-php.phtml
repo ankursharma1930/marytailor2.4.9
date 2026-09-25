@@ -51,10 +51,13 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
 
 <section
     id="slider<?= $escaper->escapeHtml($uniqueId) ?>"
-    class="splide relative"
+    class="splide hero-slider relative"
     aria-label="<?= $escaper->escapeHtml(__('Latest items')) ?>"
     x-data="initSlider<?= $escaper->escapeHtml($uniqueId) ?>()"
-    x-defer="intersect"
+    <?php /* The hero already has its mounted layout before Splide runs (web/tailwind/components/hero-slider.css),
+             so mounting waits for the first touch, scroll, mouseover or key press instead of competing with the
+             page load. Only the dots and autoplay wait with it. */ ?>
+    x-defer="interact"
 >
     <div class="splide__track">
         <ul class="splide__list">
@@ -63,16 +66,24 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                 foreach ($items as $item):
             ?>
                 <?php
-                    $imageAttributes = ['loading' => 'lazy'];
+                    $isFirstSlide = $sliderIndex === 1;
+                    // Later slides get no loading attribute: Splide's lazyLoad hides a pending image
+                    // (display: none) until it has loaded, and Chrome never fetches a hidden
+                    // loading="lazy" image - those slides stayed a spinner for good.
+                    $imageAttributes = [];
 
-                    if ($loadFirstEager && $sliderIndex === 1) {
-                        $imageAttributes = ['loading' => 'eager', 'fetchpriority' => 'high'];
+                    if ($isFirstSlide) {
+                        $imageAttributes = $loadFirstEager
+                            ? ['loading' => 'eager', 'fetchpriority' => 'high']
+                            : ['loading' => 'lazy'];
                     }
                 ?>
                 <li class="splide__slide">
+                    <?php /* Later slides load through Splide's lazyLoad: native lazy loading fetched all of them at once, since they sit just beside the viewport. */ ?>
                     <?= $sliderItemRenderer
                         ->setItem($item)
                         ->setImageAttributes($imageAttributes)
+                        ->setDeferToSlider(!$isFirstSlide)
                         ->toHtml() ?>
                 </li>
                 <?php $sliderIndex++; ?>
@@ -121,6 +132,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                     drag: true,
                     keyboard: true,
                     slideFocus: true,
+                    lazyLoad: 'nearby',
                     arrows: <?= $escaper->escapeHtmlAttr($sliderShowArrows ? 'true' : 'false') ?>,
                     pagination: <?= $escaper->escapeHtmlAttr($sliderShowDots ? 'true' : 'false') ?>,
                     classes: { page: splidePaginationDotClasses },

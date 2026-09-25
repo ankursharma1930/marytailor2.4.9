@@ -64,6 +64,12 @@ $hideDetails       = (bool) $block->getData('hide_details');
 $sliderItemRenderer->setData('hide_details', $hideDetails);
 $sliderItemRenderer->setData('hide_rating_summary', $hideRatingSummary);
 
+// These cards sit below the hero and tiles, so their images wait for the first interaction (or for being
+// on screen - see Magento_Catalog::product/list/image.phtml), and stay low priority so they never compete
+// with the LCP image. Restored below, like the template.
+$sharedImageAttributes = $sliderItemRenderer->getData('image_custom_attributes');
+$sliderItemRenderer->setData('image_custom_attributes', ['fetchpriority' => 'low', 'load_on_interaction' => '1']);
+
 // The slider item renderer block is often a shared instance.
 // If a specific item template is set for this slider, the previously set template must be reset later
 // so the item template is only replaced for the one slider it is specified on.
@@ -153,7 +159,17 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
     x-defer="intersect"
 >
     <?php if ($items): ?>
-    <div class="bg-cover mt-7" style="background-image: url('<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/bg_category.jpg') ?>')">
+    <div class="relative isolate mt-7">
+        <?php /* An <img> rather than a CSS background: the preload scanner finds it in the HTML, where a
+                 background waited for layout. This section is the LCP element on phones. */ ?>
+        <img
+            class="absolute inset-0 -z-10 w-full h-full object-cover object-left-top"
+            src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/bg_category.jpg') ?>"
+            alt=""
+            width="1920"
+            height="807"
+            fetchpriority="high"
+        >
         <div class="relative max-w-full md:max-w-6xl md:m-auto mx-auto">
             <?php if ($title): ?>
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 md:flex-row justify-center border-b-2 border-gray-200">
@@ -185,7 +201,10 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 <?= $escaper->escapeHtml(__('Press to go to carousel navigation')) ?>
             </button>
             <div class="flex-none relative w-full overflow-x-hidden focus-within:ring-2 ring-offset-2 active:ring-0 ring-blue-500/50">
-                <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
+                <?php /* scroll-px matches px: without it the first snap point sat 4-8px in, so the browser
+                         snapped the track as soon as it laid out. Chrome takes that snap for a user scroll
+                         and stops recording LCP - desktop Lighthouse then failed with NO_LCP. */ ?>
+                <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2 md:scroll-px-1 xl:scroll-px-2"
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $product): ?>
@@ -274,5 +293,6 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
 if ($sharedItemRendererTemplate) {
     $sliderItemRenderer->setTemplate($sharedItemRendererTemplate);
 }
+$sliderItemRenderer->setData('image_custom_attributes', $sharedImageAttributes);
 
 ?>

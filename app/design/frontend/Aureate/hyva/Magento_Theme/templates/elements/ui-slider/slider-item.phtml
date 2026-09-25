@@ -15,6 +15,13 @@ $itemTextSmall = $item['text_small'] ?? '';
 $itemImageAlt = $item['image_alt'] ?? '';
 $itemWidth = (int) ($item['image_width'] ?? 1280);
 $itemHeight = (int) ($item['image_height'] ?? 853);
+$itemSrcset = $item['image_srcset'] ?? '';
+$itemSizes = $item['image_sizes'] ?? '100vw';
+
+// Splide's lazyLoad sets src/srcset from these when the slide comes near; see slider-php.phtml.
+$deferToSlider = (bool) $block->getDeferToSlider();
+$srcAttribute = $deferToSlider ? 'data-splide-lazy' : 'src';
+$srcsetAttribute = $deferToSlider ? 'data-splide-lazy-srcset' : 'srcset';
 
 // `?:` not `??`: these are always set (to ''), so `??` never fell through to the
 // alt text and every link was labelled "Visit ".
@@ -34,11 +41,16 @@ $hasLoadingAttribute = ($block->getImageAttributes() ?: [])['loading'] ?? false;
     <?php /* Height follows the image's own ratio, so wide banners are not cropped on small screens. */ ?>
     <figure class="relative grid w-full" style="aspect-ratio: <?= $itemWidth ?> / <?= $itemHeight ?>;">
         <img
-            class="absolute inset-0 w-full h-full object-cover" src="<?= $escaper->escapeHtmlAttr($item['image_url']) ?>"
+            class="absolute inset-0 w-full h-full object-cover"
+            <?= /* @noEscape */ $srcAttribute ?>="<?= $escaper->escapeHtmlAttr($item['image_url']) ?>"
+            <?php if ($itemSrcset): ?>
+            <?= /* @noEscape */ $srcsetAttribute ?>="<?= $escaper->escapeHtmlAttr($itemSrcset) ?>"
+            sizes="<?= $escaper->escapeHtmlAttr($itemSizes) ?>"
+            <?php endif; ?>
             alt="<?= $escaper->escapeHtmlAttr($itemImageAlt ?: $itemTextSmall) ?>"
             width="<?= $itemWidth ?>"
             height="<?= $itemHeight ?>"
-            <?php if (! $hasLoadingAttribute): ?>
+            <?php if (! $hasLoadingAttribute && ! $deferToSlider): ?>
             loading="lazy"
             <?php endif; ?>
             <?php foreach ($block->getImageAttributes() as $name => $value): ?>

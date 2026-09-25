@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\BlockJsDependencies;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Catalog\Block\Product\Image;
+use Magento\Framework\Escaper;
+
+/** @var Image $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
+$pageJsRegistry = $viewModels->require(BlockJsDependencies::class);
+$pageJsRegistry->setBlockTemplateDependency($block, 'Magento_Catalog::product/list/js/image.phtml');
+
+$customAttributes = $block->getCustomAttributes() ?: [];
+$hasLoadingAttribute = $customAttributes['loading'] ?? false;
+
+// Child-theme addition: a caller can pass 'load_on_interaction' in image_custom_attributes (the homepage
+// Featured Products slider does). The image then renders a same-ratio placeholder and keeps its URL in
+// data-interaction-src, for Magento_Theme::page/js/load-on-interaction.phtml to load on the first
+// interaction - or at once if it is on screen. Every other product list renders exactly as before.
+$loadOnInteraction = (bool) ($customAttributes['load_on_interaction'] ?? false);
+unset($customAttributes['load_on_interaction']);
+$placeholder = 'data:image/svg+xml,' . rawurlencode(sprintf(
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 %d %d'/>",
+    (int) $block->getWidth() ?: 1,
+    (int) $block->getHeight() ?: 1
+));
+
+?>
+<img
+    <?php if ($loadOnInteraction): ?>
+    src="<?= $escaper->escapeHtmlAttr($placeholder) ?>"
+    data-interaction-src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+    <?php else: ?>
+    src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+    <?php endif; ?>
+    width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+    height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+    alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
+    class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+    <?php if (!$hasLoadingAttribute): ?>
+        loading="lazy"
+    <?php endif; ?>
+    x-data="initProductItemImage"
+    @update-gallery-<?= (int)$block->getProductId() ?>.window="updateImage"
+    <?php foreach ($customAttributes as $name => $value): ?>
+        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+    <?php endforeach; ?>
+>

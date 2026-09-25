@@ -20,6 +20,10 @@
              src_type="url" media="all"/>
     </head>
     <body>
+        <referenceContainer name="before.body.end">
+            <!-- Grey placeholder + fade-in for lazy images while they load; see the template. -->
+            <block name="image-placeholders" template="Magento_Theme::page/js/image-placeholders.phtml"/>
+        </referenceContainer>
         <referenceBlock name="cart-drawer">
             <arguments>
                 <argument name="show_sku" xsi:type="boolean">true</argument> <!-- Show sku in product options (true/false) -->

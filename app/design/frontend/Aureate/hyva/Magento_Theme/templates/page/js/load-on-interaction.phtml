@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * Loads below-the-fold images on the first interaction instead of with the page.
+ *
+ * Opt-in markup: a same-ratio placeholder in src, the real URL in data-interaction-src (and
+ * data-interaction-srcset). Used on the homepage for the Featured Products images, the hand-soap
+ * banner and the blog images. Native loading="lazy" alone still fetched them during page load,
+ * because Chrome starts lazy images up to ~1250px below the fold.
+ *
+ * - First mousemove / touchstart / wheel / scroll / keydown: every pending image gets its real
+ *   URL. They keep loading="lazy", so ones still far down load as the visitor approaches them.
+ * - An image that is actually on screen loads straight away, without waiting: a very tall
+ *   window, or a crawler - Googlebot renders with a tall viewport but never interacts.
+ */
+?>
+<script>
+    (() => {
+        const selector = 'img[data-interaction-src]';
+        const events = ['mousemove', 'touchstart', 'wheel', 'scroll', 'keydown'];
+
+        const load = img => {
+            if (!img.dataset.interactionSrc) return;
+            if (img.dataset.interactionSrcset) img.srcset = img.dataset.interactionSrcset;
+            img.src = img.dataset.interactionSrc;
+            img.removeAttribute('data-interaction-src');
+            img.removeAttribute('data-interaction-srcset');
+        };
+
+        const observer = 'IntersectionObserver' in window
+            ? new IntersectionObserver(entries => entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    observer.unobserve(entry.target);
+                    load(entry.target);
+                }
+            }))
+            : null;
+
+        const loadAll = () => {
+            events.forEach(type => window.removeEventListener(type, loadAll));
+            observer && observer.disconnect();
+            document.querySelectorAll(selector).forEach(load);
+        };
+
+        document.querySelectorAll(selector).forEach(img => observer ? observer.observe(img) : load(img));
+        events.forEach(type => window.addEventListener(type, loadAll, {once: true, passive: true}));
+    })();
+</script>
+<?php if (isset($hyvaCsp)) $hyvaCsp->registerInlineScript(); ?>

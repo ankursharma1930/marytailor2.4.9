@@ -15,6 +15,22 @@ Options -ExecCGI
 SetHandler default-handler
 </FilesMatch>
 
+## BEGIN webp-negotiation (shell/11-product-images-webp.php) - do not edit by hand
+## Serve catalog/product/cache/<image>.webp in place of <image> when the browser accepts WebP and
+## the script has written a copy. Same URL, so nothing else changes. Must precede the get.php rule.
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{HTTP_ACCEPT} image/webp
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME}.webp -f
+    RewriteRule ^(catalog/product/cache/.+\.(?:png|jpe?g))$ $1.webp [NC,T=image/webp,END]
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.(png|jpe?g)(\.webp)?$">
+        Header merge Vary Accept
+    </FilesMatch>
+</IfModule>
+## END webp-negotiation
 <IfModule mod_rewrite.c>
 
 ############################################

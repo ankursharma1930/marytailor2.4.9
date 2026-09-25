@@ -1,0 +1,40 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * Placeholder while an image loads: a soft grey box, then the image fades in.
+ * Styles: web/tailwind/components/image-placeholder.css.
+ *
+ * Only lazy and load-on-interaction images are marked - never eager ones, so the hero and the
+ * LCP image paint exactly as before. Images that are already loaded when this runs (from the
+ * browser cache) are left alone, so a repeat visit does not flash. The load listener is
+ * delegated, so it also catches images whose src is set later (load-on-interaction, Splide).
+ */
+?>
+<script>
+    (() => {
+        const pending = img => !img.complete || !img.naturalWidth || img.hasAttribute('data-interaction-src');
+
+        document.querySelectorAll('img[loading="lazy"], img[data-interaction-src], img[data-splide-lazy]')
+            .forEach(img => pending(img) && img.classList.add('img-pending'));
+
+        document.addEventListener('load', event => {
+            const img = event.target;
+            // A load-on-interaction placeholder is itself a (data:) image - wait for the real one.
+            if (!img.classList || !img.classList.contains('img-pending') || img.currentSrc.startsWith('data:')) return;
+            img.classList.remove('img-pending');
+            img.classList.add('img-loaded');
+        }, true);
+
+        document.addEventListener('error', event => {
+            event.target.classList && event.target.classList.remove('img-pending');
+        }, true);
+    })();
+</script>
+<?php if (isset($hyvaCsp)) $hyvaCsp->registerInlineScript(); ?>

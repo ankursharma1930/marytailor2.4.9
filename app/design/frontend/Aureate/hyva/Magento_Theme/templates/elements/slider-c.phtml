@@ -9,7 +9,6 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\Media;
 use Hyva\Theme\ViewModel\Slider;
 use Magento\Framework\View\Element\Template;
 
@@ -18,58 +17,70 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 
 $sliderViewModel = $viewModels->require(Slider::class);
-$mediaUrl = $viewModels->require(Media::class)->getMediaUrl();
 $baseUrl = $block->getBaseUrl();
 
 /**
  * Homepage hero banners. Every banner is 1933x755, so the dimensions below keep the
  * slider from reserving the wrong box and shifting the page while the images load.
+ *
+ * Served as responsive WebP from the child theme (web/images/homepage/), generated from
+ * the pub/media/wysiwyg originals named here by shell/09-homepage-images.php. A new or
+ * replaced banner needs that script re-run, and its widths kept in step with these.
  */
+$bannerWidths = [640, 768, 960, 1366, 1933];
 $items = [
     [
-        'image_url' => $mediaUrl . 'wysiwyg/01-dish-soap-banner-mary-tylor-naturals.png',
+        'image_file' => '01-dish-soap-banner-mary-tylor-naturals.png',
         'image_alt' => __('The Healthy Suds plant-based dish soap'),
         'url' => $baseUrl . 'dish-soap',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/01-laundry-soap-banner-mary-tylor-naturals.png',
+        'image_file' => '01-laundry-soap-banner-mary-tylor-naturals.png',
         'image_alt' => __('The Healthy Suds plant-based laundry soap'),
         'url' => $baseUrl . 'laundry-soap',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/03-baby-soap-sensitive-skin-pet-soap-banner-mary-tylor-naturals.png',
+        'image_file' => '03-baby-soap-sensitive-skin-pet-soap-banner-mary-tylor-naturals.png',
         'image_alt' => __('Baby soap for sensitive skin and pet soap by Mary Tylor Naturals'),
         'url' => $baseUrl . 'the-healthy-suds/baby-soap',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/04-all-purpose-cleaner-banner-mary-tylor-naturals.png',
+        'image_file' => '04-all-purpose-cleaner-banner-mary-tylor-naturals.png',
         'image_alt' => __('Neroli all purpose cleaning spray by Mary Tylor Naturals'),
         'url' => $baseUrl . 'neroli-cleaning-spray-32-oz.html',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/05-handsoap-banner-mary-tylor-naturals.png',
+        'image_file' => '05-handsoap-banner-mary-tylor-naturals.png',
         'image_alt' => __('The Healthy Suds all natural foaming hand soap'),
         'url' => $baseUrl . 'liquid-hand-soap',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/06-the-healthy-candle-collection-banner-mary-tylor-naturals.png',
+        'image_file' => '06-the-healthy-candle-collection-banner-mary-tylor-naturals.png',
         'image_alt' => __('The Healthy Candle beeswax candle collection'),
         'url' => $baseUrl . 'the-healthy-candle',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/07-castile-soap-banner-mary-tylor-naturals.png',
+        'image_file' => '07-castile-soap-banner-mary-tylor-naturals.png',
         'image_alt' => __('Castile soap by Mary Tylor Naturals'),
         'url' => $baseUrl . 'castile-soap',
     ],
     [
-        // The file on disk is .jpeg - a .png here resolved to Magento's 262x262 placeholder.
-        'image_url' => $mediaUrl . 'wysiwyg/08-bodysoap-banner-mary-tylor-naturals.jpeg',
+        // The original on disk is .jpeg - a .png there resolved to Magento's 262x262 placeholder.
+        'image_file' => '08-bodysoap-banner-mary-tylor-naturals.jpeg',
         'image_alt' => __('The Healthy Suds all natural body soap'),
         'url' => $baseUrl . 'body-soap',
     ],
 ];
 
 foreach ($items as $i => $item) {
+    $name = pathinfo($item['image_file'], PATHINFO_FILENAME);
+    $srcset = [];
+    foreach ($bannerWidths as $width) {
+        $srcset[] = $block->getViewFileUrl("images/homepage/$name-$width.webp") . " {$width}w";
+    }
+    $items[$i]['image_url'] = $block->getViewFileUrl("images/homepage/$name-1366.webp");
+    $items[$i]['image_srcset'] = implode(', ', $srcset);
+    $items[$i]['image_sizes'] = '100vw';
     $items[$i]['image_width'] = 1933;
     $items[$i]['image_height'] = 755;
 }
