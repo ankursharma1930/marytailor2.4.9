@@ -19,56 +19,60 @@ use Magento\Framework\View\Element\Template;
 
 $sliderViewModel = $viewModels->require(Slider::class);
 $mediaUrl = $viewModels->require(Media::class)->getMediaUrl();
+$baseUrl = $block->getBaseUrl();
+
 /**
- * These items are examples. You could query products, categories, etc..
- * Change the slider-item.phtml accordingly to display the correct properties.
+ * Homepage hero banners. Every banner is 1933x755, so the dimensions below keep the
+ * slider from reserving the wrong box and shifting the page while the images load.
  */
 $items = [
     [
-        // All options
         'image_url' => $mediaUrl . 'wysiwyg/01-dish-soap-banner-mary-tylor-naturals.png',
-        'image_width' => 1280,
-        'image_height' => 853,
-        'image_alt' => __('New Arrivals'),
-//        'text_small' => __('New Arrivals'),
-//        'text_large' => __('(Track)Suit Up!'),
-        'url' => $block->getUrl('home'),
+        'image_alt' => __('The Healthy Suds plant-based dish soap'),
+        'url' => $baseUrl . 'dish-soap',
     ],
     [
         'image_url' => $mediaUrl . 'wysiwyg/01-laundry-soap-banner-mary-tylor-naturals.png',
-        'image_alt' => __('Summer Collection'),
+        'image_alt' => __('The Healthy Suds plant-based laundry soap'),
+        'url' => $baseUrl . 'laundry-soap',
     ],
     [
         'image_url' => $mediaUrl . 'wysiwyg/03-baby-soap-sensitive-skin-pet-soap-banner-mary-tylor-naturals.png',
-//        'text_small' => __('Winter Collection'),
-//        'text_large' => __('Show Your Style'),
+        'image_alt' => __('Baby soap for sensitive skin and pet soap by Mary Tylor Naturals'),
+        'url' => $baseUrl . 'the-healthy-suds/baby-soap',
     ],
     [
         'image_url' => $mediaUrl . 'wysiwyg/04-all-purpose-cleaner-banner-mary-tylor-naturals.png',
-//        'text_small' => __('Sale'),
-//        'text_large' => __('10% Off, Only This Weekend'),
+        'image_alt' => __('Neroli all purpose cleaning spray by Mary Tylor Naturals'),
+        'url' => $baseUrl . 'neroli-cleaning-spray-32-oz.html',
     ],
     [
         'image_url' => $mediaUrl . 'wysiwyg/05-handsoap-banner-mary-tylor-naturals.png',
-//        'text_small' => __('Sale'),
-//        'text_large' => __('10% Off, Only This Weekend'),
+        'image_alt' => __('The Healthy Suds all natural foaming hand soap'),
+        'url' => $baseUrl . 'liquid-hand-soap',
     ],
     [
         'image_url' => $mediaUrl . 'wysiwyg/06-the-healthy-candle-collection-banner-mary-tylor-naturals.png',
-//        'text_small' => __('Sale'),
-//        'text_large' => __('10% Off, Only This Weekend'),
+        'image_alt' => __('The Healthy Candle beeswax candle collection'),
+        'url' => $baseUrl . 'the-healthy-candle',
     ],
     [
         'image_url' => $mediaUrl . 'wysiwyg/07-castile-soap-banner-mary-tylor-naturals.png',
-//        'text_small' => __('Sale'),
-//        'text_large' => __('10% Off, Only This Weekend'),
+        'image_alt' => __('Castile soap by Mary Tylor Naturals'),
+        'url' => $baseUrl . 'castile-soap',
     ],
     [
-        'image_url' => $mediaUrl . 'wysiwyg/08-bodysoap-banner-mary-tylor-naturals.png',
-//        'text_small' => __('Sale'),
-//        'text_large' => __('10% Off, Only This Weekend'),
+        // The file on disk is .jpeg - a .png here resolved to Magento's 262x262 placeholder.
+        'image_url' => $mediaUrl . 'wysiwyg/08-bodysoap-banner-mary-tylor-naturals.jpeg',
+        'image_alt' => __('The Healthy Suds all natural body soap'),
+        'url' => $baseUrl . 'body-soap',
     ],
 ];
+
+foreach ($items as $i => $item) {
+    $items[$i]['image_width'] = 1933;
+    $items[$i]['image_height'] = 755;
+}
 
 $sliderStyle = (string) $block->getSliderStyle();
 $sliderShowArrows = $block->getShowArrows() !== null ? $block->getShowArrows() : "end";

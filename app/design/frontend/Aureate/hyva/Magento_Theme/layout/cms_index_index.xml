@@ -28,7 +28,7 @@
             <block name="homepage-content" template="Magento_Theme::html/homepage.phtml"/>
             <block name="best-seller-slider" template="Magento_Catalog::product/slider/bestseller-slider.phtml">
                 <arguments>
-                    <argument name="title" xsi:type="string" translate="true">Feature Products</argument>
+                    <argument name="title" xsi:type="string" translate="true">Featured Products</argument>
                     <argument name="category_ids" xsi:type="string">6</argument>
                     <!--                    <argument name="include_child_category_products" xsi:type="boolean">true</argument>-->
                     <argument name="page_size" xsi:type="string">4</argument>

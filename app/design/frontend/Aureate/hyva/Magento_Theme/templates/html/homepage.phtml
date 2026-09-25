@@ -1,42 +1,68 @@
 <?php
+declare(strict_types=1);
+
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Media;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
 /** @var ViewModelRegistry $viewModels */
 /** @var Escaper $escaper */
+/** @var Template $block */
 
 $mediaUrl = $viewModels->require(Media::class)->getMediaUrl();
+$baseUrl = $block->getBaseUrl();
+
+$tiles = [
+    [
+        'image' => 'wysiwyg/small-icon-img-001.png',
+        'label' => __('Signature Beeswax Candle'),
+        'alt' => __('Signature Beeswax Candle from The Healthy Candle Collection'),
+        'url' => $baseUrl . 'the-healthy-candle',
+    ],
+    [
+        'image' => 'wysiwyg/small-icon-img-002.png',
+        'label' => __('Botanical Bliss Candle'),
+        'alt' => __('Botanical Bliss Beeswax Candle from The Healthy Candle Collection'),
+        'url' => $baseUrl . 'the-healthy-candle',
+    ],
+    [
+        'image' => 'wysiwyg/small-icon-image-003.png',
+        'label' => __('Lavender Laundry Soap'),
+        'alt' => __('The Healthy Suds plant-based Lavender laundry soap'),
+        'url' => $baseUrl . 'laundry-soap',
+    ],
+    [
+        'image' => 'wysiwyg/small-icon-image-004.png',
+        'label' => __('Signature Laundry Soap'),
+        'alt' => __('The Healthy Suds plant-based Signature laundry soap'),
+        'url' => $baseUrl . 'laundry-soap',
+    ],
+];
 ?>
-<div class="max-w-full md:max-w-6xl md:m-auto mx-auto">
-    <div class="flex flex-wrap">
-        <div class="w-full md:w-1/2 box1 mx-auto">
-            <div class="p-4">
-                <div class="img">
-                    <img class="mx-auto" src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/small-icon-img-001.png') ?>" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="w-full md:w-1/2 box2 mx-auto">
-            <div class="p-4">
-                <div class="img">
-                    <img class="mx-auto" src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/small-icon-img-002.png') ?>" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="w-full md:w-1/2 box2 mx-auto">
-            <div class="p-4">
-                <div class="img">
-                    <img class="mx-auto" src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/small-icon-image-003.png') ?>" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="w-full md:w-1/2 box2 mx-auto">
-            <div class="p-4">
-                <div class="img">
-                    <img class="mx-auto" src="<?= $escaper->escapeUrl($mediaUrl . 'wysiwyg/small-icon-image-004.png') ?>" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
+<h1 class="sr-only">
+    <?= $escaper->escapeHtml(__('Mary Tylor Naturals - A Better Way To Skin Care, Inspired by Nature')) ?>
+</h1>
+<div class="max-w-full md:max-w-6xl mx-auto px-4">
+    <ul class="flex flex-wrap list-none p-0 m-0 -mx-2">
+        <?php foreach ($tiles as $tile): ?>
+            <li class="w-1/2 lg:w-1/4 p-2">
+                <a
+                    href="<?= $escaper->escapeUrl($tile['url']) ?>"
+                    class="block overflow-hidden rounded transition-shadow duration-200 hover:shadow-lg
+                           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                    <img
+                        class="w-full h-auto"
+                        src="<?= $escaper->escapeUrl($mediaUrl . $tile['image']) ?>"
+                        alt="<?= $escaper->escapeHtmlAttr($tile['alt']) ?>"
+                        width="570"
+                        height="309"
+                        loading="lazy"
+                    >
+                    <span class="sr-only"><?= $escaper->escapeHtml($tile['label']) ?></span>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 </div>

@@ -12,6 +12,13 @@ $item = $block->getData('item');
 $itemUrl = $item['url'] ?? '';
 $itemTextLarge = $item['text_large'] ?? '';
 $itemTextSmall = $item['text_small'] ?? '';
+$itemImageAlt = $item['image_alt'] ?? '';
+$itemWidth = (int) ($item['image_width'] ?? 1280);
+$itemHeight = (int) ($item['image_height'] ?? 853);
+
+// `?:` not `??`: these are always set (to ''), so `??` never fell through to the
+// alt text and every link was labelled "Visit ".
+$itemLabel = $itemTextLarge ?: ($itemImageAlt ?: __('page'));
 
 $hasLoadingAttribute = ($block->getImageAttributes() ?: [])['loading'] ?? false;
 
@@ -20,16 +27,17 @@ $hasLoadingAttribute = ($block->getImageAttributes() ?: [])['loading'] ?? false;
 <?php if ($itemUrl): ?>
 <a
     href="<?= $escaper->escapeUrl($itemUrl)?>"
-    aria-label="<?= $escaper->escapeHtml(__('Visit %1', ($itemTextLarge ?? $item['image_alt'] || 'page'))) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Visit %1', $itemLabel)) ?>"
     class="block"
 >
 <?php endif; ?>
-    <figure class="relative grid w-full h-[460px] md:h-[580px] lg:h-[800px]">
+    <?php /* Height follows the image's own ratio, so wide banners are not cropped on small screens. */ ?>
+    <figure class="relative grid w-full" style="aspect-ratio: <?= $itemWidth ?> / <?= $itemHeight ?>;">
         <img
             class="absolute inset-0 w-full h-full object-cover" src="<?= $escaper->escapeHtmlAttr($item['image_url']) ?>"
-            alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? $item['text_small'] ?? '') ?>"
-            width="<?= $escaper->escapeHtmlAttr($item['image_width'] ?? '1280') ?>"
-            height="<?= $escaper->escapeHtmlAttr($item['image_height'] ?? '853') ?>"
+            alt="<?= $escaper->escapeHtmlAttr($itemImageAlt ?: $itemTextSmall) ?>"
+            width="<?= $itemWidth ?>"
+            height="<?= $itemHeight ?>"
             <?php if (! $hasLoadingAttribute): ?>
             loading="lazy"
             <?php endif; ?>
